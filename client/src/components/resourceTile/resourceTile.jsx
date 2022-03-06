@@ -3,10 +3,12 @@ import { Polygon } from "react-svg-path";
 import Junction from "./junction";
 import "./styles/road.css"
 import Road from "./road";
+import { getResourceBackground } from "../../utils/boardHelper";
 
-function Tile({ row, cell }) {
-    const initX = 0;
-    const initY = 0;
+function Tile({ row, cell, tileNumer, resource, test }) {
+    console.log(tileNumer, test)
+    // const { number, resource } = resourceData;
+    // const backgroundColor= getResourceBackground(resource.name);
     const radius = 70;
     const rad30 = 30 * Math.PI / 180;
     // const center = {
@@ -28,7 +30,7 @@ function Tile({ row, cell }) {
         bottomLeft: { x: center.x - radius, y: center.y - Math.tan(rad30) * radius },
         bottomRight: { x: center.x + radius, y: center.y - Math.tan(rad30) * radius },
     }
-    console.log(center)
+    // console.log(center)
 
     return (
         <svg height="150" width="150" >
@@ -40,7 +42,7 @@ function Tile({ row, cell }) {
                 [coordinates.bottom.x, coordinates.bottom.y],
                 [coordinates.bottomLeft.x, coordinates.bottomLeft.y],
                 [coordinates.topLeft.x, coordinates.topLeft.y]
-            ]} fill="green"></Polygon>
+            ]} fill={resource.color}></Polygon>
 
             <Road x1={coordinates.top.x} y1={coordinates.top.y} x2={coordinates.topRight.x} y2={coordinates.topRight.y} />
             <Road x1={coordinates.topRight.x} y1={coordinates.topRight.y} x2={coordinates.bottomRight.x} y2={coordinates.bottomRight.y} />
@@ -54,30 +56,12 @@ function Tile({ row, cell }) {
             <Junction centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
             <Junction centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
             <Junction centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
+            <circle style={{ fill: "white", stroke: "black" }} cx={center.x} cy={center.y} r="20">
+            </circle>
+            <text x="50%" y="50%" textAnchor="middle" strokeWidth="2px" dy=".3em">{tileNumer}</text>
         </svg>
 
     )
 }
 
 export default Tile;
-
-/* <line x1={coordinates.top.x} y1={coordinates.top.y} x2={coordinates.topRight.x} y2={coordinates.topRight.y} className="road" />
-            <line x1={coordinates.topRight.x} y1={coordinates.topRight.y} x2={coordinates.bottomRight.x} y2={coordinates.bottomRight.y} className="road" />
-            <line x1={coordinates.bottomRight.x} y1={coordinates.bottomRight.y} x2={coordinates.bottom.x} y2={coordinates.bottom.y} className="road" />
-            <line x1={coordinates.bottom.x} y1={coordinates.bottom.y} x2={coordinates.bottomLeft.x} y2={coordinates.bottomLeft.y} className="road" />
-            <line x1={coordinates.bottomLeft.x} y1={coordinates.bottomLeft.y} x2={coordinates.topLeft.x} y2={coordinates.topLeft.y} className="road" />
-            <line x1={coordinates.topLeft.x} y1={coordinates.topLeft.y} x2={coordinates.top.x} y2={coordinates.top.y} className="road"/> */
-
-/* <Junction centerX={coordinates.top.x} centerY={coordinates.top.y} />
-            <Junction centerX={coordinates.topLeft.x} centerY={coordinates.topLeft.y} />
-            <Junction centerX={coordinates.topRight.x} centerY={coordinates.topRight.y} />
-            <Junction centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
-            <Junction centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
-            <Junction centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} /> */
-
-            // <Road x1={coordinates.top.x} y1={coordinates.top.y} x2={coordinates.topRight.x} y2={coordinates.topRight.y} />
-            // <Road x1={coordinates.topRight.x} y1={coordinates.topRight.y} x2={coordinates.bottomRight.x} y2={coordinates.bottomRight.y} />
-            // <Road x1={coordinates.bottomRight.x} y1={coordinates.bottomRight.y} x2={coordinates.bottom.x} y2={coordinates.bottom.y} />
-            // <Road x1={coordinates.bottom.x} y1={coordinates.bottom.y} x2={coordinates.bottomLeft.x} y2={coordinates.bottomLeft.y} />
-            // <Road x1={coordinates.bottomLeft.x} y1={coordinates.bottomLeft.y} x2={coordinates.topLeft.x} y2={coordinates.topLeft.y} />
-            // <Road x1={coordinates.topLeft.x} y1={coordinates.topLeft.y} x2={coordinates.top.x} y2={coordinates.top.y} />
