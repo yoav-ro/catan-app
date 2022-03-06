@@ -1,43 +1,26 @@
-export const resourcesTypes = {
+export const resources = {
     WOOD: {
         name: "wood",
-        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png",
-        color: "#dbe36b",
+        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png"
     },
     BRICK: {
         name: "brick",
-        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png",
-        color: "brown",
+        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png"
     },
     WHEAT: {
         name: "wheat",
-        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png",
-        color: "#255928",
+        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png"
     },
     SHEEP: {
         name: "sheep",
-        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png",
-        color: "#b8f2bc"
+        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png"
     },
     IRON: {
         name: "iron",
-        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png",
-        color: "#949995",
+        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png"
     },
     DESERT: {
         name: "desert",
-        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png",
-        color: "#f2eeb8",
+        ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png"
     },
 }
-
-export const numbersArr = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12];
-
-export const resourcesArr = [
-    resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK,
-    resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD,
-    resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON,
-    resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP,
-    resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
-    resourcesTypes.DESERT,
-]
