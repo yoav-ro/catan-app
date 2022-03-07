@@ -3,24 +3,22 @@ import { Polygon } from "react-svg-path";
 import Junction from "./junction";
 import "./styles/road.css"
 import Road from "./road";
-import { getResourceBackground } from "../../utils/boardHelper";
 
-function Tile({ row, cell, tileNumer, resource, test }) {
-    console.log(tileNumer, test)
-    // const { number, resource } = resourceData;
+function Tile({ row, cell, tileNumer, resource }) {
+    console.log(tileNumer)
     // const backgroundColor= getResourceBackground(resource.name);
     const radius = 70;
     const rad30 = 30 * Math.PI / 180;
-    // const center = {
-    //     x: initX + (cell * 75),
-    //     y: initY + (row * 75),
-    // }
-
 
     const center = {
-        x: 75,
-        y: 75
+        x: cell * radius * 2 + radius + row % 2 * radius,
+        y: (row * (Math.tan(rad30) + 1) + 1) * radius,
     }
+    if (row === 0 || row === 4) {
+        center.x += radius * 2;
+    }
+
+
 
     const coordinates = {
         top: { x: center.x, y: center.y + radius },
@@ -30,10 +28,9 @@ function Tile({ row, cell, tileNumer, resource, test }) {
         bottomLeft: { x: center.x - radius, y: center.y - Math.tan(rad30) * radius },
         bottomRight: { x: center.x + radius, y: center.y - Math.tan(rad30) * radius },
     }
-    // console.log(center)
 
     return (
-        <svg height="150" width="150" >
+        <>
             <div x={center.x} y={center.y} />
             <Polygon points={[
                 [coordinates.top.x, coordinates.top.y],
@@ -59,8 +56,7 @@ function Tile({ row, cell, tileNumer, resource, test }) {
             <circle style={{ fill: "white", stroke: "black" }} cx={center.x} cy={center.y} r="20">
             </circle>
             <text x="50%" y="50%" textAnchor="middle" strokeWidth="2px" dy=".3em">{tileNumer}</text>
-        </svg>
-
+        </>
     )
 }
 
