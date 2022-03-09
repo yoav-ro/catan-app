@@ -1,49 +1,173 @@
-import { resourcesTypes, numbersArr, resourcesArr } from "./utils/constants";
-import { mixArray } from "./utils/helperFunctions"
+const { resourcesTypes, numbersArr, resourcesArr, players } = require("./utils/constants");
+const { mixArray, getDistance } = require("./utils/helperFunctions")
 
 class Board {
+    #tileRadius
     constructor(tileRadius) {
+        this.#tileRadius = tileRadius;
         this.roads = [];
-        this.settelments = [];
+        this.junctions = [];
+        this.longestRoad = [];
         this.tiles = getTilesData(tileRadius);
     }
 
+    //Returns the status of the requested junction, if exists.
+    getJunctionStatus(x, y) {
+        try {
+            if (this.doCoordinatesExist(x, y)) {
+                this.junctions.forEach(junction => {
+                    if (junction.x === x && junction.y === y) {
+                        return junction.status;
+                    }
+                });
+                return "free";
+            }
+        } catch (error) {
+            return { message: "Error: " + error };
+        }
+    }
+
+    //Returns the status of the requested road, if exists.
+    getRoadStatus(startX, startY, endX, endY) {
+        try {
+            if (this.doCoordinatesExist(startX, startY) && this.doCoordinatesExist(endX, endY)) {
+                this.roads.forEach(road => {
+                    if (road.startX === startX && road.startY === startY && road.endX === endX && road.endY === endY) {
+                        return road.status;
+                    }
+                });
+                return "free";
+            }
+        } catch (error) {
+            return { message: "Error: " + error };
+        }
+    }
+
+    addRoad(player, startX, startY, endX, endY) {
+        try {
+            if (this.doCoordinatesExist(startX, startY) && this.doCoordinatesExist(endX, endY)) {
+                if (this.getRoadStatus(startX, startY, endX, endY) === "free") {
+                    this.roads = [...this.roads, {
+                        startX: startX,
+                        startY: startY,
+                        endX: endX,
+                        endY: endY,
+                        status: player
+                    }]
+                }
+                else {
+                    throw "Road already accupied";
+                }
+            }
+            else {
+                throw "Invalid roard";
+            }
+        } catch (error) {
+            return { message: "Error: " + error } 
+        }
+    }
+
+    addJunction(player, x, y) {
+        try {
+            if (this.doCoordinatesExist(x, y)) {
+                this.roads.forEach(road => {
+                    if (road.x === x && road.y === y) {
+                        throw "Junction already accupied";
+                    }
+                    else {
+                        this.junctions = [...this.junctions, {
+                            x: x,
+                            y: y,
+                            status: player
+                        }]
+                    }
+                });
+            }
+            else {
+                throw "Junction does not exist"
+            }
+        } catch (error) {
+            return { message: "Error: " + error }
+        }
+    }
+
+    doCoordinatesExist(x, y) {
+        let retValue = true;
+        for (let tile of this.tiles) {
+            for (let coord in this.tiles.coordinates) {
+                if (coord.x !== x && coord.y !== y) {
+                    retValue = false;
+                }
+            }
+        }
+        return retValue;
+    }
+
+    // get roads() {
+    //     return this.roads;
+    // }
+
+    // get settelments() {
+    //     return this.settelments;
+    // }
+
+    // get tiles() {
+    //     return this.tiles;
+    // }
+
+    // get getLongestRoad() {
+    //     return this.longestRoad
+    // }
 }
 
-//Each tiles should contain: coordinates, status, number, resource
+//Each tiles should contain: coordinates, number, resource
 function getTilesData(tileRadius) {
     const resources = mixArray(resourcesArr);
     const numbers = mixArray(numbersArr);
 
-    tilesData = resources.map(tile => {
-
+    const tilesData = resources.map(tile => {
         if (tile.name === resourcesTypes.DESERT.name) {
             return { resource: tile, number: undefined };
         } else {
             return { resource: tile, number: numbers.pop() }
         }
     });
+    const rowLengths = [3, 4, 5, 4, 3];
+
+    for (let i = 0; i < rowLengths.length; i++) {
+        for (let j = 0; j < rowLengths[i]; j++) {
+            tilesData.coordinates = calulateCoordinatesByBoardPosition(i, j, tileRadius);
+        }
+    }
+
+    return tilesData;
 }
 
 function calulateCoordinatesByBoardPosition(row, cell, radius) {
     const rad30 = 30 * Math.PI / 180;
+    const hexPerpendicular = Math.cos(rad30) * radius;
 
     const center = {
-        x: cell * radius * 2 + radius + row % 2 * radius,
-        y: (row * (Math.tan(rad30) + 1) + 1) * radius,
+        x: cell * hexPerpendicular * 2 + hexPerpendicular + row % 2 * hexPerpendicular,
+        y: radius * 1.5 * row + radius,
     }
     if (row === 0 || row === 4) {
-        center.x += radius * 2;
+        center.x += hexPerpendicular * 2;
     }
 
     const coordinates = {
         top: { x: center.x, y: center.y + radius },
-        topLeft: { x: center.x - radius, y: center.y + Math.tan(rad30) * radius },
-        topRight: { x: center.x + radius, y: center.y + Math.tan(rad30) * radius },
+        topLeft: { x: center.x - hexPerpendicular, y: center.y + Math.tan(rad30) * hexPerpendicular },
+        topRight: { x: center.x + hexPerpendicular, y: center.y + Math.tan(rad30) * hexPerpendicular },
         bottom: { x: center.x, y: center.y - radius },
-        bottomLeft: { x: center.x - radius, y: center.y - Math.tan(rad30) * radius },
-        bottomRight: { x: center.x + radius, y: center.y - Math.tan(rad30) * radius },
+        bottomLeft: { x: center.x - hexPerpendicular, y: center.y - Math.tan(rad30) * hexPerpendicular },
+        bottomRight: { x: center.x + hexPerpendicular, y: center.y - Math.tan(rad30) * hexPerpendicular },
     }
 
+    const edge = getDistance(coordinates.bottom.x, coordinates.bottom.y, coordinates.bottomLeft.x, coordinates.bottomLeft.y)
+    const radiusCalc = getDistance(center.x, center.y, coordinates.bottomLeft.x, coordinates.bottomLeft.y)
+    console.log(edge, radiusCalc)
     return coordinates;
 }
+
+const board = new Board(70);

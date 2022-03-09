@@ -1,4 +1,4 @@
-export const resourcesTypes = {
+const resourcesTypes = {
     WOOD: {
         name: "wood",
     },
@@ -19,9 +19,16 @@ export const resourcesTypes = {
     },
 }
 
-export const numbersArr = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12];
+const players = {
+    BLUE: "blue",
+    RED: "red",
+    WHITE: "white",
+    ORANGE: "orange",
+}
 
-export const resourcesArr = [
+const numbersArr = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12];
+
+const resourcesArr = [
     resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK,
     resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD,
     resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON,
@@ -29,3 +36,7 @@ export const resourcesArr = [
     resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
     resourcesTypes.DESERT,
 ]
+
+module.exports = {
+    resourcesArr, numbersArr, resourcesTypes, players
+}

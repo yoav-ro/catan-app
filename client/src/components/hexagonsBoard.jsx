@@ -8,9 +8,6 @@ function HexagonBoard() {
     const { row0, row1, row2, row3, row4 } = rowsData;
     console.log(rowsData)
 
-    const initX = 151.5;
-    const initY = 48.5;
-
     return (
         <div id="board">
             <svg height={1080} width={1920}>
