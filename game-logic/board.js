@@ -53,6 +53,7 @@ class Board {
                     player: player,
                 }
                 this.roads = [...this.roads, newJunctionObj];
+                this.#findLongestRoad();
             }
         } catch (error) {
             return { message: "Error: " + error }
@@ -111,6 +112,7 @@ class Board {
                     player: player,
                 }
                 this.junctions = [...this.junctions, newJunctionObj];
+                this.#findLongestRoad();
             }
         } catch (error) {
             return { message: "Error: " + error }
@@ -147,17 +149,52 @@ class Board {
 
     #isConnectedToRoad(player, startX, startY, endX, endY) {
         this.roads.forEach(road => {
-            if (road.startX === startX && road.startY === startY && road.status === player) {
-                return true;
-            }
-            if (road.endX === endX && road.endY === endY && road.status === player) {
-                return true;
-            }
-            if (road.endX === startX && road.endY === startY && road.status === player) {
-                return true;
+            if (road.status === player) {
+                if (road.startX === startX && road.startY === startY) {
+                    return true;
+                }
+                if (road.endX === endX && road.endY === endY) {
+                    return true;
+                }
+                if (road.endX === startX && road.endY === startY) {
+                    return true;
+                }
+                if (road.startX === endX && road.startY === endY) {
+                    return true;
+                }
             }
         })
         return false;
+    }
+
+    #findLongestRoad() {
+        // this.roads.forEach(road => {
+        //     let roadLength = 1;
+        //     this.#findConnectedRoads(road);
+
+        // })
+    }
+
+    #findConnectedRoads(roadInput) {
+        const { player, startX, startY, endX, endY } = roadInput;
+        const connectedRoads = [];
+        this.roads.forEach(road => {
+            if (road.status === player) {
+                if (road.startX === startX && road.startY === startY && road.endX !== endX && road.endX !== endY) {
+                    connectedRoads.push(road);
+                }
+                if (road.startX !== startX && road.startY !== startY && road.endX === endX && road.endX === endY) {
+                    connectedRoads.push(road);
+                }
+                if (road.startX === endX && road.startY === endY && road.endX !== startX && road.endX !== startY) {
+                    connectedRoads.push(road);
+                }
+                if (road.endX === startX && road.endY === startY && road.startX !== endX && road.startY !== endY) {
+                    connectedRoads.push(road);
+                }
+            }
+        })
+        return connectedRoads;
     }
 
     doCoordinatesExist(x, y) {
