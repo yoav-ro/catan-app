@@ -43,27 +43,16 @@ class Board {
         }
     }
 
-    //Validates road input and adds it to the board if valid.
-    addRoad(player, startX, startY, endX, endY) {
+    //Validates junction input and adds it to the board if valid.
+    addJunction(player, x, y) {
         try {
-            if (this.doCoordinatesExist(startX, startY) && this.doCoordinatesExist(endX, endY) && Math.round(getDistance(startX, startY, endX, endY)) === this.#tileRadius) {
-                if (this.getRoadStatus(startX, startY, endX, endY) === "free") {
-                    const newRoadObj = {
-                        startX: startX,
-                        startY: startY,
-                        endX: endX,
-                        endY: endY,
-                        status: player
-                    }
-                    this.roads = [...this.roads, newRoadObj];
-                    this.updateLongestRoad(newRoadObj);
+            if (this.#canPlaceSettelment(player, x, y)) {
+                const newJunctionObj = {
+                    x: x,
+                    y: y,
+                    player: player,
                 }
-                else {
-                    throw "Road already accupied";
-                }
-            }
-            else {
-                throw "Invalid road";
+                this.junctions = [...this.junctions, newJunctionObj];
             }
         } catch (error) {
             return { message: "Error: " + error }
@@ -110,29 +99,74 @@ class Board {
         return false;
     }
 
-    #canPlaceRoad(player, startX, startY, endX, endY) {
-
-    }
-
-    //Validates junction input and adds it to the board if valid.
-    addJunction(player, x, y) {
+    //Validates road input and adds it to the board if valid.
+    addRoad(player, startX, startY, endX, endY) {
         try {
-            if (this.#canPlaceSettelment(player, x, y)) {
-                const newJunctionObj = {
-                    x: x,
-                    y: y,
-                    player: player,
-                }
-                this.junctions = [...this.junctions, newJunctionObj];
+            if (!this.doCoordinatesExist(startX, startY) || !this.doCoordinatesExist(endX, endY) || Math.round(getDistance(startX, startY, endX, endY)) !== this.#tileRadius) {
+                throw "Invalid road";
             }
+            if (this.getRoadStatus(startX, startY, endX, endY) === "free") {
+                const newRoadObj = {
+                    startX: startX,
+                    startY: startY,
+                    endX: endX,
+                    endY: endY,
+                    status: player
+                }
+                this.roads = [...this.roads, newRoadObj];
+                this.updateLongestRoad(newRoadObj);
+            }
+            else {
+                throw "Road already accupied";
+            }
+
+
         } catch (error) {
             return { message: "Error: " + error }
         }
     }
 
-    updateLongestRoad(roadObj) {
-        const currRoad = [roadObj];
+    #canPlaceRoad(player, startX, startY, endX, endY) {
+        //Checks if the coordinates are valid
+        if (!this.doCoordinatesExist(startX, startY) || !this.doCoordinatesExist(endX, endY) || Math.round(getDistance(startX, startY, endX, endY)) !== this.#tileRadius) {
+            throw "Invalid road";
+        }
+        //Check if the road is free
+        if (this.getRoadStatus(startX, startY, endX, endY) !== "free") { 
+            throw "Road already accupied";
+        }
+        //Cheks if the road is connected to another player
+        if (!this.#isConnectedToJunction(player, startX, startY, endX, endY) || !this.#isConnectedToRoad(player, startX, startY, endX, endY)) {
+            throw "Cant place road here"
+        }
+        return true;
+    }
 
+    #isConnectedToJunction(player, startX, startY, endX, endY) {
+        this.junctions.forEach(junction => {
+            if (junction.x === startX && junction.y === startY && junction.status === player) {
+                return true;
+            }
+            if (junction.x === endX && junction.y === endY && junction.status === player) {
+                return true;
+            }
+        })
+        return false;
+    }
+
+    #isConnectedToRoad(player, startX, startY, endX, endY) {
+        this.roads.forEach(road => {
+            if (road.startX === startX && road.startY === startY && road.status === player) {
+                return true;
+            }
+            if (road.endX === endX && road.endY === endY && road.status === player) {
+                return true;
+            }
+            if (road.endX === startX && road.endY === startY && road.status === player) {
+                return true;
+            }
+        })
+        return false;
     }
 
     doCoordinatesExist(x, y) {
@@ -210,5 +244,3 @@ function calulateCoordinatesByBoardPosition(row, cell, radius) {
 
     return coordinates;
 }
-
-const board = new Board(70);
