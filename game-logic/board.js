@@ -52,7 +52,7 @@ class Board {
                     y: y,
                     player: player,
                 }
-                this.junctions = [...this.junctions, newJunctionObj];
+                this.roads = [...this.roads, newJunctionObj];
             }
         } catch (error) {
             return { message: "Error: " + error }
@@ -102,25 +102,16 @@ class Board {
     //Validates road input and adds it to the board if valid.
     addRoad(player, startX, startY, endX, endY) {
         try {
-            if (!this.doCoordinatesExist(startX, startY) || !this.doCoordinatesExist(endX, endY) || Math.round(getDistance(startX, startY, endX, endY)) !== this.#tileRadius) {
-                throw "Invalid road";
-            }
-            if (this.getRoadStatus(startX, startY, endX, endY) === "free") {
+            if (this.#canPlaceRoad(player, startX, startY, endX, endY)) {
                 const newRoadObj = {
                     startX: startX,
                     startY: startY,
                     endX: endX,
                     endY: endY,
-                    status: player
+                    player: player,
                 }
-                this.roads = [...this.roads, newRoadObj];
-                this.updateLongestRoad(newRoadObj);
+                this.junctions = [...this.junctions, newJunctionObj];
             }
-            else {
-                throw "Road already accupied";
-            }
-
-
         } catch (error) {
             return { message: "Error: " + error }
         }
@@ -132,7 +123,7 @@ class Board {
             throw "Invalid road";
         }
         //Check if the road is free
-        if (this.getRoadStatus(startX, startY, endX, endY) !== "free") { 
+        if (this.getRoadStatus(startX, startY, endX, endY) !== "free") {
             throw "Road already accupied";
         }
         //Cheks if the road is connected to another player
