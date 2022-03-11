@@ -228,22 +228,6 @@ class Board {
         }
         return retValue;
     }
-
-    // get roads() {
-    //     return this.roads;
-    // }
-
-    // get settelments() {
-    //     return this.settelments;
-    // }
-
-    // get tiles() {
-    //     return this.tiles;
-    // }
-
-    // get getLongestRoad() {
-    //     return this.longestRoad
-    // }
 }
 
 //Each tiles should contain: coordinates, number, resource
@@ -295,6 +279,3 @@ function calulateCoordinatesByBoardPosition(row, cell, radius) {
 
     return coordinates;
 }
-
-let testBoard = new Board(70);
-console.log(testBoard);
