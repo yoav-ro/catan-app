@@ -43,6 +43,26 @@ class Board {
         }
     }
 
+    moveRobber(row, cell) {
+        this.tiles.forEach(tile => {
+            if (tile.row === row && tile.cell === cell) {
+                if (tile.isRobber) {
+                    throw "Robber already on tile"
+                }
+                tile.isRobber = true;
+            }
+        });
+
+        //Remove robber from where it was previously
+        this.tiles.forEach(tile => {
+            if (tile.row !== row && tile.cell !== cell) {
+                if (tile.isRobber) {
+                    this.isRobber = false;
+                }
+            }
+        });
+    }
+
     //Validates junction input and adds it to the board if valid.
     addJunction(player, x, y) {
         try {
@@ -200,7 +220,7 @@ class Board {
     doCoordinatesExist(x, y) {
         let retValue = true;
         for (let tile of this.tiles) {
-            for (let coord in this.tiles.coordinates) {
+            for (let coord in tile.coordinates) {
                 if (coord.x !== x && coord.y !== y) {
                     retValue = false;
                 }
@@ -232,20 +252,23 @@ function getTilesData(tileRadius) {
     const numbers = mixArray(numbersArr);
 
     const tilesData = resources.map(tile => {
-        if (tile.name === resourcesTypes.DESERT.name) {
-            return { resource: tile, number: undefined };
+        if (tile === resourcesTypes.DESERT) {
+            return { resource: tile, number: undefined, isRobber: false };
         } else {
-            return { resource: tile, number: numbers.pop() }
+            return { resource: tile, number: numbers.pop(), isRobber: false }
         }
     });
     const rowLengths = [3, 4, 5, 4, 3];
+    let tileCount = 0;
 
     for (let i = 0; i < rowLengths.length; i++) {
         for (let j = 0; j < rowLengths[i]; j++) {
-            tilesData.coordinates = calulateCoordinatesByBoardPosition(i, j, tileRadius);
+            tilesData[tileCount].coordinates = calulateCoordinatesByBoardPosition(i, j, tileRadius);
+            tilesData[tileCount].row = i;
+            tilesData[tileCount].cell = j;
+            tileCount++;
         }
     }
-
     return tilesData;
 }
 
@@ -272,3 +295,6 @@ function calulateCoordinatesByBoardPosition(row, cell, radius) {
 
     return coordinates;
 }
+
+let testBoard = new Board(70);
+console.log(testBoard);

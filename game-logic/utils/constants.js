@@ -32,16 +32,6 @@ const resourcesArr = [
     resourcesTypes.DESERT,
 ];
 
-//Each game contains: 14 knight, 5 victory points, 2 road building, 2 years of plenty, 2 monopoly.
-const devCardsArr = [
-    devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight,
-    devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight,
-    devCards.victoryPoint, devCards.victoryPoint, devCards.victoryPoint, devCards.victoryPoint, devCards.victoryPoint,
-    devCards.roadBuilding, devCards.roadBuilding,
-    devCards.yearOfPlenty, devCards.yearOfPlenty,
-    devCards.monopoly, devCards.monopoly,
-]
-
 const devCards = {
     knight: {
         name: "Knight",
@@ -74,6 +64,18 @@ const devCards = {
         canUseInstantly: false,
     }
 }
+
+//Each game contains: 14 knight, 5 victory points, 2 road building, 2 years of plenty, 2 monopoly.
+const devCardsArr = [
+    devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight,
+    devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight,
+    devCards.victoryPoint, devCards.victoryPoint, devCards.victoryPoint, devCards.victoryPoint, devCards.victoryPoint,
+    devCards.roadBuilding, devCards.roadBuilding,
+    devCards.yearOfPlenty, devCards.yearOfPlenty,
+    devCards.monopoly, devCards.monopoly,
+]
+
+
 
 module.exports = {
     resourcesArr, numbersArr, resourcesTypes, players, buildingCosts, devCards, devCardsArr
