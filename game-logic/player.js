@@ -1,4 +1,4 @@
-const { resourcesTypes, buildingCosts } = require("./utils/constants");
+const { resourcesTypes, buildingCosts, devCards } = require("./utils/constants");
 const { doesArrayContain } = require("./utils/helperFunctions")
 
 class Player {
@@ -134,6 +134,22 @@ class Player {
     }
 
     buyDevCard(devCardObj) {
+        try {
+            if (this.#canBuyDevCard()) {
+                this.devCards.push(devCardObj);
+                if (this.devCards.name === devCards.victoryPoint.name) {
+                    this.points++;
+                }
+            }
+        } catch (error) {
+            return { message: "Error: " + error };
+        }
+    }
 
+    #canBuyDevCard() {
+        if (!doesArrayContain(this.resources, buildingCosts.devCard)) {
+            throw "Not enough resources";
+        }
+        return true;
     }
 }
