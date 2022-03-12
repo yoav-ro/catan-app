@@ -16,12 +16,14 @@ class Board {
     getJunctionStatus(x, y) {
         try {
             if (this.doCoordinatesExist(x, y)) {
-                this.junctions.forEach(junction => {
-                    if (junction.x === x && junction.y === y) {
-                        return junction.status;
+                this.tiles.forEach(tile => {
+                    if (tile.doesHaveJunction(x, y)) {
+                        const status = tile.getJunctionStatus(x, y);
+                        return status;
                     }
                 });
-                return "free";
+            } else {
+                throw "Invalid coordinates";
             }
         } catch (error) {
             return { message: "Error: " + error };
@@ -220,15 +222,14 @@ class Board {
     }
 
     doCoordinatesExist(x, y) {
-        let retValue = true;
         for (let tile of this.tiles) {
             for (let coord in tile.coordinates) {
                 if (coord.x !== x && coord.y !== y) {
-                    retValue = false;
+                    return false;
                 }
             }
         }
-        return retValue;
+        return true;
     }
 }
 
@@ -237,21 +238,14 @@ function getTilesData(tileRadius) {
     const resources = mixArray(resourcesArr);
     const numbers = mixArray(numbersArr);
 
-    const tilesData = resources.map(tile => {
-        if (tile === resourcesTypes.DESERT) {
-            return { resource: tile, number: undefined, isRobber: false };
-        } else {
-            return { resource: tile, number: numbers.pop(), isRobber: false }
-        }
-    });
     const rowLengths = [3, 4, 5, 4, 3];
     let tileCount = 0;
 
+    const tilesData = [];
     for (let i = 0; i < rowLengths.length; i++) {
         for (let j = 0; j < rowLengths[i]; j++) {
-            tilesData[tileCount].coordinates = calulateCoordinatesByBoardPosition(i, j, tileRadius);
-            tilesData[tileCount].row = i;
-            tilesData[tileCount].cell = j;
+            const tile = new Tile(resources[tileCount], numbers[tileCount], i, j, tileRadius);
+            tilesData.push(tile);
             tileCount++;
         }
     }
