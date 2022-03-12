@@ -1,4 +1,5 @@
 const { dicesRoll } = require("./utils/helperFunctions");
+const { pieceTypes } = require("./utils/constants");
 const Player = require("./player");
 const Board = require("./board");
 
@@ -14,14 +15,32 @@ class Game {
         this.isSetupPhase = true;
     }
 
+    //Give player their resources by roll
     rollDice(player) {
         if (player.color = this.currTurn) {
             const roll = dicesRoll();
             this.board.tiles.forEach(tile => {
-                if (tile.number === roll){
-
+                if (tile.number === roll) {
+                    const resourceToGive = tile.resource;
+                    for (let junction of surroundingJunctions) {
+                        const player = this.#getPlayerByColor(junction.player);
+                        if (junction.type === pieceTypes.CITY) {
+                            player.addResources([resourceToGive, resourceToGive]);
+                        }
+                        if (junction.type === pieceTypes.SETTELMENT) {
+                            player.addResources([resourceToGive]);
+                        }
+                    }
                 }
             });
         }
+    }
+
+    #getPlayerByColor(color) {
+        this.players.forEach(player => {
+            if (player.color === color) {
+                return player;
+            }
+        })
     }
 }
