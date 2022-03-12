@@ -14,6 +14,10 @@ function doesArrayContain(array, items) {
     return items.every(item => { array.includes(item) })
 }
 
+function dicesRoll() {
+    return  Math.round(Math.random() * (6 - 1) + 1) + Math.round(Math.random() * (6 - 1) + 1)
+}
+
 module.exports = {
-    mixArray, getDistance, doesArrayContain
+    mixArray, getDistance, doesArrayContain, dicesRoll,
 }

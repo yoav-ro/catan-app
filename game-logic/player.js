@@ -1,4 +1,4 @@
-const { resourcesTypes, buildingCosts, devCards } = require("./utils/constants");
+const { buildingCosts, devCards } = require("./utils/constants");
 const { doesArrayContain } = require("./utils/helperFunctions")
 
 class Player {
@@ -153,3 +153,5 @@ class Player {
         return true;
     }
 }
+
+module.exports = Player;

@@ -1,5 +1,6 @@
-const { resourcesTypes, numbersArr, resourcesArr, players } = require("./utils/constants");
+const { resourcesTypes, numbersArr, resourcesArr } = require("./utils/constants");
 const { mixArray, getDistance } = require("./utils/helperFunctions")
+const Tile = require("./tile");
 
 class Board {
     #tileRadius
@@ -64,13 +65,14 @@ class Board {
     }
 
     //Validates junction input and adds it to the board if valid.
-    addJunction(player, x, y) {
+    addJunction(player, x, y, type) {
         try {
             if (this.#canPlaceSettelment(player, x, y)) {
                 const newJunctionObj = {
                     x: x,
                     y: y,
                     player: player,
+                    type: type,
                 }
                 this.roads = [...this.roads, newJunctionObj];
                 this.#findLongestRoad();
@@ -131,7 +133,7 @@ class Board {
                     endY: endY,
                     player: player,
                 }
-                this.junctions = [...this.junctions, newJunctionObj];
+                this.junctions = [...this.junctions, newRoadObj];
                 this.#findLongestRoad();
             }
         } catch (error) {
@@ -256,26 +258,4 @@ function getTilesData(tileRadius) {
     return tilesData;
 }
 
-function calulateCoordinatesByBoardPosition(row, cell, radius) {
-    const rad30 = 30 * Math.PI / 180;
-    const hexPerpendicular = Math.cos(rad30) * radius;
-
-    const center = {
-        x: cell * hexPerpendicular * 2 + hexPerpendicular + row % 2 * hexPerpendicular,
-        y: radius * 1.5 * row + radius,
-    }
-    if (row === 0 || row === 4) {
-        center.x += hexPerpendicular * 2;
-    }
-
-    const coordinates = {
-        top: { x: center.x, y: center.y + radius },
-        topLeft: { x: center.x - hexPerpendicular, y: center.y + Math.tan(rad30) * hexPerpendicular },
-        topRight: { x: center.x + hexPerpendicular, y: center.y + Math.tan(rad30) * hexPerpendicular },
-        bottom: { x: center.x, y: center.y - radius },
-        bottomLeft: { x: center.x - hexPerpendicular, y: center.y - Math.tan(rad30) * hexPerpendicular },
-        bottomRight: { x: center.x + hexPerpendicular, y: center.y - Math.tan(rad30) * hexPerpendicular },
-    }
-
-    return coordinates;
-}
+module.exports = Board;

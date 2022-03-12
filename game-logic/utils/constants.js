@@ -14,6 +14,12 @@ const players = {
     ORANGE: "orange",
 }
 
+const pieceTypes={
+    CITY: "city",
+    SETTELMENT: "settelment",
+    ROAD: "road",
+    DEVCARD: "devCard",
+}
 const buildingCosts = {
     settelment: [resourcesTypes.BRICK, resourcesTypes.WOOD, resourcesTypes.SHEEP, resourcesTypes.WHEAT],
     road: [resourcesTypes.WOOD, resourcesTypes.BRICK],
@@ -78,5 +84,5 @@ const devCardsArr = [
 
 
 module.exports = {
-    resourcesArr, numbersArr, resourcesTypes, players, buildingCosts, devCards, devCardsArr
+    resourcesArr, numbersArr, resourcesTypes, players, buildingCosts, devCards, devCardsArr, pieceTypes
 }
