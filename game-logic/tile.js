@@ -18,6 +18,15 @@ class Tile {
         }
     }
 
+    doesHaveJunction(x, y) {
+        for (let coord in this.coordinates) {
+            if (coord.x === x && coord.y === y) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     getJunctionStatus(x, y) {
         for (let i = 0; i < this.surroundingJunctions.length; i++) {
             if (this.surroundingJunctions[i].x === x && this.surroundingJunctions[i].y === y) {

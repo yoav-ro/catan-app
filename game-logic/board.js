@@ -1,4 +1,4 @@
-const { resourcesTypes, numbersArr, resourcesArr } = require("./utils/constants");
+const { resourcesTypes, numbersArr, resourcesArr, pieceTypes } = require("./utils/constants");
 const { mixArray, getDistance } = require("./utils/helperFunctions")
 const Tile = require("./tile");
 
@@ -7,7 +7,6 @@ class Board {
     constructor(tileRadius) {
         this.#tileRadius = tileRadius;
         this.roads = [];
-        this.junctions = [];
         this.longestRoad = [];
         this.tiles = getTilesData(tileRadius);
     }
@@ -16,12 +15,14 @@ class Board {
     getJunctionStatus(x, y) {
         try {
             if (this.doCoordinatesExist(x, y)) {
-                this.junctions.forEach(junction => {
-                    if (junction.x === x && junction.y === y) {
-                        return junction.status;
+                this.tiles.forEach(tile => {
+                    if (tile.doesHaveJunction(x, y)) {
+                        const status = tile.getJunctionStatus(x, y);
+                        return status;
                     }
                 });
-                return "free";
+            } else {
+                throw "Invalid coordinates";
             }
         } catch (error) {
             return { message: "Error: " + error };
@@ -67,7 +68,7 @@ class Board {
     //Validates junction input and adds it to the board if valid.
     addJunction(player, x, y, type) {
         try {
-            if (this.#canPlaceSettelment(player, x, y)) {
+            if (this.#canPlaceSettelment(player, x, y, type)) {
                 const newJunctionObj = {
                     x: x,
                     y: y,
@@ -83,15 +84,26 @@ class Board {
     }
 
     //Validates if the settelment can be build
-    #canPlaceSettelment(player, x, y) {
+    #canPlaceSettelment(player, x, y, newPieceType) {
         if (!this.doCoordinatesExist(x, y)) { //Checks if the coordinates are valid
             throw "Invalid junction coordinates";
         }
-        this.junctions.forEach(junction => { //Check if the junction is free
-            if (junction.x === x && junction.y === y) {
-                throw "Junction already accupied";
+
+        const junctionStatus = this.getJunctionStatus(x, y);
+        if (junctionStatus !== "free") { //Type validation
+            if (newPieceType === junctionStatus.type) {
+                throw "Junction is already a " + newPieceType;
             }
-        });
+            if (newPieceType === pieceTypes.CITY) {
+                if (junctionStatus.player !== player) {
+                    throw "Cant upgrade a settlement that doesnt belong to the player";
+                }
+                if (junctionStatus.type === pieceTypes.SETTELMENT) {
+                    throw "Cant change a city to a settelment";
+                }
+            }
+        }
+
         if (!this.#isJunction2RoadsApart(x, y)) { //Check if the junction isnt too close to any other junctions
             throw "Junction is to close to another settelment";
         }
@@ -102,9 +114,11 @@ class Board {
     }
 
     #isJunction2RoadsApart(x, y) {
-        this.junctions.forEach(junction => {
-            if (Math.round(getDistance(junction.x, junction.y, x, y)) === this.#tileRadius) {
-                return false;
+        this.tiles.forEach(tile => {
+            for (let coord in tile.coordinates) {
+                if (Math.round(getDistance(coord.x, coord.y, x, y)) === this.#tileRadius) {
+                    return false;
+                }
             }
         })
         return true;
@@ -133,7 +147,7 @@ class Board {
                     endY: endY,
                     player: player,
                 }
-                this.junctions = [...this.junctions, newRoadObj];
+                this.roads = [...this.roads, newRoadObj];
                 this.#findLongestRoad();
             }
         } catch (error) {
@@ -150,7 +164,7 @@ class Board {
         if (this.getRoadStatus(startX, startY, endX, endY) !== "free") {
             throw "Road already accupied";
         }
-        //Cheks if the road is connected to another player
+        //Checks if the road is connected to another player
         if (!this.#isConnectedToJunction(player, startX, startY, endX, endY) || !this.#isConnectedToRoad(player, startX, startY, endX, endY)) {
             throw "Cant place road here"
         }
@@ -158,14 +172,14 @@ class Board {
     }
 
     #isConnectedToJunction(player, startX, startY, endX, endY) {
-        this.junctions.forEach(junction => {
-            if (junction.x === startX && junction.y === startY && junction.status === player) {
+        const startStatus = this.getJunctionStatus(startX, startY);
+        const endStatus = this.getJunctionStatus(endX, endY);
+        if (startStatus !== "free" && endStatus !== "free") {
+            if (endStatus.player === player || startStatus.player === player) {
                 return true;
             }
-            if (junction.x === endX && junction.y === endY && junction.status === player) {
-                return true;
-            }
-        })
+        }
+
         return false;
     }
 
@@ -220,15 +234,14 @@ class Board {
     }
 
     doCoordinatesExist(x, y) {
-        let retValue = true;
         for (let tile of this.tiles) {
             for (let coord in tile.coordinates) {
                 if (coord.x !== x && coord.y !== y) {
-                    retValue = false;
+                    return false;
                 }
             }
         }
-        return retValue;
+        return true;
     }
 }
 
@@ -237,21 +250,14 @@ function getTilesData(tileRadius) {
     const resources = mixArray(resourcesArr);
     const numbers = mixArray(numbersArr);
 
-    const tilesData = resources.map(tile => {
-        if (tile === resourcesTypes.DESERT) {
-            return { resource: tile, number: undefined, isRobber: false };
-        } else {
-            return { resource: tile, number: numbers.pop(), isRobber: false }
-        }
-    });
     const rowLengths = [3, 4, 5, 4, 3];
     let tileCount = 0;
 
+    const tilesData = [];
     for (let i = 0; i < rowLengths.length; i++) {
         for (let j = 0; j < rowLengths[i]; j++) {
-            tilesData[tileCount].coordinates = calulateCoordinatesByBoardPosition(i, j, tileRadius);
-            tilesData[tileCount].row = i;
-            tilesData[tileCount].cell = j;
+            const tile = new Tile(resources[tileCount], numbers[tileCount], i, j, tileRadius);
+            tilesData.push(tile);
             tileCount++;
         }
     }
