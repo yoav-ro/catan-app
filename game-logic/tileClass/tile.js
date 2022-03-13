@@ -13,16 +13,17 @@ class Tile {
 
     setJunction(x, y, player, type) {
         for (let coord in this.coordinates) {
-            if (coord.x === x && coord.y === y) {
+            if (this.coordinates[coord].x === x && this.coordinates[coord].y === y) {
                 this.#removeJunction(x, y);
-                this.surroundingJunctions.push(getJuncObj(x, y, player, type));
+                const newJuncObj= getJuncObj(x, y, player, type);
+                this.surroundingJunctions.push(newJuncObj);
             }
         }
     }
 
     doesHaveJunction(x, y) {
         for (let coord in this.coordinates) {
-            if (coord.x === x && coord.y === y) {
+            if (this.coordinates[coord].x === x && this.coordinates[coord].y === y) {
                 return true;
             }
         }
@@ -56,7 +57,7 @@ function getJuncObj(x, y, player, type) {
         x: x,
         y: y,
         player: player,
-        type, type
+        type: type
     };
 }
 

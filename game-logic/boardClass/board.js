@@ -107,7 +107,7 @@ class Board {
     #isJunction2RoadsApart(x, y) {
         this.tiles.forEach(tile => {
             for (let coord in tile.coordinates) {
-                if (Math.round(getDistance(coord.x, coord.y, x, y)) === this.#tileRadius) {
+                if (Math.round(getDistance(tile.coordinates[coord].x, tile.coordinates[coord].y, x, y)) === this.#tileRadius) {
                     return false;
                 }
             }
@@ -223,7 +223,7 @@ class Board {
     doCoordinatesExist(x, y) {
         for (let tile of this.tiles) {
             for (let coord in tile.coordinates) {
-                if (coord.x !== x && coord.y !== y) {
+                if (tile.coordinates[coord].x !== x && tile.coordinates[coord].y !== y) {
                     return false;
                 }
             }

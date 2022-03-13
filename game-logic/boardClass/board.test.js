@@ -1,5 +1,5 @@
 const Board = require("./board");
-const { resourcesTypes, resourcesArr } = require("../utils/constants");
+const { resourcesTypes, resourcesArr, numbersArr } = require("../utils/constants");
 const { doesArrayContain } = require("../utils/helperFunctions");
 
 const mockBoard = new Board(70);
@@ -30,13 +30,15 @@ describe("Construction testing", () => {
         })
     })
 
-    test("Board includes the correct amount of each resource", () => {
+    test("Board includes the correct amount of each resource and numbers", () => {
         const resourcesOnBoard = [];
+        const numbersOnBoard = [];
         mockBoard.tiles.forEach(tile => {
             resourcesOnBoard.push(tile.resource);
+            numbersOnBoard.push(tile.number);
         })
-        console.log(resourcesOnBoard.length, resourcesArr.length)
         expect(doesArrayContain(resourcesOnBoard, resourcesArr)).toBe(true);
+        expect(doesArrayContain(numbersArr, numbersOnBoard)).toBe(true);
     })
 })
 
