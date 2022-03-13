@@ -1,3 +1,5 @@
+const { resourcesTypes } = require("../utils/constants");
+
 class Tile {
     constructor(resource, number, row, cell, radius) {
         this.number = number;
@@ -5,7 +7,7 @@ class Tile {
         this.row = row;
         this.cell = cell;
         this.coordinates = calulateCoordinatesByBoardPosition(row, cell, radius);
-        this.isRobber = false;
+        this.isRobber = resource === resourcesTypes.DESERT ? true : false;
         this.surroundingJunctions = [];
     }
 

@@ -1,6 +1,6 @@
-const { resourcesTypes, numbersArr, resourcesArr, pieceTypes } = require("./utils/constants");
-const { mixArray, getDistance } = require("./utils/helperFunctions")
-const Tile = require("./tile");
+const { resourcesTypes, numbersArr, resourcesArr, pieceTypes } = require("../utils/constants");
+const { mixArray, getDistance } = require("../utils/helperFunctions")
+const Tile = require("../tileClass/tile");
 
 class Board {
     #tileRadius

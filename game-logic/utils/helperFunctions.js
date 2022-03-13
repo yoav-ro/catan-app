@@ -11,7 +11,12 @@ function getDistance(x1, y1, x2, y2) {
 }
 
 function doesArrayContain(array, items) {
-    return items.every(item => { array.includes(item) })
+    items.forEach(item => {
+        if (!array.includes(item)) {
+            return false;
+        }
+    });
+    return true;
 }
 
 function dicesRoll() {

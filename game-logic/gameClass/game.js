@@ -1,20 +1,36 @@
-const { dicesRoll, mixArray } = require("./utils/helperFunctions");
-const { pieceTypes, resourcesTypes, devCardsArr } = require("./utils/constants");
-const Player = require("./player");
-const Board = require("./board");
+const { dicesRoll, mixArray } = require("../utils/helperFunctions");
+const { pieceTypes, resourcesTypes, devCardsArr } = require("../utils/constants");
+const Player = require("../playerClass/player");
+const Board = require("../boardClass/board");
 
 class Game {
     constructor(playersDataArr, tileRadius) {
         this.board = new Board(tileRadius);
         this.players = [
             new Player(playersDataArr[0].name, playersDataArr[0].color),
-            new Player(pplayersDataArr[1].name, playersDataArr[1].color),
+            new Player(playersDataArr[1].name, playersDataArr[1].color),
             new Player(playersDataArr[2].name, playersDataArr[2].color),
             new Player(playersDataArr[3].name, playersDataArr[3].color)];
         this.devCards = mixArray(devCardsArr);
         this.currTurn = undefined;
         this.isSetupPhase = true;
     }
+    
+    activateMonopoly(playerColor, resourceType)
+    {
+        
+    }
+
+    activateRoadBuilding(playerColor, road1StartX, road1StartY, road1EndX, road1EndY,road2StartX, road2StartY, road2EndX, road2EndY)
+    {}
+
+    activateYearOfPlenty(playerColor, resourceA, resourceB)
+    {}
+
+    activateKnight(playerColor, newRobberX, newRobberY)
+    {}
+
+
 
     //Give player their resources by roll
     rollDice(player) {
@@ -91,3 +107,5 @@ class Game {
         })
     }
 }
+
+module.exports = Game;
