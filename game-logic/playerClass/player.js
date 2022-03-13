@@ -77,20 +77,22 @@ class Player {
         return true;
     }
 
-    buildSettelment(x, y) {
+    buildSettelment(x, y, shouldTakeResources) {
         if (this.#canBuildSettlement(x, y)) {
             this.settelments.push({ x: x, y: y });
-            this.removeResources(buildingCosts.settelment);
+            if (!shouldTakeResources) {
+                this.removeResources(buildingCosts.settelment);
+            }
             this.settelmentsLeft--;
             this.addPoints(1);
         }
     }
 
-    #canBuildSettlement(x, y) {
+    #canBuildSettlement(x, y, shouldTakeResources) {
         if (this.settelmentsLeft < 0) {
             throw "5 settelments already built";
         }
-        if (!doesArrayContain(this.resources, buildingCosts.settelment)) {
+        if (!doesArrayContain(this.resources, buildingCosts.settelment) && !shouldTakeResources) {
             throw "Not enough resources";
         }
         if (this.settelments.includes({ x: x, y: y })) {
@@ -99,19 +101,21 @@ class Player {
         return true;
     }
 
-    buildRoad(startX, startY, endX, endY) {
+    buildRoad(startX, startY, endX, endY, shouldTakeResources) {
         if (this.#canBuildRoad(startX, startY, endX, endY)) {
             this.roads.push({ startX: startX, startY: startY, endX: endX, endY: endY });
-            this.removeResources(buildingCosts.road);
+            if (!shouldTakeResources) {
+                this.removeResources(buildingCosts.road);
+            }
             this.roadsLeft--;
         }
     }
 
-    #canBuildRoad(startX, startY, endX, endY) {
+    #canBuildRoad(startX, startY, endX, endY, shouldTakeResources) {
         if (this.roadsLeft < 0) {
             throw "15 roads already built";
         }
-        if (!doesArrayContain(this.resources, buildingCosts.road)) {
+        if (!doesArrayContain(this.resources, buildingCosts.road) && !shouldTakeResources) {
             throw "Not enough resources";
         }
         if (this.roadsLeft.includes({ startX: startX, startY: startY, endX: endX, endY: endY })) {
