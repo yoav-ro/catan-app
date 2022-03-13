@@ -45,28 +45,23 @@ class Player {
     }
 
     buildCity(x, y) {
-        try {
-            if (this.#canBuildCity(x, y)) {
-                for (let i = 0; i < this.settelments.length; i++) {
-                    if (this.settelments[i].x === x && this.settelments[i].y === y) {
-                        const cityObject = {
-                            x: x,
-                            y: y,
-                        }
-                        this.cities.push(cityObject);
-                        this.citiesLeft--;
-                        this.settelmentsLeft++;
-                        this.settelments.splice(i, 1);
-                        this.removeResources(buildingCosts.city);
-                        this.addPoints(2);
-                        break;
+        if (this.#canBuildCity(x, y)) {
+            for (let i = 0; i < this.settelments.length; i++) {
+                if (this.settelments[i].x === x && this.settelments[i].y === y) {
+                    const cityObject = {
+                        x: x,
+                        y: y,
                     }
+                    this.cities.push(cityObject);
+                    this.citiesLeft--;
+                    this.settelmentsLeft++;
+                    this.settelments.splice(i, 1);
+                    this.removeResources(buildingCosts.city);
+                    this.addPoints(2);
+                    break;
                 }
             }
-        } catch (error) {
-            return { message: "Error: " + error };
         }
-
     }
 
     #canBuildCity(x, y) {
@@ -83,15 +78,11 @@ class Player {
     }
 
     buildSettelment(x, y) {
-        try {
-            if (this.#canBuildSettlement(x, y)) {
-                this.settelments.push({ x: x, y: y });
-                this.removeResources(buildingCosts.settelment);
-                this.settelmentsLeft--;
-                this.addPoints(1);
-            }
-        } catch (error) {
-            return { message: "Error: " + error };
+        if (this.#canBuildSettlement(x, y)) {
+            this.settelments.push({ x: x, y: y });
+            this.removeResources(buildingCosts.settelment);
+            this.settelmentsLeft--;
+            this.addPoints(1);
         }
     }
 
@@ -109,14 +100,10 @@ class Player {
     }
 
     buildRoad(startX, startY, endX, endY) {
-        try {
-            if (this.#canBuildRoad(startX, startY, endX, endY)) {
-                this.roads.push({ startX: startX, startY: startY, endX: endX, endY: endY });
-                this.removeResources(buildingCosts.road);
-                this.roadsLeft--;
-            }
-        } catch (error) {
-            return { message: "Error: " + error };
+        if (this.#canBuildRoad(startX, startY, endX, endY)) {
+            this.roads.push({ startX: startX, startY: startY, endX: endX, endY: endY });
+            this.removeResources(buildingCosts.road);
+            this.roadsLeft--;
         }
     }
 
@@ -134,15 +121,11 @@ class Player {
     }
 
     buyDevCard(devCardObj) {
-        try {
-            if (this.#canBuyDevCard()) {
-                this.devCards.push(devCardObj);
-                if (this.devCards.name === devCards.victoryPoint.name) {
-                    this.points++;
-                }
+        if (this.#canBuyDevCard()) {
+            this.devCards.push(devCardObj);
+            if (this.devCards.name === devCards.victoryPoint.name) {
+                this.points++;
             }
-        } catch (error) {
-            return { message: "Error: " + error };
         }
     }
 

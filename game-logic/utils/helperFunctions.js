@@ -15,7 +15,7 @@ function doesArrayContain(array, items) {
 }
 
 function dicesRoll() {
-    return  Math.round(Math.random() * (6 - 1) + 1) + Math.round(Math.random() * (6 - 1) + 1)
+    return Math.round(Math.random() * (6 - 1) + 1) + Math.round(Math.random() * (6 - 1) + 1)
 }
 
 module.exports = {

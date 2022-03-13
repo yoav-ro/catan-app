@@ -14,33 +14,31 @@ class Board {
 
     //Returns the status of the requested junction, if exists.
     getJunctionStatus(x, y) {
-        try {
-            if (this.doCoordinatesExist(x, y)) {
-                this.junctions.forEach(junction => {
-                    if (junction.x === x && junction.y === y) {
-                        return junction.status;
-                    }
-                });
-                return "free";
-            }
-        } catch (error) {
-            return { message: "Error: " + error };
+        if (this.doCoordinatesExist(x, y)) {
+            this.junctions.forEach(junction => {
+                if (junction.x === x && junction.y === y) {
+                    return junction.status;
+                }
+            });
+            return "free";
+        }
+        else {
+            throw "Invalid junction coordinates"
         }
     }
 
     //Returns the status of the requested road, if exists.
     getRoadStatus(startX, startY, endX, endY) {
-        try {
-            if (this.doCoordinatesExist(startX, startY) && this.doCoordinatesExist(endX, endY)) {
-                this.roads.forEach(road => {
-                    if (road.startX === startX && road.startY === startY && road.endX === endX && road.endY === endY) {
-                        return road.status;
-                    }
-                });
-                return "free";
-            }
-        } catch (error) {
-            return { message: "Error: " + error };
+        if (this.doCoordinatesExist(startX, startY) && this.doCoordinatesExist(endX, endY)) {
+            this.roads.forEach(road => {
+                if (road.startX === startX && road.startY === startY && road.endX === endX && road.endY === endY) {
+                    return road.status;
+                }
+            });
+            return "free";
+        }
+        else {
+            throw "Invalid road coordinates"
         }
     }
 
@@ -66,19 +64,14 @@ class Board {
 
     //Validates junction input and adds it to the board if valid.
     addJunction(player, x, y, type) {
-        try {
-            if (this.#canPlaceSettelment(player, x, y)) {
-                const newJunctionObj = {
-                    x: x,
-                    y: y,
-                    player: player,
-                    type: type,
-                }
-                this.roads = [...this.roads, newJunctionObj];
-                this.#findLongestRoad();
+        if (this.#canPlaceSettelment(player, x, y)) {
+            const newJunctionObj = {
+                x: x,
+                y: y,
+                player: player,
+                type: type,
             }
-        } catch (error) {
-            return { message: "Error: " + error }
+            this.roads = [...this.roads, newJunctionObj];
         }
     }
 
@@ -124,20 +117,16 @@ class Board {
 
     //Validates road input and adds it to the board if valid.
     addRoad(player, startX, startY, endX, endY) {
-        try {
-            if (this.#canPlaceRoad(player, startX, startY, endX, endY)) {
-                const newRoadObj = {
-                    startX: startX,
-                    startY: startY,
-                    endX: endX,
-                    endY: endY,
-                    player: player,
-                }
-                this.junctions = [...this.junctions, newRoadObj];
-                this.#findLongestRoad();
+        if (this.#canPlaceRoad(player, startX, startY, endX, endY)) {
+            const newRoadObj = {
+                startX: startX,
+                startY: startY,
+                endX: endX,
+                endY: endY,
+                player: player,
             }
-        } catch (error) {
-            return { message: "Error: " + error }
+            this.junctions = [...this.junctions, newRoadObj];
+            this.#findLongestRoad();
         }
     }
 
