@@ -1,5 +1,5 @@
 const { dicesRoll, mixArray } = require("../utils/helperFunctions");
-const { pieceTypes, resourcesTypes, devCardsArr, players } = require("../utils/constants");
+const { pieceTypes, resourcesTypes, devCardsArr, playerColors } = require("../utils/constants");
 const Player = require("../playerClass/player");
 const Board = require("../boardClass/board");
 
@@ -12,11 +12,22 @@ class Game {
             new Player(playersDataArr[2].name, playersDataArr[2].color),
             new Player(playersDataArr[3].name, playersDataArr[3].color)];
         this.devCards = mixArray(devCardsArr);
-        this.initPickOrder = mixArray(players);
+        this.initPickOrder = mixArray(playerColors);
         this.currTurn = undefined;
     }
 
     activateMonopoly(playerColor, resourceType) {
+        const resourceToAdd = [];
+        playerColors.forEach(player => {
+            if (player.color !== player) {
+                const resCount = player.countResources(resourceType);
+                const resourcesToRemove = Array(resCount).fill(resourceType);
+                player.removeResources(resourcesToRemove);
+                resourceToAdd.concat(resourcesToRemove);
+            }
+        })
+
+        this.#getPlayerByColor(playerColor).addResources(resourceToAdd);
     }
 
     activateRoadBuilding(playerColor, road1StartX, road1StartY, road1EndX, road1EndY, road2StartX, road2StartY, road2EndX, road2EndY) { }

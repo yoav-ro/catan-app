@@ -1,5 +1,5 @@
 const { buildingCosts, devCards } = require("../utils/constants");
-const { doesArrayContain } = require("../utils/helperFunctions")
+const { doesArrayContain, countItemsInArray } = require("../utils/helperFunctions")
 
 class Player {
     constructor(name, color) {
@@ -20,6 +20,10 @@ class Player {
 
     addResources(resourcesToAddArr) {
         this.resources = [...this.resources, ...resourcesToAddArr];
+    }
+
+    countResources(resourceType) {
+        return countItemsInArray(this.resources, resourceType);
     }
 
     removeResources(resourcesToRemoveArr) {

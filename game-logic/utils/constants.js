@@ -7,7 +7,7 @@ const resourcesTypes = {
     DESERT: "desert",
 }
 
-const players = {
+const playerColors = {
     BLUE: "blue",
     RED: "red",
     WHITE: "white",
@@ -84,5 +84,5 @@ const devCardsArr = [
 
 
 module.exports = {
-    resourcesArr, numbersArr, resourcesTypes, players, buildingCosts, devCards, devCardsArr, pieceTypes
+    resourcesArr, numbersArr, resourcesTypes, playerColors, buildingCosts, devCards, devCardsArr, pieceTypes
 }

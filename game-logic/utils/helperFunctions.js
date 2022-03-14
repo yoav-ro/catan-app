@@ -23,6 +23,10 @@ function dicesRoll() {
     return Math.round(Math.random() * (6 - 1) + 1) + Math.round(Math.random() * (6 - 1) + 1)
 }
 
+function countItemsInArray(array, itemToCount) {
+    return array.filter(item => item === itemToCount).length;
+}
+
 module.exports = {
-    mixArray, getDistance, doesArrayContain, dicesRoll,
+    mixArray, getDistance, doesArrayContain, dicesRoll, countItemsInArray
 }
