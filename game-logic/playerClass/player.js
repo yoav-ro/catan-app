@@ -14,12 +14,29 @@ class Player {
         this.cities = [];
         this.roads = [];
         this.devCards = [];
+        this.activeKnightes = 0;
         this.largestArmy = false;
         this.longestRoad = false;
     }
 
     addResources(resourcesToAddArr) {
         this.resources = [...this.resources, ...resourcesToAddArr];
+    }
+
+    activateDevCard(devCardType) {
+        let doesPlayerHaveCard = false;
+        this.devCards.forEach(devCard => {
+            if (devCard.name === devCardType && !devCard.isUsed) {
+                doesPlayerHaveCard = true;
+                devCard.isUsed = true;
+            }
+            else {
+                throw "Development card already used"
+            }
+        })
+        if (!doesPlayerHaveCard) {
+            throw "Player doesnt have this card (" + devCardType + ")"
+        }
     }
 
     countResources(resourceType) {
@@ -84,7 +101,7 @@ class Player {
     buildSettelment(x, y, shouldTakeResources) {
         if (this.#canBuildSettlement(x, y)) {
             this.settelments.push({ x: x, y: y });
-            if (!shouldTakeResources) {
+            if (shouldTakeResources) {
                 this.removeResources(buildingCosts.settelment);
             }
             this.settelmentsLeft--;

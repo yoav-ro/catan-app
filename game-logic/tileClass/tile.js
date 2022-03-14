@@ -15,8 +15,8 @@ class Tile {
         for (let coord in this.coordinates) {
             if (this.coordinates[coord].x === x && this.coordinates[coord].y === y) {
                 this.#removeJunction(x, y);
-                const newJuncObj= getJuncObj(x, y, player, type);
-                this.surroundingJunctions.push(newJuncObj);
+                const newJuncObj = getJuncObj(x, y, player, type);
+                this.surroundingJunctions = [...this.surroundingJunctions, newJuncObj];
             }
         }
     }
@@ -34,11 +34,10 @@ class Tile {
         for (let i = 0; i < this.surroundingJunctions.length; i++) {
             if (this.surroundingJunctions[i].x === x && this.surroundingJunctions[i].y === y) {
                 const { player, type } = this.surroundingJunctions[i];
-                return { player, type };
-            } else {
-                return "free";
+                return { player: player, type: type };
             }
         }
+        return "free";
     }
 
     #removeJunction(x, y) {

@@ -1,5 +1,5 @@
 const { dicesRoll, mixArray } = require("../utils/helperFunctions");
-const { pieceTypes, resourcesTypes, devCardsArr, playerColors } = require("../utils/constants");
+const { pieceTypes, resourcesTypes, devCardsArr, playerColors, devCards } = require("../utils/constants");
 const Player = require("../playerClass/player");
 const Board = require("../boardClass/board");
 
@@ -17,30 +17,68 @@ class Game {
     }
 
     activateMonopoly(playerColor, resourceType) {
-        const resourceToAdd = [];
-        playerColors.forEach(player => {
-            if (player.color !== player) {
-                const resCount = player.countResources(resourceType);
-                const resourcesToRemove = Array(resCount).fill(resourceType);
-                player.removeResources(resourcesToRemove);
-                resourceToAdd.concat(resourcesToRemove);
-            }
-        })
-
-        this.#getPlayerByColor(playerColor).addResources(resourceToAdd);
+        try {
+            const resourceToAdd = [];
+            playerColors.forEach(player => {
+                if (player.color !== player) {
+                    const resCount = player.countResources(resourceType);
+                    const resourcesToRemove = Array(resCount).fill(resourceType);
+                    player.removeResources(resourcesToRemove);
+                    resourceToAdd.concat(resourcesToRemove);
+                    player.activateDevCard(devCards.monopoly.name);
+                }
+            })
+            this.#getPlayerByColor(playerColor).addResources(resourceToAdd);
+        } catch (error) {
+            return { Error: "Error: " + error };
+        }
     }
 
-    activateRoadBuilding(playerColor, road1StartX, road1StartY, road1EndX, road1EndY, road2StartX, road2StartY, road2EndX, road2EndY) { }
+    activateRoadBuilding(playerColor, road1StartX, road1StartY, road1EndX, road1EndY, road2StartX, road2StartY, road2EndX, road2EndY) {
+        try {
+            const player = this.#getPlayerByColor(playerColor);
+            player.buildRoad(road1StartX, road1StartY, road1EndX, road1EndY, false);
+            player.buildRoad(road2StartX, road2StartY, road2EndX, road2EndY, false);
+            this.board.addRoad(playerColor, road1StartX, road1StartY, road1EndX, road1EndY);
+            this.board.addRoad(playerColor, road2StartX, road2StartY, road2EndX, road2EndY);
+            player.activateDevCard(devCards.monopoly.name);
+        } catch (error) {
+            return { Error: "Error: " + error };
+        }
 
-    activateYearOfPlenty(playerColor, resourceA, resourceB) { }
+    }
 
-    activateKnight(playerColor, newRobberX, newRobberY) { }
+    activateYearOfPlenty(playerColor, resourceA, resourceB) {
+        try {
+            const player = this.#getPlayerByColor(playerColor);
+            player.addResources([resourceA, resourceB]);
+            player.activateDevCard(devCards.yearOfPlenty.name);
+        } catch (error) {
+            return { Error: "Error: " + error };
+        }
+    }
+
+    activateKnight(playerColor, newRobberRow, newRobberCell) {
+        try {
+            this.board.moveRobber(newRobberRow, newRobberCell);
+            // this.takeResource()
+        } catch (error) {
+            return { Error: "Error: " + error };
+        }
+    }
+
+    takeResource(takingPlayer, robbedPlayer, resource) {
+        const robbingPlayer = this.#getPlayerByColor(takingPlayer);
+        const robbed = this.#getPlayerByColor(robbedPlayer);
+        robbed.removeResources([resource]);
+        robbingPlayer.addResources([resource]);
+    }
 
     initialBuildSettelment(playerColor, x, y) {
         if (playerColor === this.initPickOrder[0]) {
             const player = this.#getPlayerByColor(playerColor);
             if (player.settelments.length < 2) {
-                this.buildSettelment(playerColor, x, y, true);
+                this.buildSettelment(playerColor, x, y, false, false);
             }
         }
         const lastPlayer = this.initPickOrder.shift()
@@ -58,6 +96,7 @@ class Game {
         this.initPickOrder.push(lastPlayer);
     }
 
+    //Returns a random number between 1-12
     rollDice() {
         return dicesRoll();
     }
@@ -85,11 +124,11 @@ class Game {
 
     }
 
-    buildSettelment(playerColor, x, y, shouldTakeResources) {
+    buildSettelment(playerColor, x, y, shouldTakeResources, shouldBeConnected) {
         try {
             const player = this.#getPlayerByColor(playerColor);
             player.buildSettelment(x, y, shouldTakeResources);
-            this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT);
+            this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT, shouldBeConnected);
         } catch (error) {
             return { Error: "Error: " + error };
         }
@@ -99,7 +138,7 @@ class Game {
         try {
             const player = this.#getPlayerByColor(playerColor);
             player.buildCity(x, y);
-            this.board.addJunction(playerColor, x, y, pieceTypes.CITY);
+            this.board.addJunction(playerColor, x, y, pieceTypes.CITY, true);
         } catch (error) {
             return { Error: "Error: " + error };
         }

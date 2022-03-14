@@ -1,10 +1,10 @@
 const Board = require("./board");
-const { resourcesTypes, resourcesArr, numbersArr } = require("../utils/constants");
+const { resourcesTypes, resourcesArr, numbersArr, pieceTypes } = require("../utils/constants");
 const { doesArrayContain } = require("../utils/helperFunctions");
 
-const mockBoard = new Board(70);
 
 describe("Construction testing", () => {
+    const mockBoard = new Board(70);
 
     test("No initial roads", () => {
         expect(
@@ -42,3 +42,61 @@ describe("Construction testing", () => {
     })
 })
 
+describe("Robber tests", () => {
+    test("Moving to the same place throws an error", () => {
+        const mockBoard = new Board(70);
+        let oldRow, oldCell;
+        mockBoard.tiles.forEach(tile => {
+            if (tile.resource === resourcesTypes.DESERT) {
+                oldCell = tile.cell;
+                oldRow = tile.row;
+            }
+        })
+        const move = () => {
+            mockBoard.moveRobber(oldRow, oldCell);
+        }
+        expect(move).toThrow();
+    })
+
+    test("Moving to a new location", () => {
+        const mockBoard = new Board(70);
+        let oldRow, oldCell;
+        mockBoard.tiles.forEach(tile => {
+            if (tile.resource === resourcesTypes.DESERT) {
+                oldCell = tile.cell;
+                oldRow = tile.row;
+            }
+        })
+        let newRow = 3;
+        let newCell = 1;
+        mockBoard.moveRobber(newRow, newCell);
+        if (newRow !== oldRow && newCell !== newCell) {
+            mockBoard.tiles.forEach(tile => {
+                if (tile.resource === resourcesTypes.DESERT) {
+                    expect(tile.isRobber).toBe(false);
+                }
+                if (tile.cell === newCell && tile.row === newRow) {
+                    expect(tile.isRobber).toBe(true);
+                }
+            })
+        }
+    })
+})
+
+describe("Roads tests", () => {
+    test("Road placement", () => {
+        const mockBoard = new Board(70);
+        mockBoard.addJunction("blue", 181.86533479473212, 0, pieceTypes.SETTELMENT, false);
+
+        const roadInvalidCoords = () => {
+            mockBoard.addRoad("blue", 1, 1, 2, 2);
+        }
+        expect(roadInvalidCoords).toThrow("Invalid road")
+
+        const roadOnExistingRoad = () => {
+            mockBoard.addRoad("blue", 181.86533479473212, 0, 121.2435565298214, 35);
+            mockBoard.addRoad("blue", 181.86533479473212, 0, 121.2435565298214, 35);
+        }
+        expect(roadOnExistingRoad).toThrow("Road already accupied")
+    })
+})

@@ -14,12 +14,9 @@ class Board {
     //Returns the status of the requested junction, if exists.
     getJunctionStatus(x, y) {
         if (this.doCoordinatesExist(x, y)) {
-            this.junctions.forEach(junction => {
-                if (junction.x === x && junction.y === y) {
-                    return junction.status;
-                }
-            });
-            return "free";
+            const tiles = this.getTilesByJunction(x, y);
+            const junctionStatus = tiles[0].getJunctionStatus(x, y);
+            return junctionStatus;
         }
         else {
             throw "Invalid junction coordinates"
@@ -29,12 +26,14 @@ class Board {
     //Returns the status of the requested road, if exists.
     getRoadStatus(startX, startY, endX, endY) {
         if (this.doCoordinatesExist(startX, startY) && this.doCoordinatesExist(endX, endY)) {
+            let status;
             this.roads.forEach(road => {
                 if (road.startX === startX && road.startY === startY && road.endX === endX && road.endY === endY) {
-                    return road.status;
+                    console.log("status: " + road.player);
+                    status = road.player;
                 }
             });
-            return "free";
+            return status ? status : "free";
         }
         else {
             throw "Invalid road coordinates"
@@ -62,20 +61,17 @@ class Board {
     }
 
     //Validates junction input and adds it to the board if valid.
-    addJunction(player, x, y, type) {
-        if (this.#canPlaceSettelment(player, x, y)) {
-            const newJunctionObj = {
-                x: x,
-                y: y,
-                player: player,
-                type: type,
-            }
-            this.roads = [...this.roads, newJunctionObj];
+    addJunction(player, x, y, type, shouldBeConnected) {
+        if (this.#canPlaceSettelment(player, x, y, shouldBeConnected)) {
+            const tilesToAddJunc = this.getTilesByJunction(x, y);
+            tilesToAddJunc.forEach(tile => {
+                tile.setJunction(x, y, player, type);
+            })
         }
     }
 
     //Validates if the settelment can be build
-    #canPlaceSettelment(player, x, y, newPieceType) {
+    #canPlaceSettelment(player, x, y, newPieceType, shouldBeConnected) {
         if (!this.doCoordinatesExist(x, y)) { //Checks if the coordinates are valid
             throw "Invalid junction coordinates";
         }
@@ -98,7 +94,7 @@ class Board {
         if (!this.#isJunction2RoadsApart(x, y)) { //Check if the junction isnt too close to any other junctions
             throw "Junction is to close to another settelment";
         }
-        if (!this.#isJunctionConnectedToPlayer(player, x, y)) { //Check if the junction is connected to a road build by the same player
+        if (!this.#isJunctionConnectedToPlayer(player, x, y) && shouldBeConnected) { //Check if the junction is connected to a road build by the same player
             throw "Junction is not connected to any road build by player " + player;
         }
         return true;
@@ -137,8 +133,8 @@ class Board {
                 endY: endY,
                 player: player,
             }
-            this.junctions = [...this.junctions, newRoadObj];
-            this.#findLongestRoad();
+            this.roads = [...this.roads, newRoadObj];
+            // this.#findLongestRoad();
         }
     }
 
@@ -148,11 +144,13 @@ class Board {
             throw "Invalid road";
         }
         //Check if the road is free
-        if (this.getRoadStatus(startX, startY, endX, endY) !== "free") {
+        const roadStatus = this.getRoadStatus(startX, startY, endX, endY);
+        console.log(roadStatus)
+        if (roadStatus !== "free") {
             throw "Road already accupied";
         }
         //Checks if the road is connected to another player
-        if (!this.#isConnectedToJunction(player, startX, startY, endX, endY) || !this.#isConnectedToRoad(player, startX, startY, endX, endY)) {
+        if (!this.#isConnectedToJunction(player, startX, startY, endX, endY) && !this.#isConnectedToRoad(player, startX, startY, endX, endY)) {
             throw "Cant place road here"
         }
         return true;
@@ -161,7 +159,7 @@ class Board {
     #isConnectedToJunction(player, startX, startY, endX, endY) {
         const startStatus = this.getJunctionStatus(startX, startY);
         const endStatus = this.getJunctionStatus(endX, endY);
-        if (startStatus !== "free" && endStatus !== "free") {
+        if (startStatus !== "free" || endStatus !== "free") {
             if (endStatus.player === player || startStatus.player === player) {
                 return true;
             }
@@ -220,15 +218,25 @@ class Board {
         return connectedRoads;
     }
 
+    getTilesByJunction(x, y) {
+        const tilesToRet = [];
+        this.tiles.forEach(tile => {
+            if (tile.doesHaveJunction(x, y)) {
+                tilesToRet.push(tile);
+            }
+        })
+        return tilesToRet;
+    }
+
     doCoordinatesExist(x, y) {
         for (let tile of this.tiles) {
             for (let coord in tile.coordinates) {
-                if (tile.coordinates[coord].x !== x && tile.coordinates[coord].y !== y) {
-                    return false;
+                if (tile.coordinates[coord].x === x && tile.coordinates[coord].y === y) {
+                    return true;
                 }
             }
         }
-        return true;
+        return false;
     }
 }
 

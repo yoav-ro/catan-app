@@ -44,30 +44,35 @@ const devCards = {
         description: "Allows you to move the robber and place it onto a new hex, and steal a random card from an opponent with settlements or cities adjacent to it",
         canPlayBeforeRoll: true,
         canUseInstantly: false,
+        isUsed: false,
     },
     roadBuilding: {
         name: "Road Building",
         description: "Player can place 2 roads as if they just built them",
         canPlayBeforeRoll: false,
         canUseInstantly: false,
+        isUsed: false,
     },
     yearOfPlenty: {
         name: "Year of Plentry",
         description: "The player can draw 2 resource cards of their choice from the bank",
         canPlayBeforeRoll: false,
         canUseInstantly: true,
+        isUsed: false,
     },
     monopoly: {
         name: "Monopoly",
         description: "The player can claim all resource cards of a specific declared type",
         canPlayBeforeRoll: false,
         canUseInstantly: false,
+        isUsed: false,
     },
     victoryPoint: {
         name: "Victory Point",
         description: " 1 additional Victory Point is added to the owners total and doesn't need to be played to win.",
         canPlayBeforeRoll: false,
         canUseInstantly: false,
+        isUsed: true,
     }
 }
 
