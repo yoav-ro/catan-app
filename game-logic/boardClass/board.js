@@ -29,7 +29,6 @@ class Board {
             let status;
             this.roads.forEach(road => {
                 if (road.startX === startX && road.startY === startY && road.endX === endX && road.endY === endY) {
-                    console.log("status: " + road.player);
                     status = road.player;
                 }
             });
@@ -145,7 +144,6 @@ class Board {
         }
         //Check if the road is free
         const roadStatus = this.getRoadStatus(startX, startY, endX, endY);
-        console.log(roadStatus)
         if (roadStatus !== "free") {
             throw "Road already accupied";
         }

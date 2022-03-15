@@ -91,12 +91,22 @@ describe("Roads tests", () => {
         const roadInvalidCoords = () => {
             mockBoard.addRoad("blue", 1, 1, 2, 2);
         }
-        expect(roadInvalidCoords).toThrow("Invalid road")
+        expect(roadInvalidCoords).toThrow("Invalid road");
 
         const roadOnExistingRoad = () => {
             mockBoard.addRoad("blue", 181.86533479473212, 0, 121.2435565298214, 35);
             mockBoard.addRoad("blue", 181.86533479473212, 0, 121.2435565298214, 35);
         }
-        expect(roadOnExistingRoad).toThrow("Road already accupied")
+        expect(roadOnExistingRoad).toThrow("Road already accupied");
+
+        const roadNotConnected = () => {
+            mockBoard.addRoad("blue", 606.2177826491071, 315, 606.2177826491071, 245);
+        }
+        expect(roadNotConnected).toThrow("Cant place road here");
+
+        const notBySamePlayer = () => {
+            mockBoard.addRoad("red", 242.48711305964284, 35, 181.86533479473212, 0);
+        }
+        expect(notBySamePlayer).toThrow("Cant place road here");
     })
 })
