@@ -61,15 +61,15 @@ class Game {
     activateKnight(playerColor, newRobberRow, newRobberCell) {
         try {
             this.board.moveRobber(newRobberRow, newRobberCell);
-            // this.takeResource()
+            // this.robbPlayer()
         } catch (error) {
             return { Error: "Error: " + error };
         }
     }
 
-    takeResource(takingPlayer, robbedPlayer, resource) {
-        const robbingPlayer = this.#getPlayerByColor(takingPlayer);
-        const robbed = this.#getPlayerByColor(robbedPlayer);
+    robbPlayer(robbingPlayerColor, robbedPlayerColor, resource) {
+        const robbingPlayer = this.#getPlayerByColor(robbingPlayerColor);
+        const robbed = this.#getPlayerByColor(robbedPlayerColor);
         robbed.removeResources([resource]);
         robbingPlayer.addResources([resource]);
     }
