@@ -123,6 +123,20 @@ class Game {
 
     }
 
+    getPiecesByPlayer(playerColor, pieceType) {
+        const player = this.#getPlayerByColor(playerColor);
+        switch (pieceType) {
+            case pieceTypes.CITY:
+                return 4 - player.citiesLeft;
+            case pieceTypes.DEVCARD:
+                return player.devCards.length;
+            case pieceTypes.ROAD:
+                return 15 - player.roadsLeft;
+            case pieceTypes.SETTELMENT:
+                return 5 - player.settelmentsLeft;
+        }
+    }
+
     buildSettelment(playerColor, x, y, shouldTakeResources, shouldBeConnected) {
         try {
             const player = this.#getPlayerByColor(playerColor);

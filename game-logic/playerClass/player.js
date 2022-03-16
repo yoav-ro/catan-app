@@ -1,4 +1,4 @@
-const { buildingCosts, devCards } = require("../utils/constants");
+const { buildingCosts, devCards, pieceTypes } = require("../utils/constants");
 const { doesArrayContain, countItemsInArray } = require("../utils/helperFunctions")
 
 class Player {
