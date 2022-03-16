@@ -13,7 +13,6 @@ class Game {
             new Player(playersDataArr[3].name, playersDataArr[3].color)];
         this.devCards = mixArray(devCardsArr);
         this.initPickOrder = mixArray(playerColors);
-        this.currTurn = undefined;
     }
 
     activateMonopoly(playerColor, resourceType) {

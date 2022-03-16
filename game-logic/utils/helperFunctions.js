@@ -27,6 +27,10 @@ function countItemsInArray(array, itemToCount) {
     return array.filter(item => item === itemToCount).length;
 }
 
+function randomItemFromArray(array) {
+    array[Math.floor(Math.random() * array.length)];
+}
+
 module.exports = {
-    mixArray, getDistance, doesArrayContain, dicesRoll, countItemsInArray
+    mixArray, getDistance, doesArrayContain, dicesRoll, countItemsInArray, randomItemFromArray
 }
