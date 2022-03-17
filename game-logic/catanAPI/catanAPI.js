@@ -142,17 +142,21 @@ class catanAPI extends Game {
 
     #parseEndTurn() {
         try {
-            const lastPlayer = this.playerOrder.shift()
-            this.playerOrder.push(lastPlayer);
-
+            if (this.isSetupPhase) {
+                const lastPlayer = this.setupOrder.shift()
+                this.setupOrder.push(lastPlayer);
+                if (this.setupItemsCount === 8) {
+                    this.setupOrder.reverse();
+                }
+            }
+            else {
+                const lastPlayer = this.playerOrder.shift()
+                this.playerOrder.push(lastPlayer);
+            }
             this.#setDirectiveExpetation(directiveObj.type);
         } catch (error) {
             return { Error: error };
         }
-    }
-
-    #advanceSetupOrder() {
-        //todo
     }
 
     #validatePlayer(playerColor) {
