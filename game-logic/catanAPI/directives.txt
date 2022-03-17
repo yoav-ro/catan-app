@@ -4,7 +4,7 @@ Types:
     type: "endTurn"
     action: Will start the turn of the next player
     condition: always
-    expectation: dice roll / knight activation / trade request
+    expectation: dice roll / knight activation
 }
 
 {
