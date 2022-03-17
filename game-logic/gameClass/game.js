@@ -1,4 +1,4 @@
-const { dicesRoll, mixArray } = require("../utils/helperFunctions");
+const { dicesRoll, mixArray, randomItemFromArray } = require("../utils/helperFunctions");
 const { pieceTypes, resourcesTypes, devCardsArr, playerColors, devCards } = require("../utils/constants");
 const Player = require("../playerClass/player");
 const Board = require("../boardClass/board");
@@ -66,11 +66,12 @@ class Game {
         }
     }
 
-    robbPlayer(robbingPlayerColor, robbedPlayerColor, resource) {
+    robbPlayer(robbingPlayerColor, robbedPlayerColor) {
         const robbingPlayer = this.#getPlayerByColor(robbingPlayerColor);
         const robbed = this.#getPlayerByColor(robbedPlayerColor);
-        robbed.removeResources([resource]);
-        robbingPlayer.addResources([resource]);
+        const resToRobb = randomItemFromArray(robbed.resources);
+        robbed.removeResources([resToRobb]);
+        robbingPlayer.addResources([resToRobb]);
     }
 
     initialBuildSettelment(playerColor, x, y) {
