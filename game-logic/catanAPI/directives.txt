@@ -7,12 +7,25 @@ Types:
     expectation: dice roll / knight activation
 }
 
+example:
+{
+    type: "endTurn",
+    player: "blue"
+}
+----------------------------------------------------------
 {
     type: "rollDice"
     action: roll the dice at the beggining of a turn
     condition: at the beggining of a turn. the only action that can happen before is a knight activation 
     expectation: any but another dice roll and trade response, robbPlayer (if 7)
 }
+
+example:
+{
+    type: "rollDice",
+    player: "blue"
+}
+----------------------------------------------------------
 
 {
     type: "build"
@@ -21,12 +34,43 @@ Types:
     expectation: any but dice roll and trade response
 }
 
+examples:
+{
+    type: "build",
+    player: "blue"
+    item: {
+        name: "settelment"
+        x: 10,
+        y: 45,
+    }
+}
+{
+    type: "build",
+    player: "blue"
+    item: {
+        name: "road"
+        startX: 10,
+        startY: 45,
+        endX: 30,
+        endY: 45,
+    }
+}
+----------------------------------------------------------
+
 {
     type: "activateDevCard"
     action: activate a certien dev card.
     condition: after dice roll (unless knight). Once at a turn. Cant use just built cards (unless year of plenty)
     expectation: any but dice roll and trade response robbPlayer (if knight)
 }
+
+example:
+{
+    type "activateDevCard",
+    player: "blue",
+    card: "knight",
+}
+----------------------------------------------------------
 
 {
     type: "tradeReq"
@@ -35,12 +79,34 @@ Types:
     expectation: any but dice roll
 }
 
+example: 
 {
-    type: "tradeRes"
-    action: is accepted, trades between the players
-    condition: after trade request
-    expectation: any but dice roll
+    type: "tradeReq",
+    player: "blue",
+    tradeWith: "red",
+    givenResources: ["wood", "wood"],
+    recievedResources: ["iron", "sheep"],
 }
+
+----------------------------------------------------------
+
+{
+    type: "tradeRes",
+    action: is accepted, trades between the players,
+    condition: after trade request,
+    expectation: any but dice roll,
+}
+
+example: 
+{
+    type: "tradeRes",
+    player: "red",
+    tradeWith: "blue",
+    givenResources: ["iron", "sheep"],
+    recievedResources: ["wood", "wood"],
+    isAccepted: true
+}
+----------------------------------------------------------
 
 {
     type: "robbPlayer"
@@ -48,6 +114,13 @@ Types:
     condition: after knight or rolling 7
     expectation: any
 }
+example:
+{
+    type: "robbPlayer",
+    player: "blue",
+    playerToRobb: "red",
+}
+----------------------------------------------------------
 
 {
     type: "setupBuild"
@@ -55,3 +128,27 @@ Types:
     condition: only in setup phase
     expectation: more setupBuilds, ending of setup phase
 }
+
+examples:
+{
+    type: "setupBuild",
+    player: "blue"
+    item: {
+        name: "settelment"
+        x: 10,
+        y: 45,
+    }
+}
+{
+    type: "setupBuild",
+    player: "blue"
+    item: {
+        name: "road"
+        startX: 10,
+        startY: 45,
+        endX: 30,
+        endY: 45,
+    }
+}
+
+----------------------------------------------------------
