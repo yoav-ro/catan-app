@@ -3,6 +3,13 @@ const { pieceTypes } = require("../utils/constants");
 const { randomItemFromArray, mixArray } = require("../utils/helperFunctions");
 const { directiveTypes, directiveTypes } = require("./apiConstants");
 
+//todo:
+//set return messages
+//also return updated game data on every request
+//longest road and largest army
+//ports
+//bank trade
+
 class catanAPI extends Game {
     constructor(playersDataArr, tileRadius) {
         super(playersDataArr, tileRadius)
@@ -12,6 +19,7 @@ class catanAPI extends Game {
         this.setupItemsCount = 0;
         this.isSetupPhase = true;
         this.lastRoll = undefined;
+        this.pendingTrade = undefined;
     }
 
     parseDirective(directiveObj) {
@@ -27,9 +35,9 @@ class catanAPI extends Game {
                 case directiveTypes.activateDevCard:
                     return this.#parseDevCard(directiveObj);
                 case directiveTypes.tradeReq:
-                    return this.#parseTradeReq(directiveObj);
+                    return this.#parseTradeReq(directiveObj); //good
                 case directiveTypes.tradeRes:
-                    return this.#parseTradeRes(directiveObj);
+                    return this.#parseTradeRes(directiveObj); //good
                 case directiveTypes.robbPlayer:
                     return this.#parseRobbPlayer(directiveObj); //good
                 case directiveTypes.setupBuild:
@@ -89,16 +97,36 @@ class catanAPI extends Game {
 
     #parseTradeReq(directiveObj) {
         try {
-
+            const { player, tradeWith, givenResources, recievedResources } = directiveObj;
+            this.#validateTradeReq(player, tradeWith, givenResources, recievedResources);
+            this.#setPendingTrade(player, tradeWith, givenResources, recievedResources);
             this.#setDirectiveExpetation(directiveObj.type);
         } catch (error) {
             return { Error: error };
         }
     }
 
+    #validateTradeReq(player, tradeWith, givenResources, recievedResources) {
+        if (!player || !tradeWith || !givenResources || !recievedResources) {
+            throw "Invalid trade request";
+        }
+        if (givenResources === [] || recievedResources === []) {
+            throw '"Free" resource giving isnt allowed'
+        }
+        if (player === tradeWith) {
+            throw "A player cannot trade with himself";
+        }
+    }
+
     #parseTradeRes(directiveObj) {
         try {
-
+            if (!this.pendingTrade) {
+                throw "No pending trade detected";
+            }
+            if (directiveObj.isAccepted) {
+                const { offeringPlayer, offeringPlayerResources, offeredPlayer, offeredPlayerResources } = this.pendingTrade;
+                this.executeTrade(offeringPlayer, offeredPlayer, offeringPlayerResources, offeredPlayerResources);
+            }
             this.#setDirectiveExpetation(directiveObj.type);
         } catch (error) {
             return { Error: error };
@@ -225,6 +253,17 @@ class catanAPI extends Game {
                     this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard];
                 }
         }
+    }
+
+    #setPendingTrade(playerA, playerB, resPlayerA, resPlayerB) {
+        const pendingTradeObj = {
+            offeringPlayer: playerA,
+            offeringPlayerResources: resPlayerA,
+            offeredPlayer: playerB,
+            offeredPlayerResources: resPlayerB,
+        }
+
+        this.pendingTrade = pendingTradeObj;
     }
 
     #validateDirective(directiveObj) {

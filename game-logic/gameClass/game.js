@@ -179,6 +179,17 @@ class Game {
         }
     }
 
+    executeTrade(playerA, playerB, resPlayerA, resPlayerB) {
+        const playerA = this.#getPlayerByColor(playerA);
+        const playerB = this.#getPlayerByColor(playerB);
+
+        playerA.removeResources(resPlayerA);
+        playerB.removeResources(resPlayerB);
+
+        playerA.addResources(resPlayerB);
+        playerB.addResources(resPlayerA);
+    }
+
     #getPlayerByColor(color) {
         this.players.forEach(player => {
             if (player.color === color) {
