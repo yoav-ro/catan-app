@@ -1,5 +1,5 @@
 const Game = require("../gameClass/game");
-const { pieceTypes } = require("../utils/constants");
+const { pieceTypes, devCards } = require("../utils/constants");
 const { randomItemFromArray, mixArray } = require("../utils/helperFunctions");
 const { directiveTypes, directiveTypes } = require("./apiConstants");
 
@@ -18,6 +18,7 @@ class catanAPI extends Game {
         this.directiveExpectation = [directiveTypes.setupBuild];
         this.setupItemsCount = 0;
         this.isSetupPhase = true;
+        this.isAwaitingRobb = false;
         this.lastRoll = undefined;
         this.pendingTrade = undefined;
     }
@@ -87,8 +88,28 @@ class catanAPI extends Game {
     }
 
     #parseDevCard(directiveObj) {
-        try {
+        const { player, card } = directiveObj;
 
+        try {
+            switch (card.type) {
+                case devCards.knight.name:
+                    const { newRobberX, newRobberY } = card;
+                    this.activateKnight(player, newRobberX, newRobberY);
+                    this.isAwaitingRobb = true;
+                    break;
+                case devCards.monopoly.name:
+                    this.activateMonopoly(player, card.resource);
+                    break;
+                case devCards.roadBuilding.name:
+                    const { firstRoadStartX, firstRoadStartY, firstRoadEndX, firstRoadEndY, secondRoadStartX, secondRoadStartY, secondRoadEndX, secondRoadEndY } = card;
+                    this.activateRoadBuilding(player, firstRoadStartX, firstRoadStartY, firstRoadEndX, firstRoadEndY, secondRoadStartX, secondRoadStartY, secondRoadEndX, secondRoadEndY);
+                    break;
+                case devCards.yearOfPlenty.name:
+                    const { resourceA, resourceB } = card;
+                    this.activateYearOfPlenty(player, resourceA, resourceB);
+                default:
+                    throw "Invalid dev card type";
+            }
             this.#setDirectiveExpetation(directiveObj.type);
         } catch (error) {
             return { Error: error };
@@ -137,6 +158,7 @@ class catanAPI extends Game {
         try {
             const { player, playerToRob } = directiveObj;
             this.robbPlayer(player, playerToRob);
+            this.isAwaitingRobb = false;
             this.#setDirectiveExpetation(directiveTypes.robbPlayer);
         } catch (error) {
             return { Error: error };
@@ -180,6 +202,7 @@ class catanAPI extends Game {
             else {
                 const lastPlayer = this.playerOrder.shift()
                 this.playerOrder.push(lastPlayer);
+                this.isAwaitingRobb = false;
             }
             this.#setDirectiveExpetation(directiveObj.type);
         } catch (error) {
@@ -234,11 +257,15 @@ class catanAPI extends Game {
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
                 if (this.lastRoll === 7) {
                     this.directiveExpectation.push(robbPlayer);
+                    this.isAwaitingRobb = true;
                 }
             case directiveTypes.build:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
             case directiveTypes.activateDevCard:
                 this.directiveExpectation = [endTurn, build, tradeReq];
+                if(this.isAwaitingRobb){
+                    this.directiveExpectation.push(robbPlayer);
+                }
             case directiveTypes.tradeReq:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeRes];
             case directiveTypes.tradeRes:

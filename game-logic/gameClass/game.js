@@ -13,6 +13,8 @@ class Game {
             new Player(playersDataArr[3].name, playersDataArr[3].color)];
         this.devCards = mixArray(devCardsArr);
         this.initPickOrder = mixArray(playerColors);
+        this.largestArmyPlayer = undefined;
+        this.longestRoadPlayer = undefined;
     }
 
     activateMonopoly(playerColor, resourceType) {
@@ -60,7 +62,9 @@ class Game {
     activateKnight(playerColor, newRobberRow, newRobberCell) {
         try {
             this.board.moveRobber(newRobberRow, newRobberCell);
-            // this.robbPlayer()
+            const player = this.#getPlayerByColor(playerColor);
+            player.activeKnights++;
+            this.#setLargestArmy();
         } catch (error) {
             return { Error: "Error: " + error };
         }
@@ -94,6 +98,28 @@ class Game {
         }
         const lastPlayer = this.initPickOrder.shift()
         this.initPickOrder.push(lastPlayer);
+    }
+
+    #setLargestArmy() {
+        let mostKnights = 0;
+        let mostKnightsPlayer;
+        players.forEach(player => {
+            if (player.activeKnights > mostKnights) {
+                mostKnights = player.activeKnights;
+                mostKnightsPlayer = player;
+            }
+        });
+        if (this.largestArmyPlayer) {
+            if (mostKnightsPlayer.activeKnights > this.largestArmyPlayer.activeKnights) {
+                mostKnightsPlayer.addPoints(2);
+                this.largestArmyPlayer.removePoints(2);
+                this.largestArmyPlayer = mostKnightsPlayer;
+            }
+        }
+        else if (mostKnightsPlayer.activeKnights >= 3) {
+            mostKnightsPlayer.addPoints(2);
+            this.largestArmyPlayer = mostKnightsPlayer;
+        }
     }
 
     //Returns a random number between 1-12

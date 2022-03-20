@@ -14,7 +14,7 @@ class Player {
         this.cities = [];
         this.roads = [];
         this.devCards = [];
-        this.activeKnightes = 0;
+        this.activeKnights = 0;
         this.largestArmy = false;
         this.longestRoad = false;
     }
