@@ -6,7 +6,8 @@ const { directiveTypes, directiveTypes } = require("./apiConstants");
 //todo:
 //set return messages
 //also return updated game data on every request
-//longest road and largest army
+//longest road 
+//largest army - good
 //ports
 //bank trade
 
@@ -34,7 +35,7 @@ class catanAPI extends Game {
                 case directiveTypes.build:
                     return this.#parseBuild(directiveObj); //good
                 case directiveTypes.activateDevCard:
-                    return this.#parseDevCard(directiveObj);
+                    return this.#parseDevCard(directiveObj); //good
                 case directiveTypes.tradeReq:
                     return this.#parseTradeReq(directiveObj); //good
                 case directiveTypes.tradeRes:

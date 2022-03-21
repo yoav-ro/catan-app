@@ -1,7 +1,7 @@
 const { resourcesTypes } = require("../utils/constants");
 
 class Tile {
-    constructor(resource, number, row, cell, radius) {
+    constructor(resource, number, row, cell, radius, ports) {
         this.number = number;
         this.resource = resource;
         this.row = row;
@@ -9,6 +9,10 @@ class Tile {
         this.coordinates = calulateCoordinatesByBoardPosition(row, cell, radius);
         this.isRobber = resource === resourcesTypes.DESERT ? true : false;
         this.surroundingJunctions = [];
+    }
+
+    setJunctions(row, cell, radius) {
+        const coordinates = calulateCoordinatesByBoardPosition(row, cell, radius);
     }
 
     setJunction(x, y, player, type) {
@@ -51,12 +55,13 @@ class Tile {
 
 module.exports = Tile;
 
-function getJuncObj(x, y, player, type) {
+function getJuncObj(x, y, player, type, port) {
     return {
         x: x,
         y: y,
         player: player,
-        type: type
+        type: type,
+        port: port,
     };
 }
 
@@ -82,4 +87,12 @@ function calulateCoordinatesByBoardPosition(row, cell, radius) {
     }
 
     return coordinates;
+}
+
+function setJunctions(row, cell, radius) {
+    const junctionsArr = [];
+    const coordinates = calulateCoordinatesByBoardPosition(row, cell, radius);
+    for (let coord in coordinates) {
+
+    }
 }
