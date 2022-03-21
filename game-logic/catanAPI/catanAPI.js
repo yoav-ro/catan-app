@@ -44,6 +44,8 @@ class catanAPI extends Game {
                     return this.#parseRobbPlayer(directiveObj); //good
                 case directiveTypes.setupBuild:
                     return this.#parseBuildSetup(directiveObj); //good
+                case directiveTypes.tradeWithPort:
+                    return this.#parseTradeWithPort(directiveObj); //good
                 default:
                 //Return Error- bad request
             }
@@ -211,6 +213,15 @@ class catanAPI extends Game {
         }
     }
 
+    #parseTradeWithPort(directiveObj) {
+        try {
+            const { player, portType, resourceToGive, resourceToTake } = directiveObj;
+            this.tradeWithPort(portType, player, resourceToGive, resourceToTake);
+        } catch (error) {
+            return { Error: error };
+        }
+    }
+
     #validatePlayer(playerColor) {
         if (playerColor !== this.playerOrder[0].color) {
             throw `This is not ${playerColor}'s turn`;
@@ -264,7 +275,7 @@ class catanAPI extends Game {
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
             case directiveTypes.activateDevCard:
                 this.directiveExpectation = [endTurn, build, tradeReq];
-                if(this.isAwaitingRobb){
+                if (this.isAwaitingRobb) {
                     this.directiveExpectation.push(robbPlayer);
                 }
             case directiveTypes.tradeReq:

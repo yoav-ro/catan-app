@@ -4,11 +4,13 @@ const Tile = require("../tileClass/tile");
 
 class Board {
     #tileRadius
+
     constructor(tileRadius) {
         this.#tileRadius = tileRadius;
         this.roads = [];
         this.longestRoad = [];
         this.tiles = getTilesData(tileRadius);
+        this.portsData = getPortsData(this.tiles);
     }
 
     //Returns the status of the requested junction, if exists.
@@ -216,6 +218,16 @@ class Board {
         return connectedRoads;
     }
 
+    getPortsByType(boardType) {
+        const portsByType = [];
+        this.portsData.forEach(port => {
+            if (port.type === boardType) {
+                portsByType.push(port);
+            }
+        })
+        return portsByType;
+    }
+
     getTilesByJunction(x, y) {
         const tilesToRet = [];
         this.tiles.forEach(tile => {
@@ -236,70 +248,12 @@ class Board {
         }
         return false;
     }
-
-    #setPortCoords() {
-        const portCoords = [];
-        this.tiles.forEach(tile => {
-            if (tile.row === 0){
-                if(tile.cell===0){
-                    portCoords.push(tile.coordinates.top);
-                    portCoords.push(tile.coordinates.topLeft);
-                }
-                if(tile.cell===1){
-                    portCoords.push(tile.coordinates.top);
-                    portCoords.push(tile.coordinates.topRight);
-                }
-                if(tile.cell===2){
-                    portCoords.push(tile.coordinates.bottom);
-                }
-            }
-            if (tile.row === 1){
-                if(tile.cell===0){
-                    portCoords.push(tile.coordinates.topLeft);
-                    portCoords.push(tile.coordinates.bottomLeft);
-                }
-                if(tile.cell===3){
-                    portCoords.push(tile.coordinates.topRight);
-                }
-            }
-            if (tile.row === 2){
-                if(tile.cell===0){
-                    portCoords.push(tile.coordinates.bottom);
-                }
-                if(tile.cell===4){
-                    portCoords.push(tile.coordinates.topRight);
-                    portCoords.push(tile.coordinates.bottomRight);
-                }
-            }
-            if (tile.row === 3){
-                if(tile.cell===0){
-                    portCoords.push(tile.coordinates.topLeft);
-                    portCoords.push(tile.coordinates.bottomLeft);
-                }
-                if(tile.cell===4){
-                    portCoords.push(tile.coordinates.bottomRight);
-                    portCoords.push(tile.coordinates.bottom);
-                }
-            }
-            if (tile.row === 4){
-                if(tile.cell===0){
-                    portCoords.push(tile.coordinates.bottom);
-                    portCoords.push(tile.coordinates.bottomLeft);
-                }
-                if(tile.cell===1){
-                    portCoords.push(tile.coordinates.bottom);
-                    portCoords.push(tile.coordinates.bottomRight);
-                }
-            }
-        })
-    }
 }
 
 //Each tiles should contain: coordinates, number, resource
 function getTilesData(tileRadius) {
     const resources = mixArray(resourcesArr);
     const numbers = mixArray(numbersArr);
-    const ports = mixArray(ports);
 
     const rowLengths = [3, 4, 5, 4, 3];
     let tileCount = 0;
@@ -315,14 +269,94 @@ function getTilesData(tileRadius) {
     return tilesData;
 }
 
-function isEdgeTile(row, cell, rowLength) {
-    if (row === 0 || row === 4) {
-        return true;
-    }
-    else if (cell === 0 || cell === rowLength{
-        return true;
-    }
-    return false;
+function getPortsData(tiles) {
+    const ports = mixArray(ports);
+    const portCoords = []; //todo- manage the coords to pairs and give each pair a port type
+    tiles.forEach(tile => {
+        if (tile.row === 0) {
+            if (tile.cell === 0) {
+                portCoords.push(
+                    {
+                        junctionA: tile.coordinates.top,
+                        junctionB: tile.coordinates.topLeft,
+                        type: ports.pop(),
+                    }
+                );
+            }
+            if (tile.cell === 1) {
+                portCoords.push({
+                    junctionA: tile.coordinates.top,
+                    junctionB: tile.coordinates.topRight,
+                    type: ports.pop(),
+                })
+            }
+        }
+        if (tile.row === 1) {
+            if (tile.cell === 0) {
+                portCoords.push(
+                    {
+                        junctionA: tile.coordinates.topLeft,
+                        junctionB: tile.coordinates.bottomLeft,
+                        type: ports.pop(),
+                    }
+                );
+            }
+            if (tile.cell === 3) {
+                portCoords.push(
+                    {
+                        junctionA: tile.coordinates.topRight,
+                        junctionB: tile.coordinates.top,
+                        type: ports.pop(),
+                    }
+                );
+            }
+        }
+        if (tile.row === 2) {
+            if (tile.cell === 4) {
+                portCoords.push(
+                    {
+                        junctionA: tile.coordinates.topRight,
+                        junctionB: tile.coordinates.bottomRight,
+                        type: ports.pop(),
+                    }
+                );
+            }
+        }
+        if (tile.row === 3) {
+            if (tile.cell === 0) {
+                portCoords.push({
+                    junctionA: tile.coordinates.topLeft,
+                    junctionB: tile.coordinates.bottomLeft,
+                    type: ports.pop(),
+                })
+            }
+            if (tile.cell === 4) {
+                portCoords.push({
+                    junctionA: tile.coordinates.bottomRight,
+                    junctionB: tile.coordinates.bottom,
+                    type: ports.pop(),
+                })
+            }
+        }
+        if (tile.row === 4) {
+            if (tile.cell === 0) {
+                portCoords.push({
+                    junctionA: tile.coordinates.bottomLeft,
+                    junctionB: tile.coordinates.bottom,
+                    type: ports.pop(),
+                })
+            }
+            if (tile.cell === 1) {
+                portCoords.push({
+                    junctionA: tile.coordinates.bottomRight,
+                    junctionB: tile.coordinates.bottom,
+                    type: ports.pop(),
+                })
+            }
+        }
+    })
+    return portCoords;
 }
+
 
 module.exports = Board;

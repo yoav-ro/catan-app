@@ -126,6 +126,23 @@ example:
 }
 
 ----------------------------------------------------------
+{
+    type "tradeWithPort"
+    action: instantly trades with a requested port if a player has access to it.
+    condition: after dice roll
+    expectation: any but dice roll
+}
+
+example:
+{
+    type: "tradeWithPort"
+    player: "blue",
+    portType: "bank"
+    resourceToGive: "wood",
+    resourceToTake: "iron",
+}
+
+----------------------------------------------------------
 
 {
     type: "tradeRes",

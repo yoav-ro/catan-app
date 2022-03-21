@@ -7,6 +7,7 @@ const directiveTypes = {
     tradeRes: "tradeRes",
     robbPlayer: "robbPlayer",
     setupBuild: "setupBuild",
+    tradeWithPort: "tradeWithPort",
 }
 
 

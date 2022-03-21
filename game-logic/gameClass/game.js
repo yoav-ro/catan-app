@@ -1,5 +1,5 @@
-const { dicesRoll, mixArray, randomItemFromArray } = require("../utils/helperFunctions");
-const { pieceTypes, resourcesTypes, devCardsArr, playerColors, devCards } = require("../utils/constants");
+const { dicesRoll, mixArray, randomItemFromArray, doesArrayContain } = require("../utils/helperFunctions");
+const { pieceTypes, resourcesTypes, devCardsArr, playerColors, devCards, ports } = require("../utils/constants");
 const Player = require("../playerClass/player");
 const Board = require("../boardClass/board");
 
@@ -214,6 +214,43 @@ class Game {
 
         playerA.addResources(resPlayerB);
         playerB.addResources(resPlayerA);
+    }
+
+    tradeWithPort(portType, playerColor, resourceToGive, resourceToTake) {
+        const player = this.#getPlayerByColor(playerColor);
+        if (portType === "bank") {
+            if (doesArrayContain(player.resources, Array(4).fill(resourceToGive))) {
+                player.removeResources(Array(4).fill(resourceToGive));
+                player.addResources([resourceToTake]);
+                return "Trade made succesfully";
+            }
+        }
+        if (this.#playerHasPort(playerColor, portType)) {
+            const numOfResToTake = portType === "3to1" ? 3 : 2;
+            player.removeResources(Array(numOfResToTake).fill(resourceToGive));
+            player.addResources([resourceToTake]);
+            return "Trade made succesfully";
+        }
+        else {
+            throw `Player ${playerColor} does not have access to this port (${portType})`;
+        }
+    }
+
+    #playerHasPort(playerColor, portType) {
+        const player = this.#getPlayerByColor(playerColor);
+        const portsByType = this.board.getPortsByType(portType);
+
+        player.settelments.forEach(settelment => {
+            portsByType.forEach(port => {
+                if (port.junctionA.x === settelment.x && port.junctionA.x === settelment.y) {
+                    return true;
+                }
+                if (port.junctionB.x === settelment.x && port.junctionB.x === settelment.y) {
+                    return true;
+                }
+            })
+        })
+        return false;
     }
 
     #getPlayerByColor(color) {

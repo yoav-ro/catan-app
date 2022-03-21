@@ -1,7 +1,8 @@
+const Junction = require("../junctionClass/junction");
 const { resourcesTypes } = require("../utils/constants");
 
 class Tile {
-    constructor(resource, number, row, cell, radius, ports) {
+    constructor(resource, number, row, cell, radius) {
         this.number = number;
         this.resource = resource;
         this.row = row;
@@ -9,10 +10,6 @@ class Tile {
         this.coordinates = calulateCoordinatesByBoardPosition(row, cell, radius);
         this.isRobber = resource === resourcesTypes.DESERT ? true : false;
         this.surroundingJunctions = [];
-    }
-
-    setJunctions(row, cell, radius) {
-        const coordinates = calulateCoordinatesByBoardPosition(row, cell, radius);
     }
 
     setJunction(x, y, player, type) {
@@ -87,12 +84,4 @@ function calulateCoordinatesByBoardPosition(row, cell, radius) {
     }
 
     return coordinates;
-}
-
-function setJunctions(row, cell, radius) {
-    const junctionsArr = [];
-    const coordinates = calulateCoordinatesByBoardPosition(row, cell, radius);
-    for (let coord in coordinates) {
-
-    }
 }
