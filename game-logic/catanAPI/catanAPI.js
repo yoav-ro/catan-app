@@ -4,8 +4,8 @@ const { randomItemFromArray, mixArray } = require("../utils/helperFunctions");
 const { directiveTypes, directiveTypes } = require("./apiConstants");
 
 //todo:
-//set return messages
-//also return updated game data on every request
+//set return messages - good
+//also return updated game data on every request - good
 //longest road 
 //largest army - good
 //ports - good
@@ -234,6 +234,10 @@ class catanAPI extends Game {
                 retMsg = `${lastPlayer} has finished his turn. Now Its ${this.playerOrder[0]}'s turn.`;
             }
             this.#setDirectiveExpetation(directiveObj.type);
+            const victory = this.checkVictory();
+            if (victory) {
+                this.#handleVictory(victory);
+            }
             return retMsg;
         } catch (error) {
             return { Error: error };
@@ -348,5 +352,10 @@ class catanAPI extends Game {
         return gameStateObj;
     }
 
+    #handleVictory(winnerObj) {
+        const { color, points } = winnerObj;
+        this.directiveExpectation = [];
+        return `Player ${color} won with ${points} points!`;
+    }
 }
 module.exports = Turn;

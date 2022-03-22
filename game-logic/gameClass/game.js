@@ -229,6 +229,18 @@ class Game {
         return false;
     }
 
+    checkVictory() {
+        this.players.forEach(player => {
+            if (player.points >= 10) {
+                return {
+                    color: player.color,
+                    points: player.points,
+                };
+            }
+        })
+        return false;
+    }
+
     #getPlayerByColor(color) {
         this.players.forEach(player => {
             if (player.color === color) {
