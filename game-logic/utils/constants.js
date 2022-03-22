@@ -59,7 +59,7 @@ const devCards = {
         isUsed: false,
     },
     yearOfPlenty: {
-        name: "Year of Plentry",
+        name: "Year of Plenty",
         description: "The player can draw 2 resource cards of their choice from the bank",
         canPlayBeforeRoll: false,
         canUseInstantly: true,

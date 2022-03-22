@@ -50,6 +50,9 @@ class Player {
                 this.resources.splice(itemIndex, 1);
             });
         }
+        else {
+            throw "Player doenst have enough resources";
+        }
     }
 
     addPoints(pointsToAdd) {
