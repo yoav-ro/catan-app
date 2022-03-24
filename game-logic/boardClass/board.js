@@ -191,7 +191,8 @@ class Board {
     #findLongestRoad() {
         this.roads.forEach(road => {
             const checkedRoads = [road];
-            const connectedRoads = this.#findConnectedRoads(road)
+            const connectedRoads = this.#findConnectedRoads(road);
+            
         })
     }
 
