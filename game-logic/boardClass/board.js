@@ -1,5 +1,5 @@
 const { resourcesTypes, numbersArr, resourcesArr, pieceTypes, ports, ports } = require("../utils/constants");
-const { mixArray, getDistance } = require("../utils/helperFunctions")
+const { mixArray, getDistance, doesArrayContain } = require("../utils/helperFunctions")
 const Tile = require("../tileClass/tile");
 
 class Board {
@@ -189,33 +189,48 @@ class Board {
     }
 
     #findLongestRoad() {
-        // this.roads.forEach(road => {
-        //     let roadLength = 1;
-        //     this.#findConnectedRoads(road);
-
-        // })
+        this.roads.forEach(road => {
+            const checkedRoads = [road];
+            const connectedRoads = this.#findConnectedRoads(road)
+        })
     }
 
-    #findConnectedRoads(roadInput) {
+    #findConnectedRoads(roadInput, checkedRoads) {
         const { player, startX, startY, endX, endY } = roadInput;
         const connectedRoads = [];
+        const checkedRoads = [];
         this.roads.forEach(road => {
-            if (road.status === player) {
+            if (road.status.player === player) {
                 if (road.startX === startX && road.startY === startY && road.endX !== endX && road.endX !== endY) {
-                    connectedRoads.push(road);
+                    if (this.#validateRoadSequence(road.startX, road.startY)) {
+                        connectedRoads.push(road);
+                    }
                 }
                 if (road.startX !== startX && road.startY !== startY && road.endX === endX && road.endX === endY) {
-                    connectedRoads.push(road);
+                    if (this.#validateRoadSequence(road.endX, road.endY)) {
+                        connectedRoads.push(road);
+                    }
                 }
                 if (road.startX === endX && road.startY === endY && road.endX !== startX && road.endX !== startY) {
-                    connectedRoads.push(road);
+                    if (this.#validateRoadSequence(road.startX, road.startY)) {
+                        connectedRoads.push(road);
+                    }
                 }
                 if (road.endX === startX && road.endY === startY && road.startX !== endX && road.startY !== endY) {
-                    connectedRoads.push(road);
+                    if (this.#validateRoadSequence(road.endX, road.endY)) {
+                        connectedRoads.push(road);
+                    }
                 }
             }
         })
         return connectedRoads;
+    }
+
+    #validateRoadSequence(player, x, y) {
+        if (this.getJunctionStatus(x, y).player !== player) {
+            return false;
+        }
+        return true;
     }
 
     getPortsByType(boardType) {
