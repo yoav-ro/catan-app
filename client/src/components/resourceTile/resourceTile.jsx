@@ -9,24 +9,25 @@ function Tile({ row, cell, tileNumer, resource }) {
     // const backgroundColor= getResourceBackground(resource.name);
     const radius = 70;
     const rad30 = 30 * Math.PI / 180;
-
+    const hexPerpendicular = Math.cos(rad30) * radius;
+    
     const center = {
-        x: cell * radius * 2 + radius + row % 2 * radius,
-        y: (row * (Math.tan(rad30) + 1) + 1) * radius,
+        x: cell * hexPerpendicular * 2 + hexPerpendicular + row % 2 * hexPerpendicular,
+        y: radius * 1.5 * row + radius,
     }
     if (row === 0 || row === 4) {
-        center.x += radius * 2;
+        center.x += hexPerpendicular * 2;
     }
 
 
 
     const coordinates = {
         top: { x: center.x, y: center.y + radius },
-        topLeft: { x: center.x - radius, y: center.y + Math.tan(rad30) * radius },
-        topRight: { x: center.x + radius, y: center.y + Math.tan(rad30) * radius },
+        topLeft: { x: center.x - hexPerpendicular, y: center.y + Math.tan(rad30) * hexPerpendicular },
+        topRight: { x: center.x + hexPerpendicular, y: center.y + Math.tan(rad30) * hexPerpendicular },
         bottom: { x: center.x, y: center.y - radius },
-        bottomLeft: { x: center.x - radius, y: center.y - Math.tan(rad30) * radius },
-        bottomRight: { x: center.x + radius, y: center.y - Math.tan(rad30) * radius },
+        bottomLeft: { x: center.x - hexPerpendicular, y: center.y - Math.tan(rad30) * hexPerpendicular },
+        bottomRight: { x: center.x + hexPerpendicular, y: center.y - Math.tan(rad30) * hexPerpendicular },
     }
 
     return (
@@ -53,6 +54,7 @@ function Tile({ row, cell, tileNumer, resource }) {
             <Junction centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
             <Junction centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
             <Junction centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
+            <Junction centerX={center.x} centerY={center.y} />
             <circle style={{ fill: "white", stroke: "black" }} cx={center.x} cy={center.y} r="20">
             </circle>
             <text x="50%" y="50%" textAnchor="middle" strokeWidth="2px" dy=".3em">{tileNumer}</text>
