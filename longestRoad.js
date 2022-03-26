@@ -23,30 +23,32 @@ const roads = [
 findLongestRoad(roads);
 
 function findLongestRoad(roads) {
-    console.log(roads);
     const test = theRecurtionThing(roads);
-    console.log(test);
+    // console.log(test);
 }
 
 function theRecurtionThing(currRoadSeq) {
-    const nextSeq = findConnectedRoads(currRoadSeq[currRoadSeq.length]);
+    const nextSeq = findConnectedRoads(currRoadSeq);
     if (nextSeq.length === 0) {
         return currRoadSeq;
     }
 
     nextSeq.forEach(newNode => {
         const newSeq = currRoadSeq.slice().push(newNode);
+        console.log(newNode);
+        // console.log(newSeq);
         return theRecurtionThing(newSeq);
     })
 }
 
 function findConnectedRoads(roadSeq) {
     console.log(roadSeq)
-    const lastRoad = roadSeq[roadSeq.length];
+    const lastRoad = roadSeq[roadSeq.length - 1];
+    // console.log(lastRoad)
     const { color, startX, startY, endX, endY } = lastRoad;
     const connectedRoads = [];
     roads.forEach(road => {
-        if (road.status.color === color && !roadSeq.includes[road]) {
+        if (road.color === color && !roadSeq.includes[road]) {
             if (road.startX === startX && road.startY === startY && road.endX !== endX && road.endX !== endY) {
                 if (validateRoadSequence(road.startX, road.startY)) {
                     connectedRoads.push(road);
