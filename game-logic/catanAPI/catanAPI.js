@@ -358,4 +358,4 @@ class catanAPI extends Game {
         return `Player ${color} won with ${points} points!`;
     }
 }
-module.exports = Turn;
+module.exports = catanAPI;

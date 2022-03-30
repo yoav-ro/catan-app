@@ -15,8 +15,6 @@ class Player {
         this.roads = [];
         this.devCards = [];
         this.activeKnights = 0;
-        this.largestArmy = false;
-        this.longestRoad = false;
     }
 
     addResources(resourcesToAddArr) {
