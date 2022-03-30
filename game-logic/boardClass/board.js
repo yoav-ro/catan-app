@@ -68,6 +68,7 @@ class Board {
             tilesToAddJunc.forEach(tile => {
                 tile.setJunction(x, y, player, type);
             })
+            this.#calcLongestRoad();
         }
     }
 
@@ -135,7 +136,7 @@ class Board {
                 player: player,
             }
             this.roads = [...this.roads, newRoadObj];
-            // this.#findLongestRoad();
+            this.#calcLongestRoad();
         }
     }
 
@@ -188,47 +189,73 @@ class Board {
         return false;
     }
 
-    #findLongestRoad() {
+    #calcLongestRoad() {
+        let newLongestRoad = [];
         this.roads.forEach(road => {
-            const checkedRoads = [road];
-            const connectedRoads = this.#findConnectedRoads(road);
-            
-        })
+            const longestByMyRoad = this.#getLongestFromSegment([road], []);
+            if (longestByMyRoad.length > longestRoad.length) {
+                longestRoad = longestByMyRoad;
+            }
+        });
+        this.longestRoad = newLongestRoad;
     }
 
-    #findConnectedRoads(roadInput, checkedRoads) {
-        const { player, startX, startY, endX, endY } = roadInput;
+    #getLongestFromSegment(currSeq, siblingRoads) {
+        const nextSegments = this.#checkSegmentNeighbor(currSeq, siblingRoads);
+        if (nextSegments.length > 0) {
+            for (let i = 0; i < nextSegments.length; i++) {
+                const segmentsCopy = nextSegments.slice();
+                segmentsCopy.splice(i, 1);
+                const nextProcess = [...currSeq, nextSegments[i]];
+                return getLongestFromSegment(nextProcess, segmentsCopy);
+            }
+        }
+        return currSeq;
+    }
+
+    #checkSegmentNeighbor(roadSeq, siblingRoads) {
+        const lastRoad = roadSeq[roadSeq.length - 1];
         const connectedRoads = [];
-        const checkedRoads = [];
         this.roads.forEach(road => {
-            if (road.status.player === player) {
-                if (road.startX === startX && road.startY === startY && road.endX !== endX && road.endX !== endY) {
-                    if (this.#validateRoadSequence(road.startX, road.startY)) {
-                        connectedRoads.push(road);
-                    }
-                }
-                if (road.startX !== startX && road.startY !== startY && road.endX === endX && road.endX === endY) {
-                    if (this.#validateRoadSequence(road.endX, road.endY)) {
-                        connectedRoads.push(road);
-                    }
-                }
-                if (road.startX === endX && road.startY === endY && road.endX !== startX && road.endX !== startY) {
-                    if (this.#validateRoadSequence(road.startX, road.startY)) {
-                        connectedRoads.push(road);
-                    }
-                }
-                if (road.endX === startX && road.endY === startY && road.startX !== endX && road.startY !== endY) {
-                    if (this.#validateRoadSequence(road.endX, road.endY)) {
-                        connectedRoads.push(road);
-                    }
+            if (!roadSeq.includes(road) && !siblingRoads.includes(road)) {
+                if (this.#areRoadsConnected(lastRoad, road)) {
+                    connectedRoads.push(road);
                 }
             }
         })
         return connectedRoads;
     }
 
+    #areRoadsConnected(roadA, roadB) {
+        const { color: colorA, startX: startXA, startY: startYA, endX: endXA, endY: endYA } = roadA;
+        const { color: colorB, startX: startXB, startY: startYB, endX: endXB, endY: endYB } = roadB;
+        if (colorA === colorB) {
+            if ((startXA === startXB && startYA === startYB) && (endXA !== endXB || endYA !== endYB)) {
+                if (this.#validateRoadSequence(startXA, startYA)) {
+                    return true;
+                }
+            }
+            if ((startXA !== startXB || startYA !== startYB) && (endXA === endXB && endYA === endYB)) {
+                if (this.#validateRoadSequence(endXA, endYA)) {
+                    return true;
+                }
+            }
+            if ((startXA === endXB && startYA === endYB) && (endXA !== startXB || endYA !== startYB)) {
+                if (this.#validateRoadSequence(startXA, startYA)) {
+                    return true;
+                }
+            }
+            if ((startXA !== endXB || startYA !== endYB) && (endXA === startXB && endYA === startYB)) {
+                if (this.#validateRoadSequence(endXA, endYA)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     #validateRoadSequence(player, x, y) {
-        if (this.getJunctionStatus(x, y).player !== player) {
+        if (getJunctionStatus(x, y).player !== player) {
             return false;
         }
         return true;
