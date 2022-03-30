@@ -115,6 +115,24 @@ class Game {
         }
     }
 
+    #setLongestRoadPlayer() {
+        const longestRoad = this.board.longestRoad;
+        if (longestRoad.length >= 5) {
+            if (this.longestRoadPlayer) {
+                if (longestRoad[0].player !== this.longestRoadPlayer) {
+                    this.#getPlayerByColor(this.longestRoadPlayer).removePoints(2);
+                    this.longestRoadPlayer = longestRoad[0].player;
+                    this.#getPlayerByColor(this.longestRoadPlayer).addPoints(2);
+                    return `. ${this.longestRoadPlayer} now has the longest road`;
+                }
+            } else {
+                this.longestRoadPlayer = longestRoad[0].player;
+                this.#getPlayerByColor(this.longestRoadPlayer).addPoints(2);
+                return `. ${this.longestRoadPlayer} now has the longest road`;
+            }
+        }
+    }
+
     //Returns a random number between 1-12
     rollDice() {
         return dicesRoll();
@@ -156,7 +174,8 @@ class Game {
         const player = this.#getPlayerByColor(playerColor);
         player.buildSettelment(x, y, shouldTakeResources);
         this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT, shouldBeConnected);
-        return `Player ${playerColor} built a settelment`;
+        const longestRoadMsg = this.#setLongestRoadPlayer();
+        return `Player ${playerColor} built a settelment` + longestRoadMsg;
     }
 
     buildCity(playerColor, x, y) {
@@ -170,7 +189,8 @@ class Game {
         const player = this.#getPlayerByColor(playerColor);
         player.buildRoad(startX, startY, endX, endY, shouldTakeResources);
         this.board.addRoad(playerColor, startX, startY, endX, endY);
-        return `Player ${playerColor} built a road`;
+        const longestRoadMsg = this.#setLongestRoadPlayer();
+        return `Player ${playerColor} built a road` + longestRoadMsg;
     }
 
     buildDevCard(playerColor) {
