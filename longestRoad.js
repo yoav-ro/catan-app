@@ -7,6 +7,7 @@ const getRoadObj = (startX, startY, endX, endY, color) => {
         color: color,
     }
 }
+const longestRoads = [];
 const roads = [
     getRoadObj(364.73066958946424, 35, 303.10889132455355, 0, "blue"), //0
     getRoadObj(364.73066958946424, 35, 364.73066958946424, 105, "blue"), //1
@@ -20,15 +21,20 @@ const roads = [
 ]
 //longest should be (road indexes): [0,1,2,3,5,6]
 
-let long = calcLongestRoad();
-// console.log(long);
+function getLongestArrayInArray(array) {
+    let longest = [];
+    array.forEach(arr => {
+        if (arr.length > longest.length) {
+            longest = arr;
+        }
+    })
+    return longest;
+}
 
 function calcLongestRoad() {
     let longestRoad = [];
     roads.forEach(road => {
-        const longestByMyRoad = getLongestFromSegment([road]);
-        console.log("new longest?")
-        console.log(longestByMyRoad)
+        const longestByMyRoad = getLongestFromSegment([road], []);
         if (longestByMyRoad.length > longestRoad.length) {
             longestRoad = longestByMyRoad;
         }
@@ -36,22 +42,25 @@ function calcLongestRoad() {
     return longestRoad;
 }
 
-function getLongestFromSegment(currSeq) {
-    const nextSegments = checkSegmentNeighbor(currSeq);
-    if (nextSegments.length === 0) {
-        return currSeq;
+
+function getLongestFromSegment(currSeq, siblingRoads) {
+    const nextSegments = checkSegmentNeighbor(currSeq, siblingRoads);
+    if (nextSegments.length > 0) {
+        for (let i = 0; i < nextSegments.length; i++) {
+            const segmentsCopy = nextSegments.slice();
+            segmentsCopy.splice(i, 1);
+            const nextProcess = [...currSeq, nextSegments[i]];
+            return getLongestFromSegment(nextProcess, segmentsCopy);
+        }
     }
-    nextSegments.forEach(nextSegment => {
-        const nextProcess = [...currSeq, nextSegment];
-        return getLongestFromSegment(nextProcess);
-    })
+    return currSeq;
 }
 
-function checkSegmentNeighbor(roadSeq) {
+function checkSegmentNeighbor(roadSeq, siblingRoads) {
     const lastRoad = roadSeq[roadSeq.length - 1];
     const connectedRoads = [];
     roads.forEach(road => {
-        if (!roadSeq.includes(road)) {
+        if (!roadSeq.includes(road) && !siblingRoads.includes(road)) {
             if (areRoadsConnected(lastRoad, road)) {
                 connectedRoads.push(road);
             }
