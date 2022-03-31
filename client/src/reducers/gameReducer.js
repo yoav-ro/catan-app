@@ -1,5 +1,7 @@
-export default function gameReducer(state, action) {
-    switch (key) {
+const initialState = { game: "none" };
+
+export default function gameReducer(state = initialState, action) {
+    switch (action.type) {
         case "SET_GAME_DATA":
             const game = action.data;
             return { game: game };
