@@ -21,12 +21,10 @@ function City({ color, centerX, centerY }) {
     }
 
     return (
-        <svg width={1000} height={1000}>
-            <g onMouseEnter={handleHoverIn} onMouseLeave={handleHoverOut}>
-                <SvgHouse centerX={biggerHouseCoords.centerX} centerY={biggerHouseCoords.centerY} scale={1 * scale} color={color} />
-                <SvgHouse centerX={smallHouseCoords.centerX} centerY={smallHouseCoords.centerY} scale={0.7 * scale} color={color} />
-            </g>
-        </svg>
+        <g onMouseEnter={handleHoverIn} onMouseLeave={handleHoverOut}>
+            <SvgHouse centerX={biggerHouseCoords.centerX} centerY={biggerHouseCoords.centerY} scale={1 * scale} color={color} />
+            <SvgHouse centerX={smallHouseCoords.centerX} centerY={smallHouseCoords.centerY} scale={0.7 * scale} color={color} />
+        </g>
     )
 }
 

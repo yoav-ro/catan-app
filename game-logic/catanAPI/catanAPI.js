@@ -1,7 +1,7 @@
 const Game = require("../gameClass/game");
 const { pieceTypes, devCards } = require("../utils/constants");
-const { randomItemFromArray, mixArray } = require("../utils/helperFunctions");
-const { directiveTypes, directiveTypes } = require("./apiConstants");
+const { mixArray } = require("../utils/helperFunctions");
+const { directiveTypes } = require("./apiConstants");
 
 //todo:
 //set return messages - good
