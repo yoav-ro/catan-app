@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 // import game from './demoGame';
 import { setGameData } from './actions';
+import Robber from './components/boardPieces/robber';
 
 function App() {
   const dispatch = useDispatch();
@@ -17,11 +18,13 @@ function App() {
 
   return (
     <div>
-      <HexagonBoard />
-      {/* <svg width={1000} height={1000}>
-        <City centerX={500} centerY={500} color="blue" />
-        <Settelment centerX={400} centerY={400} color="red" />
-      </svg> */}
+      {/* <HexagonBoard /> */}
+
+      <svg width={1000} height={1000}>
+        <Robber tileCX={300} tileCY={300} />
+        {/* <City centerX={500} centerY={500} color="blue" />
+        <Settelment centerX={400} centerY={400} color="red" /> */}
+      </svg>
 
     </div>
   );
