@@ -1,4 +1,3 @@
-const Junction = require("../junctionClass/junction");
 const { resourcesTypes } = require("../utils/constants");
 
 class Tile {

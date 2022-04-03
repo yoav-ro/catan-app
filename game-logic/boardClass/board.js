@@ -1,5 +1,5 @@
-const { resourcesTypes, numbersArr, resourcesArr, pieceTypes, ports, ports } = require("../utils/constants");
-const { mixArray, getDistance, doesArrayContain } = require("../utils/helperFunctions")
+const { resourcesTypes, numbersArr, resourcesArr, pieceTypes, portsArr } = require("../utils/constants");
+const { mixArray, getDistance, roundBySecondDec } = require("../utils/helperFunctions")
 const Tile = require("../tileClass/tile");
 
 class Board {
@@ -129,11 +129,11 @@ class Board {
     addRoad(player, startX, startY, endX, endY) {
         if (this.#canPlaceRoad(player, startX, startY, endX, endY)) {
             const newRoadObj = {
+                player: player,
                 startX: startX,
                 startY: startY,
                 endX: endX,
                 endY: endY,
-                player: player,
             }
             this.roads = [...this.roads, newRoadObj];
             this.#calcLongestRoad();
@@ -151,7 +151,9 @@ class Board {
             throw "Road already accupied";
         }
         //Checks if the road is connected to another player
-        if (!this.#isConnectedToJunction(player, startX, startY, endX, endY) && !this.#isConnectedToRoad(player, startX, startY, endX, endY)) {
+        const isConnectedToJunction = this.#isConnectedToJunction(player, startX, startY, endX, endY);
+        const isConnectedToRoad = this.#isConnectedToRoad(player, startX, startY, endX, endY);
+        if (!isConnectedToJunction && !isConnectedToRoad) {
             throw "Cant place road here"
         }
         return true;
@@ -165,39 +167,35 @@ class Board {
                 return true;
             }
         }
-
         return false;
     }
 
     #isConnectedToRoad(player, startX, startY, endX, endY) {
+        const mockRoad = {
+            player: player,
+            startX: startX,
+            startY: startY,
+            endX: endX,
+            endY: endY,
+        }
+        let ret = false;
         this.roads.forEach(road => {
-            if (road.status === player) {
-                if (road.startX === startX && road.startY === startY) {
-                    return true;
-                }
-                if (road.endX === endX && road.endY === endY) {
-                    return true;
-                }
-                if (road.endX === startX && road.endY === startY) {
-                    return true;
-                }
-                if (road.startX === endX && road.startY === endY) {
-                    return true;
-                }
+            const areConnected = this.#areRoadsConnected(mockRoad, road);
+            if (areConnected) {
+                ret = true;
             }
         })
-        return false;
+        return ret;
     }
 
     #calcLongestRoad() {
-        let newLongestRoad = [];
+        this.longestRoad = [];
         this.roads.forEach(road => {
             const longestByMyRoad = this.#getLongestFromSegment([road], []);
-            if (longestByMyRoad.length > longestRoad.length) {
-                longestRoad = longestByMyRoad;
+            if (longestByMyRoad.length > this.longestRoad.length) {
+                this.longestRoad = longestByMyRoad;
             }
         });
-        this.longestRoad = newLongestRoad;
     }
 
     #getLongestFromSegment(currSeq, siblingRoads) {
@@ -207,7 +205,7 @@ class Board {
                 const segmentsCopy = nextSegments.slice();
                 segmentsCopy.splice(i, 1);
                 const nextProcess = [...currSeq, nextSegments[i]];
-                return getLongestFromSegment(nextProcess, segmentsCopy);
+                return this.#getLongestFromSegment(nextProcess, segmentsCopy);
             }
         }
         return currSeq;
@@ -227,26 +225,26 @@ class Board {
     }
 
     #areRoadsConnected(roadA, roadB) {
-        const { color: colorA, startX: startXA, startY: startYA, endX: endXA, endY: endYA } = roadA;
-        const { color: colorB, startX: startXB, startY: startYB, endX: endXB, endY: endYB } = roadB;
+        let { player: colorA, startX: startXA, startY: startYA, endX: endXA, endY: endYA } = roadA;
+        let { player: colorB, startX: startXB, startY: startYB, endX: endXB, endY: endYB } = roadB;
         if (colorA === colorB) {
-            if ((startXA === startXB && startYA === startYB) && (endXA !== endXB || endYA !== endYB)) {
-                if (this.#validateRoadSequence(startXA, startYA)) {
+            if ((roundBySecondDec(startXA) === roundBySecondDec(startXB) && roundBySecondDec(startYA) === roundBySecondDec(startYB)) && (roundBySecondDec(endXA) !== roundBySecondDec(endXB) || roundBySecondDec(endYA) !== roundBySecondDec(endYB))) {
+                if (this.#validateRoadSequence(colorA, startXA, startYA)) {
                     return true;
                 }
             }
-            if ((startXA !== startXB || startYA !== startYB) && (endXA === endXB && endYA === endYB)) {
-                if (this.#validateRoadSequence(endXA, endYA)) {
+            if ((roundBySecondDec(startXA) !== roundBySecondDec(startXB) || roundBySecondDec(startYA) !== roundBySecondDec(startYB)) && (roundBySecondDec(endXA) === roundBySecondDec(endXB) && roundBySecondDec(endYA) === roundBySecondDec(endYB))) {
+                if (this.#validateRoadSequence(colorA, endXA, endYA)) {
                     return true;
                 }
             }
-            if ((startXA === endXB && startYA === endYB) && (endXA !== startXB || endYA !== startYB)) {
-                if (this.#validateRoadSequence(startXA, startYA)) {
+            if ((roundBySecondDec(startXA) === roundBySecondDec(endXB) && roundBySecondDec(startYA) === roundBySecondDec(endYB)) && (roundBySecondDec(endXA) !== roundBySecondDec(startXB) || roundBySecondDec(endYA) !== roundBySecondDec(startYB))) {
+                if (this.#validateRoadSequence(colorA, startXA, startYA)) {
                     return true;
                 }
             }
-            if ((startXA !== endXB || startYA !== endYB) && (endXA === startXB && endYA === startYB)) {
-                if (this.#validateRoadSequence(endXA, endYA)) {
+            if ((roundBySecondDec(startXA) !== roundBySecondDec(endXB) || roundBySecondDec(startYA) !== roundBySecondDec(endYB)) && (roundBySecondDec(endXA) === roundBySecondDec(startXB) && roundBySecondDec(endYA) === roundBySecondDec(startYB))) {
+                if (this.#validateRoadSequence(colorA, endXA, endYA)) {
                     return true;
                 }
             }
@@ -255,7 +253,11 @@ class Board {
     }
 
     #validateRoadSequence(player, x, y) {
-        if (getJunctionStatus(x, y).player !== player) {
+        const junctionStatus = this.getJunctionStatus(x, y);
+        if (junctionStatus === "free") {
+            return true;
+        }
+        if (junctionStatus.player !== player) {
             return false;
         }
         return true;
@@ -289,6 +291,7 @@ class Board {
                 }
             }
         }
+
         return false;
     }
 }
@@ -313,7 +316,7 @@ function getTilesData(tileRadius) {
 }
 
 function getPortsData(tiles) {
-    const ports = mixArray(ports);
+    const ports = mixArray(portsArr);
     const portCoords = []; //todo- manage the coords to pairs and give each pair a port type
     tiles.forEach(tile => {
         if (tile.row === 0) {

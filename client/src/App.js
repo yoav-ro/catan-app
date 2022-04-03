@@ -18,13 +18,13 @@ function App() {
 
   return (
     <div>
-      {/* <HexagonBoard /> */}
+      <HexagonBoard />
 
-      <svg width={1000} height={1000}>
+      {/* <svg width={1000} height={1000}>
         <Robber tileCX={300} tileCY={300} />
-        {/* <City centerX={500} centerY={500} color="blue" />
-        <Settelment centerX={400} centerY={400} color="red" /> */}
-      </svg>
+        <City centerX={100} centerY={100} color="blue" />
+        <Settelment centerX={200} centerY={200} color="red" />
+      </svg> */}
 
     </div>
   );

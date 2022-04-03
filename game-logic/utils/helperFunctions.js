@@ -31,6 +31,10 @@ function randomItemFromArray(array) {
     array[Math.floor(Math.random() * array.length)];
 }
 
+function roundBySecondDec(num){
+    return Math.round((num + Number.EPSILON) * 100) / 100;
+}
+
 module.exports = {
-    mixArray, getDistance, doesArrayContain, dicesRoll, countItemsInArray, randomItemFromArray
+    mixArray, getDistance, doesArrayContain, dicesRoll, countItemsInArray, randomItemFromArray, roundBySecondDec
 }

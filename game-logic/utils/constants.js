@@ -94,5 +94,5 @@ const devCardsArr = [
 
 
 module.exports = {
-    resourcesArr, numbersArr, resourcesTypes, playerColors, buildingCosts, devCards, devCardsArr, pieceTypes, ports
+    resourcesArr, numbersArr, resourcesTypes, playerColors, buildingCosts, devCards, devCardsArr, pieceTypes, portsArr
 }
