@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 // import game from './demoGame';
 import { setGameData } from './actions';
 import Robber from './components/boardPieces/robber';
+import Port from './components/boardPieces/port';
 
 function App() {
   const dispatch = useDispatch();
@@ -18,13 +19,18 @@ function App() {
 
   return (
     <div>
-      <HexagonBoard />
+      {/* <HexagonBoard /> */}
 
-      {/* <svg width={1000} height={1000}>
-        <Robber tileCX={300} tileCY={300} />
+      <svg width="1000" height="1000">
+        
+        {/* <Robber tileCX={300} tileCY={300} />
         <City centerX={100} centerY={100} color="blue" />
-        <Settelment centerX={200} centerY={200} color="red" />
-      </svg> */}
+        <Settelment centerX={200} centerY={200} color="red" /> */}
+        {/* <circle r={100} cx={500} cy={500} fill="transparent" stroke='black'/> */}
+        
+
+        <Port x={300} y={300} scale={0.1}/>
+      </svg>
 
     </div>
   );
