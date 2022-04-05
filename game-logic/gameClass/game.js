@@ -200,9 +200,9 @@ class Game {
         return `Player ${playerColor} purchesed a development card`;
     }
 
-    executeTrade(playerA, playerB, resPlayerA, resPlayerB) {
-        const playerA = this.#getPlayerByColor(playerA);
-        const playerB = this.#getPlayerByColor(playerB);
+    executeTrade(playerAColor, playerBColor, resPlayerA, resPlayerB) {
+        const playerA = this.#getPlayerByColor(playerAColor);
+        const playerB = this.#getPlayerByColor(playerBColor);
 
         playerA.removeResources(resPlayerA);
         playerB.removeResources(resPlayerB);
