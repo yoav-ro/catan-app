@@ -60,7 +60,8 @@ describe("Robber tests", () => {
 
     test("Moving to a new location", () => {
         const mockBoard = new Board(70);
-        let oldRow, oldCell;
+        let oldRow;
+        let oldCell;
         mockBoard.tiles.forEach(tile => {
             if (tile.resource === resourcesTypes.DESERT) {
                 oldCell = tile.cell;
@@ -108,5 +109,74 @@ describe("Roads tests", () => {
             mockBoard.addRoad("red", 242.48711305964284, 35, 181.86533479473212, 0);
         }
         expect(notBySamePlayer).toThrow("Cant place road here");
+    })
+})
+
+describe("Longest road tests", () => {
+    test("A chain of same- uninterrupted roads will be the longest road", () => {
+        const mockBoard = new Board(70);
+        mockBoard.addJunction("blue", 303.10889132455355, 0, pieceTypes.SETTELMENT, false);
+        mockBoard.addRoad("blue", 363.73066958946424, 35, 303.10889132455355, 0);
+        mockBoard.addRoad("blue", 363.7306695894643, 35, 363.7306695894643, 105);
+        mockBoard.addRoad("blue", 363.73066958946424, 105, 303.10889132455355, 140);
+        mockBoard.addRoad("blue", 303.10889132455355, 140, 303.10889132455355, 210);
+        const longestRoad = mockBoard.longestRoad;
+        expect(longestRoad.length).toBe(4);
+    })
+
+    test("Two rival roads", () => {
+        const mockBoard = new Board(70);
+        mockBoard.addJunction("blue", 303.10889132455355, 0, pieceTypes.SETTELMENT, false);
+        mockBoard.addJunction("red", 424.35244785437493, 210, pieceTypes.SETTELMENT, false);
+        mockBoard.addRoad("blue", 363.73066958946424, 35, 303.10889132455355, 0); //1b
+        mockBoard.addRoad("blue", 363.7306695894643, 35, 363.7306695894643, 105); //2b
+        mockBoard.addRoad("blue", 363.73066958946424, 105, 303.10889132455355, 140); //3b
+        mockBoard.addRoad("red", 424.35244785437493, 210, 363.73066958946424, 245);//1r
+        mockBoard.addRoad("red", 363.73066958946424, 245, 303.10889132455355, 210)//2r
+        mockBoard.addRoad("red", 303.10889132455355, 210, 242.48711305964284, 245); //3r
+        mockBoard.addRoad("red", 242.48711305964284, 245, 242.48711305964284, 315);//4r
+        mockBoard.addRoad("red", 424.35244785437493, 140, 424.35244785437493, 210);//5r
+        mockBoard.addRoad("blue", 303.10889132455355, 140, 303.10889132455355, 210);//4b
+        const longestRoad = mockBoard.longestRoad;
+        expect(longestRoad.length).toBe(5);
+    })
+
+    test("Cutting a road", () => {
+        const mockBoard = new Board(70);
+        mockBoard.addJunction("blue", 303.10889132455355, 0, pieceTypes.SETTELMENT, false);
+        mockBoard.addJunction("red", 424.35244785437493, 210, pieceTypes.SETTELMENT, false);
+
+        mockBoard.addRoad("blue", 363.73066958946424, 35, 303.10889132455355, 0); //1b
+        mockBoard.addRoad("blue", 363.7306695894643, 35, 363.7306695894643, 105); //2b
+        mockBoard.addRoad("blue", 363.73066958946424, 105, 303.10889132455355, 140); //3b
+        mockBoard.addRoad("blue", 303.10889132455355, 140, 303.10889132455355, 210);//4b
+        mockBoard.addRoad("blue", 303.10889132455355, 210, 242.48711305964284, 245);//5b
+        mockBoard.addRoad("blue", 242.48711305964284, 245, 242.48711305964284, 315);//6b
+
+        mockBoard.addRoad("red", 424.35244785437493, 210, 363.73066958946424, 245);//1r
+        mockBoard.addRoad("red", 363.73066958946424, 245, 303.10889132455355, 210)//2r
+        mockBoard.addJunction("red", 303.10889132455355, 210, pieceTypes.SETTELMENT, false);
+        mockBoard.addRoad("red", 424.35244785437493, 140, 424.35244785437493, 210);//3r
+        mockBoard.addRoad("red", 484.9742261192856, 105, 424.35244785437493, 140);//4r
+        mockBoard.addRoad("red", 545.5960043841964, 140, 484.9742261192856, 105);//5r
+        const longestRoad = mockBoard.longestRoad;
+        expect(longestRoad.length).toBe(5);
+        expect(longestRoad[0].player).toBe("red");
+    })
+
+    test("Road loop", () => {
+        const mockBoard = new Board(70);
+        mockBoard.addJunction("blue", 303.10889132455355, 0, pieceTypes.SETTELMENT, false);
+
+        mockBoard.addRoad("blue", 363.73066958946424, 35, 303.10889132455355, 0); //1b
+        mockBoard.addRoad("blue", 363.7306695894643, 35, 363.7306695894643, 105); //2b
+        mockBoard.addRoad("blue", 363.73066958946424, 105, 303.10889132455355, 140); //3b
+        mockBoard.addRoad("blue", 303.10889132455355, 140, 242.48711305964284, 105);//4b
+        mockBoard.addRoad("blue", 242.48711305964284, 35, 242.48711305964284, 105);//5b
+        mockBoard.addRoad("blue", 303.10889132455355, 0, 242.48711305964284, 35);//6b
+        mockBoard.addRoad("blue", 303.10889132455355, 140, 303.10889132455355, 210);//7b
+
+        const longestRoad = mockBoard.longestRoad;
+        expect(longestRoad.length).toBe(7);
     })
 })

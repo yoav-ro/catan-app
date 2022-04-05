@@ -38,30 +38,5 @@ function HexagonBoard() {
         </div>
     )
 }
-{/* <div id="row0" className="row">
-                    {rowsData.row0.map((data, key) => {
-                        console.log(data.number)
-                        return <ResourceTile key={key} tileNumber={data.number} resource={data.resource} row={1} cell={key + 1} />
-                    })}
-                </div><br />
-                <div id="row1" className="row">
-                    {rowsData.row1.map((data, key) => {
-                        return <ResourceTile key={key} tileNumber={data.number} resource={data.resource} row={2} cell={key + 1} />
-                    })}
-                </div><br />
-                <div id="row2" className="row">
-                    {rowsData.row2.map((data, key) => {
-                        return <ResourceTile key={key} tileNumber={data.number} resource={data.resource} row={3} cell={key + 1} />
-                    })}
-                </div><br />
-                <div id="row3" className="row">
-                    {rowsData.row3.map((data, key) => {
-                        return <ResourceTile key={key} tileNumber={data.number} resource={data.resource} row={4} cell={key + 1} />
-                    })}
-                </div><br />
-                <div id="row5" className="row">
-                    {rowsData.row4.map((data, key) => {
-                        return <ResourceTile key={key} tileNumber={data.number} resource={data.resource} row={5} cell={key + 1} />
-                    })}
-                </div><br /> */}
+
 export default HexagonBoard;

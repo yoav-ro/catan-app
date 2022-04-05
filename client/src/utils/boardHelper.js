@@ -18,17 +18,6 @@ export function getRowsData() {
         }
     });
 
-    // for (let i = 0; i < resourcesArr.length; i++) {
-    //     if (resourcesArr[i].name === resourcesTypes.DESERT.name) {
-    //         tilesData.push({ resource: resourcesArr[i], number: undefined })
-    //     }
-    //     else {
-    //         const num = numbersArr.pop();
-    //         console.log(num)
-    //         tilesData.push({ resource: resourcesArr[i], number: num })
-    //     }
-    //     console.log(i, numbersArr[i])
-    // }
     console.log(tilesData.length, tilesData)
     const row0 = [tilesData[0], tilesData[1], tilesData[2]]
     const row1 = [tilesData[3], tilesData[4], tilesData[5], tilesData[6]]
