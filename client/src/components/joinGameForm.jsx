@@ -16,11 +16,18 @@ function JoinGameForm({ gameSocketRef }) {
 
     }
 
+    const getGame = (e) => {
+        gameSocketRef.current.emit("newDirective", { directive: "test" });
+    }
+
     return (
-        <form>
-            <input type="text" placeholder="Enter player name" onChange={(e) => setUserName(e.target.value)} />
-            <button type="submit" onClick={handleClick}>Join</button>
-        </form>
+        <div>
+            <form>
+                <input type="text" placeholder="Enter player name" onChange={(e) => setUserName(e.target.value)} />
+                <button type="submit" onClick={handleClick}>Join</button>
+            </form>
+            <button onClick={getGame}>Get game</button>
+        </div>
     )
 }
 

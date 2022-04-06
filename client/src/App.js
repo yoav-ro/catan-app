@@ -14,7 +14,12 @@ function App() {
     socketRef.current.on("lobby", data => {
       console.log(data);
     })
-  })
+
+    socketRef.current.on("game-data", data => {
+      console.log("here")
+      console.log(data);
+    })
+  }, [])
 
   return (
     <div>

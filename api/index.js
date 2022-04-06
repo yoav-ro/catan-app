@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
-const nanoid = require("nanoid");
+const { nanoid } = require("nanoid");
 const CatanGame = require("../game-logic/catanAPI/catanAPI");
 const cors = require("cors");
 
@@ -22,7 +22,6 @@ io.sockets.on("connection", (socket) => {
     console.log(`Connection with id ${socket.id}`);
     const gamePlayerCap = 4;
 
-
     socket.on("joinGame", ({ username }) => {
         if (playersQueue.some((player) => player.username === username)) {
             io.to(socket.id).emit("lobby", "User name already taken");
@@ -37,29 +36,39 @@ io.sockets.on("connection", (socket) => {
             );
         }
 
-        if (playersQueue.length === 4) {
-            const gameObj = gameCreator(playersQueue[0], playersQueue[1], playersQueue[2], playersQueue[3]);
+        if (playersQueue.length === gamePlayerCap) {
+            const gameObj = gameCreator(playersQueue);
+            playersQueue.length = 0;
             games.push(gameObj);
         }
     })
 
     socket.on("newDirective", ({ directive }) => {
-        const game = games.find((game) => {
-            game.some((player) => { player.id === socket.id });
-        })
-        game.sendDirective(directive);
+        const game = findGameBySocketId(socket.id);
         
-        game.player.forEach(player => {
-            socket.to(player.id).emit(game);
+        //todo- parse directive
+
+        game.players.forEach(player => {
+            console.log(`sending to ${player.name}(${player.id})`)
+            io.to(player.id).emit("game-data", game);
         });
     })
 
     socket.on("disconnect", (reason) => {
         console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
-        //should end game
+        //todo- find the game disconnected from and end it end game
     })
 })
 
+function findGameBySocketId(socketId) {
+    let ret;
+    games.forEach(game => {
+        if (game.players.some(player => player.id === socketId)) {
+            ret = game;
+        }
+    })
+    return ret;
+}
 
 function gameCreator(playersArray) {
     const colorBank = ["red", "orange", "white", "blue"];
@@ -69,30 +78,19 @@ function gameCreator(playersArray) {
         [colorBank[i], colorBank[j]] = [colorBank[j], colorBank[i]];
     }
 
-    const playersObj = [
-        {
-            name: playersArray[0],
-            color: colorBank[0],
-        },
-        {
-            name: playersArray[1],
-            color: colorBank[1],
-        },
-        {
-            name: playersArray[2],
-            color: colorBank[2],
-        },
-        {
-            name: playersArray[3],
-            color: colorBank[3],
-        },
-    ]
+    const playersObj = []
+    for (let i = 0; i < playersArray.length; i++) {
+        playersObj.push({
+            name: playersArray[i],
+            color: colorBank[i],
+        })
+    }
 
     const game = new CatanGame(playersObj, 70);
     return {
         id: "game" + nanoid(),
         game: game,
-        players: playersArray,
+        players: playersArray.slice(),
     };
 }
 
