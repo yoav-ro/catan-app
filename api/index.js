@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
+const nanoid = require("nanoid");
 const CatanGame = require("../game-logic/catanAPI/catanAPI");
 const cors = require("cors");
 
@@ -23,11 +24,11 @@ io.sockets.on("connection", (socket) => {
 
 
     socket.on("joinGame", ({ username }) => {
-        if (playersQueue.includes(username)) {
+        if (playersQueue.some((player) => player.username === username)) {
             io.to(socket.id).emit("lobby", "User name already taken");
         }
         else {
-            playersQueue.push(username);
+            playersQueue.push({ username: username, id: socket.id });
             io.to(socket.id).emit("lobby",
                 {
                     msg: `Joined queue. Looking for ${gamePlayerCap - playersQueue.length} players`,
@@ -42,11 +43,23 @@ io.sockets.on("connection", (socket) => {
         }
     })
 
+    socket.on("newDirective", ({ directive }) => {
+        const game = games.find((game) => {
+            game.some((player) => { player.id === socket.id });
+        })
+        game.sendDirective(directive);
+        
+        game.player.forEach(player => {
+            socket.to(player.id).emit(game);
+        });
+    })
+
     socket.on("disconnect", (reason) => {
         console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
         //should end game
     })
 })
+
 
 function gameCreator(playersArray) {
     const colorBank = ["red", "orange", "white", "blue"];
@@ -76,6 +89,10 @@ function gameCreator(playersArray) {
     ]
 
     const game = new CatanGame(playersObj, 70);
-    return game;
+    return {
+        id: "game" + nanoid(),
+        game: game,
+        players: playersArray,
+    };
 }
 
