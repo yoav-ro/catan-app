@@ -34,8 +34,10 @@ function Tile({ number, resource, coordinates }) {
         default:
             break;
     }
+
     if (number) {
         const numberPosCorrection = number.toString().length === 2 ? -8 : -4
+        const numColor = (number === 6 || number === 8) ? "red" : "black"; 
         return (
             <g>
                 <Polygon points={[
@@ -60,7 +62,7 @@ function Tile({ number, resource, coordinates }) {
                 <Junction centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
                 <Junction centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
                 <circle cx={center.x} cy={center.y} r="20" fill="white" stroke="black" />
-                <text x={center.x} y={center.y} strokeWidth="2px" fontFamily="Arial" dy=".3em" dx={numberPosCorrection}>{number}</text>
+                <text fill={numColor} x={center.x} y={center.y} strokeWidth="4px" fontFamily="Arial" dy=".3em" dx={numberPosCorrection}>{number}</text>
             </g>
         )
     }
