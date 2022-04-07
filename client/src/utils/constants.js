@@ -2,7 +2,7 @@ export const resourcesTypes = {
     WOOD: {
         name: "wood",
         ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png",
-        color: "#dbe36b",
+        color: "#255928",
     },
     BRICK: {
         name: "brick",
@@ -12,7 +12,7 @@ export const resourcesTypes = {
     WHEAT: {
         name: "wheat",
         ref: "http://catan-map.surge.sh/static/media/brick.90e15df7.png",
-        color: "#255928",
+        color: "#dbe36b",
     },
     SHEEP: {
         name: "sheep",
