@@ -1,37 +1,29 @@
-import React, { useEffect } from 'react';
-import HexagonBoard from './components/hexagonsBoard';
-import City from './components/boardPieces/city';
-import Settelment from './components/boardPieces/settlement';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-// import game from './demoGame';
-import { setGameData } from './actions';
-import Robber from './components/boardPieces/robber';
-import Port from './components/boardPieces/port';
+import { io } from 'socket.io-client';
+import JoinGameForm from './components/joinGameForm';
+
+//http://localhost:3008
 
 function App() {
-  const dispatch = useDispatch();
+  const socketRef = useRef(null);
 
-  // dispatch(setGameData(game));
-  // const currGame = useSelector(state => state.gameReducer);
+  useEffect(() => {
+    socketRef.current = io.connect("http://localhost:3008");
 
-  // console.log(currGame);
+    socketRef.current.on("lobby", data => {
+      console.log(data);
+    })
+
+    socketRef.current.on("game-data", data => {
+      console.log("here")
+      console.log(data);
+    })
+  }, [])
 
   return (
     <div>
-      {/* <HexagonBoard /> */}
-
-      <svg width="1000" height="1000">
-        
-        {/* <Robber tileCX={300} tileCY={300} />
-        <City centerX={100} centerY={100} color="blue" />
-        <Settelment centerX={200} centerY={200} color="red" /> */}
-        {/* <circle r={100} cx={500} cy={500} fill="transparent" stroke='black'/> */}
-        
-
-        <Port x={300} y={300} scale={0.1}/>
-      </svg>
-
+      <JoinGameForm gameSocketRef={socketRef} />
     </div>
   );
 }
