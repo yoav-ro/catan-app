@@ -28,10 +28,6 @@ function App() {
     <div>
       <JoinGameForm gameSocketRef={socketRef} />
       <HexagonBoard />
-      <svg width="250" height="250">
-        <circle fill='white' stroke='black' cx="125" cy="125" r="20" />
-        <text x="50%" y="50%" textAnchor="middle"  strokeWidth="2px" dy=".3em">BC</text>
-      </svg>
     </div>
   );
 }
