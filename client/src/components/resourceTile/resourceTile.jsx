@@ -4,8 +4,12 @@ import { resourcesTypes } from "../../utils/constants";
 import Junction from "./junction";
 import "./styles/road.css"
 import Road from "./road";
+import Robber from "../boardPieces/robber";
+import City from "../boardPieces/city";
+import Settlement from "../boardPieces/settlement";
 
-function Tile({ number, resource, coordinates }) {
+
+function Tile({ number, resource, coordinates, robber, junctions }) {
     const center = {
         x: (coordinates.top.x + coordinates.bottom.x) / 2,
         y: (coordinates.top.y + coordinates.bottom.y) / 2,
@@ -37,7 +41,7 @@ function Tile({ number, resource, coordinates }) {
 
     if (number) {
         const numberPosCorrection = number.toString().length === 2 ? -8 : -4
-        const numColor = (number === 6 || number === 8) ? "red" : "black"; 
+        const numColor = (number === 6 || number === 8) ? "red" : "black";
         return (
             <g>
                 <Polygon points={[
@@ -61,8 +65,17 @@ function Tile({ number, resource, coordinates }) {
                 <Junction centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
                 <Junction centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
                 <Junction centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
+                {junctions.map((junction, key) => {
+                    if (junction.type === "city") {
+                        return <City key={key} centerX={junction.x} centerY={junction.y} color={junction.color} />
+                    }
+                    if (junction.type === "settelment") {
+                        return <Settlement key={key} centerX={junction.x} centerY={junction.y} color={junction.color} />
+                    }
+                })}
                 <circle cx={center.x} cy={center.y} r="20" fill="white" stroke="black" />
                 <text fill={numColor} x={center.x} y={center.y} strokeWidth="4px" fontFamily="Arial" dy=".3em" dx={numberPosCorrection}>{number}</text>
+                <Robber tileCX={center.x} tileCY={center.y} shouldRender={robber} resourceType={resource} />
             </g>
         )
     }
@@ -90,6 +103,15 @@ function Tile({ number, resource, coordinates }) {
             <Junction centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
             <Junction centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
             <Junction centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
+            {junctions.map(junction => {
+                if (junction.type === "city") {
+                    return <City centerX={junction.x} centerY={junction.y} color={junction.color} />
+                }
+                if (junction.type === "settelment") {
+                    return <Settlement centerX={junction.x} centerY={junction.y} color={junction.color} />
+                }
+            })}
+            <Robber tileCX={center.x} tileCY={center.y} shouldRender={robber} />
         </g>
     )
 }
