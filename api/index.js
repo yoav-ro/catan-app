@@ -45,13 +45,21 @@ io.sockets.on("connection", (socket) => {
 
     socket.on("newDirective", ({ directive }) => {
         const game = findGameBySocketId(socket.id);
-        
+
         //todo- parse directive
 
         game.players.forEach(player => {
             console.log(`sending to ${player.name}(${player.id})`)
             io.to(player.id).emit("game-data", game);
         });
+    })
+
+    socket.on("leaveQueue", ({ username }) => {
+        const playerIndex = playersQueue.findIndex(user => user.username === username);
+        if (playerIndex !== -1) {
+            playersQueue.splice(playerIndex, 1);
+            io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
+        }
     })
 
     socket.on("disconnect", (reason) => {
