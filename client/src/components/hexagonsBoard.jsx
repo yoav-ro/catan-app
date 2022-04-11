@@ -3,15 +3,20 @@ import ResourceTile from "./resourceTile/resourceTile";
 import { useSelector } from "react-redux";
 import "./styles/hexagon.css"
 import Road from "./resourceTile/road";
+import { Container } from "react-bootstrap";
+import "./styles/centerDiv.css";
 
 function HexagonBoard() {
     const gameData = useSelector(state => state.gameReducer);
-    const board = gameData.game.board;
-    console.log(board)
-    if (board) {
+
+    
+    console.log(gameData)
+    //width 606.2177826
+    if(gameData.game !== "none"){
+        const board = gameData.game.game.board;
         return (
-            <div id="board">
-                <svg height={1080} width={1920}>
+            <div id="board" className="center">
+                <svg height={605} width={651.2177826} className="centerSvg">
                     {board.tiles.map((tile, key) => {
                         return <ResourceTile
                             key={key}
@@ -37,7 +42,12 @@ function HexagonBoard() {
         )
     }
     return (
-        <></>
+        <Container>
+            <h3>
+                No ongoing game!
+            </h3>
+            <p>Please head to the home page to queue for a new game.</p>
+        </Container>
     )
 }
 
