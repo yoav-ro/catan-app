@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
+import MainNav from "./navbar";
 
 function JoinGameForm({ gameSocketRef, setCurrUser, currUser }) {
     const [userName, setUserName] = useState("");
@@ -28,22 +29,30 @@ function JoinGameForm({ gameSocketRef, setCurrUser, currUser }) {
     }
     if (!currUser) {
         return (
-            <Container>
-                <h2>Find a game</h2>
-                <Form>
-                    <Form.Control type="text" placeholder="Enter player name" onChange={(e) => setUserName(e.target.value)} />
-                    <Button type="submit" onClick={handleClick}>Join</Button>
-                </Form>
-                <button onClick={getGame}>Get game</button>
-            </Container>
+            <div>
+                <MainNav />
+                <Container>
+                    <h2>Find a game</h2>
+                    <Form>
+                        <Form.Control type="text" placeholder="Enter player name" onChange={(e) => setUserName(e.target.value)} />
+                        <Button type="submit" onClick={handleClick}>Join</Button>
+                    </Form>
+                    <button onClick={getGame}>Get game</button>
+                </Container>
+            </div>
+
         )
     }
     return (
-        <Container>
-            <h2>Welcome {currUser}</h2>
-            <h3>Looking for game...</h3>
-            <Button onClick={leaveQueue}>Leave queue</Button>
-        </Container>
+        <div>
+            <MainNav />
+            <Container>
+                <h2>Welcome {currUser}</h2>
+                <h3>Looking for game...</h3>
+                <Button onClick={leaveQueue}>Leave queue</Button>
+            </Container>
+        </div>
+
     )
 
 

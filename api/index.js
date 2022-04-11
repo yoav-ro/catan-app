@@ -40,6 +40,7 @@ io.sockets.on("connection", (socket) => {
             const gameObj = gameCreator(playersQueue);
             playersQueue.length = 0;
             games.push(gameObj);
+            emitToPlayers(io, gameObj);
         }
     })
 
@@ -48,10 +49,7 @@ io.sockets.on("connection", (socket) => {
 
         //todo- parse directive
 
-        game.players.forEach(player => {
-            console.log(`sending to ${player.name}(${player.id})`)
-            io.to(player.id).emit("game-data", game);
-        });
+        emitToPlayers(io, game);
     })
 
     socket.on("leaveQueue", ({ username }) => {
@@ -67,6 +65,13 @@ io.sockets.on("connection", (socket) => {
         //todo- find the game disconnected from and end it end game
     })
 })
+
+function emitToPlayers(io, game) {
+    game.players.forEach(player => {
+        console.log(`sending to ${player.name}(${player.id})`)
+        io.to(player.id).emit("game-data", game);
+    });
+}
 
 function findGameBySocketId(socketId) {
     let ret;
