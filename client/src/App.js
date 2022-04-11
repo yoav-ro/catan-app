@@ -6,8 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import GameTab from './components/gameTab';
 import { setGameData } from "./actions";
-import { setGameData } from "./actions";
-import HexagonBoard from './components/hexagonsBoard';
 
 //http://localhost:3008
 
