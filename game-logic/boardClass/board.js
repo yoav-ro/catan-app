@@ -305,9 +305,24 @@ function getTilesData(tileRadius) {
     let tileCount = 0;
 
     const tilesData = [];
+    let savedNum;
+
     for (let i = 0; i < rowLengths.length; i++) {
         for (let j = 0; j < rowLengths[i]; j++) {
-            const tile = new Tile(resources[tileCount], numbers[tileCount], i, j, tileRadius);
+            let tile;
+            if (resources[tileCount] === resourcesTypes.DESERT) {
+                tile = new Tile(resources[tileCount], undefined, i, j, tileRadius);
+                savedNum = numbers[tileCount];
+            }
+            else {
+                if (!numbers[tileCount]) {
+                    tile = new Tile(resources[tileCount], savedNum, i, j, tileRadius);
+                }
+                else {
+                    tile = new Tile(resources[tileCount], numbers[tileCount], i, j, tileRadius);
+                }
+            }
+
             tilesData.push(tile);
             tileCount++;
         }

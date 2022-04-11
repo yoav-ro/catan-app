@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import GameTab from './components/gameTab';
 import { setGameData } from "./actions";
+import { setGameData } from "./actions";
+import HexagonBoard from './components/hexagonsBoard';
 
 //http://localhost:3008
 
@@ -23,7 +25,7 @@ function App() {
     })
 
     socketRef.current.on("game-data", data => {
-      console.log(data);
+      console.log("New game update")
       dispatch(setGameData(data));
     })
   }, [])

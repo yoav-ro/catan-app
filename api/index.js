@@ -48,9 +48,14 @@ io.sockets.on("connection", (socket) => {
         const game = findGameBySocketId(socket.id);
 
         //todo- parse directive
+        if (game) {
+            game.players.forEach(player => {
+                console.log(`sending to ${player.name}(${player.id})`)
+                io.to(player.id).emit("game-data", game.game);
+            });
+        }
 
         emitToPlayers(io, game);
-    })
 
     socket.on("leaveQueue", ({ username }) => {
         const playerIndex = playersQueue.findIndex(user => user.username === username);

@@ -1,13 +1,20 @@
 import React from "react";
+import { resourcesTypes } from "../../utils/constants";
 
-function Robber({ tileCX, tileCY }) {
-
+function Robber({ tileCX, tileCY, shouldRender, resourceType }) {
+    const opacity = resourceType === resourcesTypes.DESERT ? 0.6 : 1;
+    
+    if (!shouldRender) {
+        return (
+            <></>
+        )
+    }
 
     return (
         <g>
-            <circle cx={tileCX} cy={tileCY - 17} r={11} />
-            <ellipse cx={tileCX} cy={tileCY} rx={13} ry={20} />
-            <rect x={tileCX- 15} y={tileCY+12} width={30} height={10} radius={20}/>
+            <circle cx={tileCX} cy={tileCY - 15} r={8} opacity={opacity}/>
+            <ellipse cx={tileCX} cy={tileCY + 3} rx={10} ry={17} opacity={opacity}/>
+            <rect x={tileCX - 11} y={tileCY + 13} width={22} height={8} opacity={opacity}/>
         </g>
     )
 }
