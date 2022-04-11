@@ -1,0 +1,14 @@
+.center {
+    margin: auto;
+    width: 50%;
+    margin-top: 10px;
+}
+
+.centerSvg{
+    display: block;
+    margin: auto;
+    background-color: aqua;
+    border-radius: 3px;
+    border-style: solid;
+    border-radius: 200px;
+}

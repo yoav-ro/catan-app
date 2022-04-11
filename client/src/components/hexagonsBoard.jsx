@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import "./styles/hexagon.css"
 import Road from "./resourceTile/road";
 import { Container } from "react-bootstrap";
-import "./styles/centerDiv.css";
+import "./styles/board.css";
 
 function HexagonBoard() {
     const gameData = useSelector(state => state.gameReducer);

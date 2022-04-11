@@ -18,17 +18,17 @@ function alignBoardCoords(board) {
 
     tiles.forEach(tile => {
         const { coordinates } = tile;
-        coordinates.top.x += 10;
-        coordinates.top.y += 10;
-        coordinates.topLeft.x += 10;
-        coordinates.topLeft.y += 10;
-        coordinates.topRight.x += 10;
-        coordinates.topRight.y += 10;
-        coordinates.bottom.x += 10;
-        coordinates.bottom.y += 10;
-        coordinates.bottomLeft.x += 10;
-        coordinates.bottomLeft.y += 10;
-        coordinates.bottomRight.x += 10;
-        coordinates.bottomRight.y += 10;
+        coordinates.top.x += 20;
+        coordinates.top.y += 20;
+        coordinates.topLeft.x += 20;
+        coordinates.topLeft.y += 20;
+        coordinates.topRight.x += 20;
+        coordinates.topRight.y += 20;
+        coordinates.bottom.x += 20;
+        coordinates.bottom.y += 20;
+        coordinates.bottomLeft.x += 20;
+        coordinates.bottomLeft.y += 20;
+        coordinates.bottomRight.x += 20;
+        coordinates.bottomRight.y += 20;
     });
 }
