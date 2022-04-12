@@ -4,15 +4,16 @@ import { useSelector } from "react-redux";
 import "./styles/hexagon.css"
 import Road from "./resourceTile/road";
 import { Container } from "react-bootstrap";
+import Port from "./boardPieces/port";
 import "./styles/board.css";
 
 function HexagonBoard() {
     const gameData = useSelector(state => state.gameReducer);
 
-    
+
     console.log(gameData)
     //width 606.2177826
-    if(gameData.game !== "none"){
+    if (gameData.game !== "none") {
         const board = gameData.game.game.board;
         return (
             <div id="board" className="center">
@@ -36,6 +37,15 @@ function HexagonBoard() {
                             y2={road.endY}
                             player={road.player}
                         />
+                    })}
+                    {board.portsData.map((port, key) => {
+                        return (
+                            <g key={key}>
+                                <Port type={port.type} x={port.junctionA.x} y={port.junctionA.y} scale={0.1} />
+                                <Port type={port.type} x={port.junctionB.x} y={port.junctionB.y} scale={0.1} />
+                            </g>
+                        )
+
                     })}
                 </svg>
             </div>

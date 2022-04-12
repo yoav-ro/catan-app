@@ -15,6 +15,15 @@ export default function gameReducer(state = initialState, action) {
 
 function alignBoardCoords(board) {
     const tiles = board.tiles;
+    // const ports = board.portsData;
+
+    // ports.forEach(port=>{
+    //     port.junctionA.x+=20;
+    //     port.junctionA.y+=20;
+    //     port.junctionB.x+=20;
+    //     port.junctionB.y+=20;
+    // })
+    
 
     tiles.forEach(tile => {
         const { coordinates } = tile;

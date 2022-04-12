@@ -338,16 +338,16 @@ function getPortsData(tiles) {
             if (tile.cell === 0) {
                 portCoords.push(
                     {
-                        junctionA: tile.coordinates.top,
-                        junctionB: tile.coordinates.topLeft,
+                        junctionA: tile.coordinates.bottom,
+                        junctionB: tile.coordinates.bottomLeft,
                         type: ports.pop(),
                     }
                 );
             }
             if (tile.cell === 1) {
                 portCoords.push({
-                    junctionA: tile.coordinates.top,
-                    junctionB: tile.coordinates.topRight,
+                    junctionA: tile.coordinates.bottom,
+                    junctionB: tile.coordinates.bottomRight,
                     type: ports.pop(),
                 })
             }
@@ -365,8 +365,8 @@ function getPortsData(tiles) {
             if (tile.cell === 3) {
                 portCoords.push(
                     {
-                        junctionA: tile.coordinates.topRight,
-                        junctionB: tile.coordinates.top,
+                        junctionA: tile.coordinates.bottomRight,
+                        junctionB: tile.coordinates.bottom,
                         type: ports.pop(),
                     }
                 );
@@ -391,10 +391,10 @@ function getPortsData(tiles) {
                     type: ports.pop(),
                 })
             }
-            if (tile.cell === 4) {
+            if (tile.cell === 3) {
                 portCoords.push({
-                    junctionA: tile.coordinates.bottomRight,
-                    junctionB: tile.coordinates.bottom,
+                    junctionA: tile.coordinates.topRight,
+                    junctionB: tile.coordinates.top,
                     type: ports.pop(),
                 })
             }
@@ -402,15 +402,15 @@ function getPortsData(tiles) {
         if (tile.row === 4) {
             if (tile.cell === 0) {
                 portCoords.push({
-                    junctionA: tile.coordinates.bottomLeft,
-                    junctionB: tile.coordinates.bottom,
+                    junctionA: tile.coordinates.topLeft,
+                    junctionB: tile.coordinates.top,
                     type: ports.pop(),
                 })
             }
             if (tile.cell === 1) {
                 portCoords.push({
-                    junctionA: tile.coordinates.bottomRight,
-                    junctionB: tile.coordinates.bottom,
+                    junctionA: tile.coordinates.topRight,
+                    junctionB: tile.coordinates.top,
                     type: ports.pop(),
                 })
             }
@@ -418,6 +418,5 @@ function getPortsData(tiles) {
     })
     return portCoords;
 }
-
 
 module.exports = Board;

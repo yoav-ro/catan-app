@@ -12,11 +12,14 @@ function Port({ type, x, y, scale: scaleInput }) {
         setScale(scale / 1.3);
     }
 
+    const handleClick=()=>{
+        console.log(`Port type ${type} at (${x}, ${y})`);
+    }
     const unscale = 1 / scale;
 
 
     return (
-        <g onMouseEnter={handleHoverIn} onMouseLeave={handleHoverOut}>
+        <g onMouseEnter={handleHoverIn} onMouseLeave={handleHoverOut} onClick={handleClick}>
             <g transform={`scale(${scale}) translate(${x * unscale}, ${y * unscale})`}>
                 <path fill="green" d="M226.496,190.563c2.862-0.638,5.832-0.639,8.695-0.001l113.612,25.286l-10.658-67.5c-1.112-7.041-7.171-12.233-14.3-12.252
             l-31.675-0.085l-5.185-64.064c-0.609-7.523-6.882-13.325-14.43-13.345l-21.56-0.058l0.1-37.157
