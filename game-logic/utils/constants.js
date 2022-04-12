@@ -39,8 +39,8 @@ const resourcesArr = [
 ];
 
 const portsArr = [
-    resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.IRON, resourcesTypes.IRON,
-    resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.SHEEP, resourcesTypes.SHEEP, "3to1", "3to1", "3to1", "3to1",
+    "3to1", resourcesTypes.WHEAT, resourcesTypes.IRON, "3to1", resourcesTypes.SHEEP, "3to1", "3to1",
+    resourcesTypes.BRICK, resourcesTypes.WOOD,
 ]
 
 const devCards = {

@@ -9,15 +9,12 @@ import "./styles/board.css";
 
 function HexagonBoard() {
     const gameData = useSelector(state => state.gameReducer);
-
-
     console.log(gameData)
-    //width 606.2177826
     if (gameData.game !== "none") {
         const board = gameData.game.game.board;
         return (
             <div id="board" className="center">
-                <svg height={605} width={651.2177826} className="centerSvg">
+                <svg height={625} width={673.2177826} className="centerSvg">
                     {board.tiles.map((tile, key) => {
                         return <ResourceTile
                             key={key}
@@ -38,15 +35,15 @@ function HexagonBoard() {
                             player={road.player}
                         />
                     })}
-                    {board.portsData.map((port, key) => {
-                        return (
-                            <g key={key}>
-                                <Port type={port.type} x={port.junctionA.x} y={port.junctionA.y} scale={0.1} />
-                                <Port type={port.type} x={port.junctionB.x} y={port.junctionB.y} scale={0.1} />
-                            </g>
-                        )
-
-                    })}
+                    <Port x={155} y={15.5} type={board.portsData[8].type} junctionA={board.portsData[8].junctionA} junctionB={board.portsData[8].junctionB} scale={0.06} />
+                    <Port x={360} y={15.5} type={board.portsData[7].type} junctionA={board.portsData[7].junctionA} junctionB={board.portsData[7].junctionB} scale={0.06} />
+                    <Port x={537} y={122} type={board.portsData[6].type} junctionA={board.portsData[6].junctionA} junctionB={board.portsData[6].junctionB} scale={0.06} />
+                    <Port x={639} y={295} type={board.portsData[5].type} junctionA={board.portsData[5].junctionA} junctionB={board.portsData[5].junctionB} scale={0.06} />
+                    <Port x={538} y={465} type={board.portsData[4].type} junctionA={board.portsData[4].junctionA} junctionB={board.portsData[4].junctionB} scale={0.06} />
+                    <Port x={355} y={571} type={board.portsData[3].type} junctionA={board.portsData[3].junctionA} junctionB={board.portsData[3].junctionB} scale={0.06} />
+                    <Port x={161} y={571} type={board.portsData[2].type} junctionA={board.portsData[2].junctionA} junctionB={board.portsData[2].junctionB} scale={0.06} />
+                    <Port x={60} y={398} type={board.portsData[1].type} junctionA={board.portsData[1].junctionA} junctionB={board.portsData[1].junctionB} scale={0.06} />
+                    <Port x={60} y={188} type={board.portsData[0].type} junctionA={board.portsData[0].junctionA} junctionB={board.portsData[0].junctionB} scale={0.06} />
                 </svg>
             </div>
         )

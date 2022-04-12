@@ -331,7 +331,7 @@ function getTilesData(tileRadius) {
 }
 
 function getPortsData(tiles) {
-    const ports = mixArray(portsArr);
+    const ports = portsArr.slice();
     const portCoords = []; //todo- manage the coords to pairs and give each pair a port type
     tiles.forEach(tile => {
         if (tile.row === 0) {
@@ -416,6 +416,7 @@ function getPortsData(tiles) {
             }
         }
     })
+    console.log(portCoords);
     return portCoords;
 }
 
