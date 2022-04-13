@@ -2,20 +2,15 @@ import React, { useState } from "react";
 import HexagonBoard from "./hexagonsBoard";
 import MainNav from "./navbar";
 import { useSelector } from "react-redux";
-import { Container, Row, Col, Modal } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import Chat from "./chat";
 import PlayerDeck from "./playerDeck";
 import Opponents from "./opponents";
-import MainModal from "./modals/mainModal";
 
 function GameTab() {
     const gameData = useSelector(state => state.gameReducer);
     const currPlayer = useSelector(state => state.playerReducer);
 
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     console.log(gameData.game.game)
     if (gameData.game !== "none") {
@@ -27,10 +22,9 @@ function GameTab() {
         return (
             <div>
                 <MainNav />
-                <MainModal show={show} setShow={setShow} handleClose={handleClose} handleShow={handleShow} />
                 <Opponents playersData={mockPlayers} />
                 <Chat gameData={gameData.game.game} />
-                <HexagonBoard boardData={gameData.game.game.board} showModal={handleShow} />
+                <HexagonBoard boardData={gameData.game.game.board} />
                 <PlayerDeck playerData={players[currPlayerIndex]} />
             </div>
         )

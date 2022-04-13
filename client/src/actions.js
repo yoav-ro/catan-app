@@ -27,11 +27,3 @@ export const resetCurrPlayer = () => (
         description: "Resets the current player",
     }
 )
-
-export const setCurrModal = (modal) => (
-    {
-        type: "SET_CURR_MODAL",
-        description: "Sets the current modal by input",
-        data: modal,
-    }
-)

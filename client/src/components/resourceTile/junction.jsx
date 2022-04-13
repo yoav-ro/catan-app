@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setCurrModal } from "../../actions";
-import { modalTypes } from "../../utils/constants";
+import { Modal, Form, Button } from "react-bootstrap";
+import BuildSettelment from "../modals/buildSettelment";
 
-function Junction({ centerX, centerY, showModal }) {
-    const [status, setStatus] = useState("free");
+function Junction({ centerX, centerY }) {
     const [radius, setRadius] = useState("3px");
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
 
     const handleHover = () => {
         setRadius("10px");
@@ -17,13 +16,22 @@ function Junction({ centerX, centerY, showModal }) {
     }
 
     const handleClick = () => {
-        console.log(`Junction, status: ${status}, at (${centerX}, ${centerY})`)
-        dispatch(setCurrModal(modalTypes.buildSettelment));
-        showModal(true);
+        console.log(`Junction, at (${centerX}, ${centerY})`)
+        setShow(true);
     }
 
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+
     return (
-        <circle stroke="black" cx={centerX} cy={centerY} r={radius} onMouseEnter={handleHover} onMouseLeave={handleLeave} onClick={handleClick} />
+        <>
+            <circle stroke="black" cx={centerX} cy={centerY} r={radius} onMouseEnter={handleHover} onMouseLeave={handleLeave} onClick={handleClick} />
+            <BuildSettelment show={show} handleClose={handleClose} x={centerX} y={centerY} />
+        </>
+
+
+
     )
 }
 
