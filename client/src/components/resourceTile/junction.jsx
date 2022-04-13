@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { Modal, Form, Button } from "react-bootstrap";
 import BuildSettelment from "../modals/buildSettelment";
 
-function Junction({ centerX, centerY }) {
+function Junction({ centerX, centerY, gameSocketRef }) {
     const [radius, setRadius] = useState("3px");
     const dispatch = useDispatch();
 
@@ -27,7 +27,7 @@ function Junction({ centerX, centerY }) {
     return (
         <>
             <circle stroke="black" cx={centerX} cy={centerY} r={radius} onMouseEnter={handleHover} onMouseLeave={handleLeave} onClick={handleClick} />
-            <BuildSettelment show={show} handleClose={handleClose} x={centerX} y={centerY} />
+            <BuildSettelment gameSocketRef={gameSocketRef} show={show} handleClose={handleClose} x={centerX} y={centerY} />
         </>
 
 

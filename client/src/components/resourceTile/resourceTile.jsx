@@ -9,7 +9,7 @@ import City from "../boardPieces/city";
 import Settlement from "../boardPieces/settlement";
 
 
-function Tile({ number, resource, coordinates, robber, junctions, showModal }) {
+function Tile({ number, resource, coordinates, robber, junctions, gameSocketRef }) {
     const center = {
         x: (coordinates.top.x + coordinates.bottom.x) / 2,
         y: (coordinates.top.y + coordinates.bottom.y) / 2,
@@ -59,12 +59,12 @@ function Tile({ number, resource, coordinates, robber, junctions, showModal }) {
                 <Road x1={coordinates.bottom.x} y1={coordinates.bottom.y} x2={coordinates.bottomLeft.x} y2={coordinates.bottomLeft.y} />
                 <Road x1={coordinates.bottomLeft.x} y1={coordinates.bottomLeft.y} x2={coordinates.topLeft.x} y2={coordinates.topLeft.y} />
                 <Road x1={coordinates.topLeft.x} y1={coordinates.topLeft.y} x2={coordinates.top.x} y2={coordinates.top.y} />
-                <Junction centerX={coordinates.top.x} centerY={coordinates.top.y} />
-                <Junction centerX={coordinates.topLeft.x} centerY={coordinates.topLeft.y} />
-                <Junction centerX={coordinates.topRight.x} centerY={coordinates.topRight.y} />
-                <Junction centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
-                <Junction centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
-                <Junction centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
+                <Junction gameSocketRef={gameSocketRef} centerX={coordinates.top.x} centerY={coordinates.top.y} />
+                <Junction gameSocketRef={gameSocketRef} centerX={coordinates.topLeft.x} centerY={coordinates.topLeft.y} />
+                <Junction gameSocketRef={gameSocketRef} centerX={coordinates.topRight.x} centerY={coordinates.topRight.y} />
+                <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
+                <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
+                <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
                 {junctions.map((junction, key) => {
                     if (junction.type === "city") {
                         return <City key={key} centerX={junction.x} centerY={junction.y} color={junction.color} />

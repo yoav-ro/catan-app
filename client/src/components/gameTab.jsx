@@ -7,7 +7,7 @@ import Chat from "./chat";
 import PlayerDeck from "./playerDeck";
 import Opponents from "./opponents";
 
-function GameTab() {
+function GameTab({ gameSocketRef }) {
     const gameData = useSelector(state => state.gameReducer);
     const currPlayer = useSelector(state => state.playerReducer);
 
@@ -24,7 +24,7 @@ function GameTab() {
                 <MainNav />
                 <Opponents playersData={mockPlayers} />
                 <Chat gameData={gameData.game.game} />
-                <HexagonBoard boardData={gameData.game.game.board} />
+                <HexagonBoard boardData={gameData.game.game.board} gameSocketRef={gameSocketRef} />
                 <PlayerDeck playerData={players[currPlayerIndex]} />
             </div>
         )

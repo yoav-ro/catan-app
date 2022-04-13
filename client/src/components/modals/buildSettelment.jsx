@@ -3,16 +3,16 @@ import { Modal, Button, Row, Col, Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { buildSettelmentDir } from "../../utils/directiveCreator";
 
-function BuildSettelment({ show, handleClose, x, y }) {
+function BuildSettelment({ show, handleClose, x, y, gameSocketRef }) {
     const currPlayer = useSelector(state => state.playerReducer);
     const gameData = useSelector(state => state.gameReducer);
     const players = gameData.game.game.players;
 
     const player = players.find(player => player.playerName.username === currPlayer);
 
-
     const handleConfirm = () => {
         const buildDir = buildSettelmentDir(x, y, player.color);
+        gameSocketRef.current.emit("newDirective", { directive: buildDir });
         handleClose();
     }
 

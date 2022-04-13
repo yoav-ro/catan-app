@@ -48,13 +48,13 @@ io.sockets.on("connection", (socket) => {
         const game = findGameBySocketId(socket.id);
 
         if (directive) {
-            game.sendDirective(directive);
+            game.game.sendDirective(directive);
         }
 
         if (game) {
             game.players.forEach(player => {
                 console.log(`sending to ${player.name}(${player.id})`)
-                io.to(player.id).emit("game-data", game.game);
+                io.to(player.id).emit("game-data", game);
             });
         }
 
