@@ -1,21 +1,23 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import MainNav from "./navbar";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrPlayer, resetCurrPlayer } from "../actions";
 
-function JoinGameForm({ gameSocketRef, setCurrUser, currUser }) {
+function JoinGameForm({ gameSocketRef }) {
     const [userName, setUserName] = useState("");
+    const currUser = useSelector(state => state.playerReducer);
     const gameData = useSelector(state => state.gameReducer);
     const isInGame = gameData.game !== "none";
+    const dispatch = useDispatch();
 
     const handleClick = (e) => {
         e.preventDefault();
         if (!userName) {
             alert("Invalid input!")
         } else {
-            //joinsocket
-            setCurrUser(userName);
+            dispatch(setCurrPlayer(userName));
             console.log("joining")
             gameSocketRef.current.emit("joinGame", { username: userName });
             setUserName("");
@@ -25,7 +27,7 @@ function JoinGameForm({ gameSocketRef, setCurrUser, currUser }) {
 
     const leaveQueue = () => {
         gameSocketRef.current.emit("leaveQueue", { username: currUser });
-        setCurrUser("");
+        dispatch(resetCurrPlayer());
     }
 
     if (!currUser) {

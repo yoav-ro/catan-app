@@ -12,7 +12,6 @@ import { setGameData } from "./actions";
 function App() {
   const socketRef = useRef(null);
   const [currUser, setCurrUser] = useState("");
-  console.log(currUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
