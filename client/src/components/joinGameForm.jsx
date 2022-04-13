@@ -18,7 +18,6 @@ function JoinGameForm({ gameSocketRef }) {
             alert("Invalid input!")
         } else {
             dispatch(setCurrPlayer(userName));
-            console.log("joining")
             gameSocketRef.current.emit("joinGame", { username: userName });
             setUserName("");
         }

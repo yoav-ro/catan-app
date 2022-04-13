@@ -416,7 +416,6 @@ function getPortsData(tiles) {
             }
         }
     })
-    console.log(portCoords);
     return portCoords;
 }
 

@@ -4,7 +4,6 @@ import { resourcesTypes } from "../utils/constants";
 import "./styles/playerDeck.css";
 
 function PlayerDeck({ playerData }) {
-    console.log(playerData)
     const playerName = playerData.playerName.username;
     const { color, points, resources, devCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = playerData;
 

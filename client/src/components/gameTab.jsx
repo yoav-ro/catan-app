@@ -11,8 +11,6 @@ function GameTab({ gameSocketRef }) {
     const gameData = useSelector(state => state.gameReducer);
     const currPlayer = useSelector(state => state.playerReducer);
 
-
-    console.log(gameData.game.game)
     if (gameData.game !== "none") {
         const players = gameData.game.game.players;
         const currPlayerIndex = players.findIndex(player => player.playerName.username === currPlayer);

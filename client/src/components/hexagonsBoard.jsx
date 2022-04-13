@@ -1,9 +1,7 @@
 import React from "react";
 import ResourceTile from "./resourceTile/resourceTile";
-import { useSelector } from "react-redux";
 import "./styles/hexagon.css"
 import Road from "./resourceTile/road";
-import { Container } from "react-bootstrap";
 import Port from "./boardPieces/port";
 import "./styles/board.css";
 
