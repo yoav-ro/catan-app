@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setCurrModal } from "../../actions";
+import { modalTypes } from "../../utils/constants";
 
-function Junction({ centerX, centerY }) {
+function Junction({ centerX, centerY, showModal }) {
     const [status, setStatus] = useState("free");
     const [radius, setRadius] = useState("3px");
+    const dispatch=useDispatch();
 
     const handleHover = () => {
         setRadius("10px");
@@ -14,6 +18,8 @@ function Junction({ centerX, centerY }) {
 
     const handleClick = () => {
         console.log(`Junction, status: ${status}, at (${centerX}, ${centerY})`)
+        dispatch(setCurrModal(modalTypes.buildSettelment));
+        showModal(true);
     }
 
     return (

@@ -1,16 +1,10 @@
 import React from "react";
-import { Modal } from "react-bootstrap";
-import { BuildSettelment } from "../../utils/directiveCreator";
+import { Modal, Button } from "react-bootstrap";
 
-function BuildSettelment({color}) {
+function BuildSettelment({ onHide }) {
 
     return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
+        <div>
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
                     Modal heading
@@ -19,7 +13,7 @@ function BuildSettelment({color}) {
             <Modal.Body>
                 <h4>Build a settelment</h4>
                 <p>
-                    You are about to build a new {color}.
+                    You are about to build a new settelment.
                     It will cost:
                     1 Wood
                     1 Sheep
@@ -28,9 +22,9 @@ function BuildSettelment({color}) {
                 </p>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
+                <Button onClick={onHide}>Close</Button>
             </Modal.Footer>
-        </Modal>
+        </div>
     );
 }
 

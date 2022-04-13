@@ -41,3 +41,9 @@ export const resourcesArr = [
     resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
     resourcesTypes.DESERT,
 ]
+
+export const modalTypes={
+    buildSettelment: "buildSettelmet",
+    buildCity: "buildCity",
+    buildRoad: "buildRoad",
+}

@@ -66,6 +66,7 @@ function PlayerDeck({ playerData }) {
                         <div>Roll Dice</div>
                         <div>Activate dev card</div>
                         <div>Offer a trade</div>
+                        <div>end turn</div>
                     </Col>
                 </Row>
             </Container >

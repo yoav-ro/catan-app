@@ -7,12 +7,13 @@ import { Container } from "react-bootstrap";
 import Port from "./boardPieces/port";
 import "./styles/board.css";
 
-function HexagonBoard({ boardData: board }) {
+function HexagonBoard({ boardData: board, showModal }) {
     return (
         <div id="board" className="center">
             <svg height={625} width={673.2177826} className="centerSvg">
                 {board.tiles.map((tile, key) => {
                     return <ResourceTile
+                        showModal={showModal}
                         key={key}
                         number={tile.number}
                         resource={tile.resource}

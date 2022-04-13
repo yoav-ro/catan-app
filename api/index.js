@@ -47,7 +47,10 @@ io.sockets.on("connection", (socket) => {
     socket.on("newDirective", ({ directive }) => {
         const game = findGameBySocketId(socket.id);
 
-        //todo- parse directive
+        if (directive) {
+            game.sendDirective(directive);
+        }
+
         if (game) {
             game.players.forEach(player => {
                 console.log(`sending to ${player.name}(${player.id})`)
