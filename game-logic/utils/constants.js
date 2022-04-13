@@ -77,7 +77,7 @@ const devCards = {
         description: " 1 additional Victory Point is added to the owners total and doesn't need to be played to win.",
         canPlayBeforeRoll: false,
         canUseInstantly: false,
-        isUsed: true,
+        isUsed: false,
     }
 }
 

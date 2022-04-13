@@ -2,8 +2,10 @@ import React from "react";
 import HexagonBoard from "./hexagonsBoard";
 import MainNav from "./navbar";
 import { useSelector } from "react-redux";
-import { Container } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
+import Chat from "./chat";
 import PlayerDeck from "./playerDeck";
+import Opponents from "./opponents";
 
 function GameTab() {
     const gameData = useSelector(state => state.gameReducer);
@@ -11,13 +13,17 @@ function GameTab() {
     console.log(gameData.game.game)
     if (gameData.game !== "none") {
         const players = gameData.game.game.players;
-        const currPlayerObj = players.find(player => player.playerName.username === currPlayer);
-        
+        const currPlayerIndex = players.findIndex(player => player.playerName.username === currPlayer);
+        const mockPlayers = players.slice();
+        mockPlayers.splice(currPlayerIndex, 1);
+
         return (
             <div>
                 <MainNav />
+                <Opponents playersData={mockPlayers} />
+                <Chat />
                 <HexagonBoard boardData={gameData.game.game.board} />
-                <PlayerDeck playerData={currPlayerObj}/>
+                <PlayerDeck playerData={players[currPlayerIndex]} />
             </div>
         )
     }
