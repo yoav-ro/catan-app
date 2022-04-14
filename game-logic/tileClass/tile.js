@@ -1,4 +1,5 @@
 const { resourcesTypes } = require("../utils/constants");
+const { roundBySecondDec } = require("../utils/helperFunctions");
 
 class Tile {
     constructor(resource, number, row, cell, radius) {
@@ -13,7 +14,7 @@ class Tile {
 
     setJunction(x, y, player, type) {
         for (let coord in this.coordinates) {
-            if (this.coordinates[coord].x === x && this.coordinates[coord].y === y) {
+            if (roundBySecondDec(this.coordinates[coord].x) === roundBySecondDec(x) && roundBySecondDec(this.coordinates[coord].y) === roundBySecondDec(y)) {
                 this.#removeJunction(x, y);
                 const newJuncObj = getJuncObj(x, y, player, type);
                 this.surroundingJunctions = [...this.surroundingJunctions, newJuncObj];
@@ -22,8 +23,10 @@ class Tile {
     }
 
     doesHaveJunction(x, y) {
+        const roundX = roundBySecondDec(x);
+        const roundY = roundBySecondDec(y);
         for (let coord in this.coordinates) {
-            if (this.coordinates[coord].x === x && this.coordinates[coord].y === y) {
+            if (roundBySecondDec(this.coordinates[coord].x) === roundX && roundBySecondDec(this.coordinates[coord].y) === roundY) {
                 return true;
             }
         }
@@ -32,7 +35,7 @@ class Tile {
 
     getJunctionStatus(x, y) {
         for (let i = 0; i < this.surroundingJunctions.length; i++) {
-            if (this.surroundingJunctions[i].x === x && this.surroundingJunctions[i].y === y) {
+            if (roundBySecondDec(this.surroundingJunctions[i].x) === roundBySecondDec(x) && roundBySecondDec(this.surroundingJunctions[i].y) === roundBySecondDec(y)) {
                 const { player, type } = this.surroundingJunctions[i];
                 return { player: player, type: type };
             }
@@ -42,7 +45,7 @@ class Tile {
 
     #removeJunction(x, y) {
         for (let i = 0; i < this.surroundingJunctions.length; i++) {
-            if (this.surroundingJunctions[i].x === x && this.surroundingJunctions[i].y === y) {
+            if (roundBySecondDec(this.surroundingJunctions[i].x) === roundBySecondDec(x) && roundBySecondDec(this.surroundingJunctions[i].y) === roundBySecondDec(y)) {
                 this.surroundingJunctions.splice(i, 1);
             }
         }

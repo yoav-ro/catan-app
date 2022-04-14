@@ -27,10 +27,15 @@ class Board {
 
     //Returns the status of the requested road, if exists.
     getRoadStatus(startX, startY, endX, endY) {
+        const roundStartX = roundBySecondDec(startX);
+        const roundStartY = roundBySecondDec(startY);
+        const roundEndX = roundBySecondDec(endX);
+        const roundEndY = roundBySecondDec(endY);
+
         if (this.doCoordinatesExist(startX, startY) && this.doCoordinatesExist(endX, endY)) {
             let status;
             this.roads.forEach(road => {
-                if (road.startX === startX && road.startY === startY && road.endX === endX && road.endY === endY) {
+                if (roundBySecondDec(road.startX) === roundStartX && roundBySecondDec(road.startY) === roundStartY && roundBySecondDec(road.endX) === roundEndX && roundBySecondDec(road.endY) === roundEndY) {
                     status = road.player;
                 }
             });
@@ -115,10 +120,10 @@ class Board {
 
     #isJunctionConnectedToPlayer(player, x, y) {
         this.roads.forEach(road => {
-            if (road.startX === x && road.startY === y && road.status === player) {
+            if (roundBySecondDec(road.startX) === roundBySecondDec(x) && roundBySecondDec(road.startY) === roundBySecondDec(y) && road.status === player) {
                 return true;
             }
-            if (road.endX === x && road.endX === y && road.status === player) {
+            if  (roundBySecondDec(road.endX) === roundBySecondDec(x) && roundBySecondDec(road.endY) === roundBySecondDec(y) && road.status === player) {
                 return true;
             }
         })
@@ -286,7 +291,7 @@ class Board {
     doCoordinatesExist(x, y) {
         for (let tile of this.tiles) {
             for (let coord in tile.coordinates) {
-                if (tile.coordinates[coord].x === x && tile.coordinates[coord].y === y) {
+                if (roundBySecondDec(tile.coordinates[coord].x) === roundBySecondDec(x) && roundBySecondDec(tile.coordinates[coord].y) === roundBySecondDec(y)) {
                     return true;
                 }
             }

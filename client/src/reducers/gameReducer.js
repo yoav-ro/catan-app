@@ -24,6 +24,13 @@ function alignBoardCoords(board) {
         port.junctionB.y += 30;
     })
 
+    board.roads.forEach(road => {
+        road.startX += 30;
+        road.startY += 30;
+        road.endX += 30;
+        road.endY += 30;
+    })
+
     tiles.forEach(tile => {
         tile.surroundingJunctions.forEach(junction => {
             junction.x += 30;

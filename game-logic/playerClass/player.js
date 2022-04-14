@@ -140,7 +140,7 @@ class Player {
         if (!doesArrayContain(this.resources, buildingCosts.road) && !shouldTakeResources) {
             throw "Not enough resources";
         }
-        if (this.roadsLeft.includes({ startX: startX, startY: startY, endX: endX, endY: endY })) {
+        if (this.roads.includes({ startX: startX, startY: startY, endX: endX, endY: endY })) {
             throw "Road already built";
         }
         return true;

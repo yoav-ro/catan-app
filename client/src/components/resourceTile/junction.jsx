@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { Modal, Form, Button } from "react-bootstrap";
 import BuildSettelment from "../modals/buildSettelment";
 
 function Junction({ centerX, centerY, gameSocketRef }) {
     const [radius, setRadius] = useState("3px");
-    const dispatch = useDispatch();
 
     const handleHover = () => {
         setRadius("10px");

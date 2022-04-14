@@ -209,6 +209,7 @@ class catanAPI extends Game {
             this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
+            console.log(error);
             return { Error: error };
         }
     }

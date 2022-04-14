@@ -2,6 +2,16 @@
     stroke-width: 1;
 }
 
+.builtRoad{
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.roadBorder{
+    stroke-width: 10;
+    stroke-linecap: round;
+}
+
 .road:hover{
     stroke-width: 15;
 }
