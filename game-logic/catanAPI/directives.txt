@@ -39,7 +39,7 @@ examples:
     type: "build",
     player: "blue"
     item: {
-        name: "settelment"
+        type: "settelment"
         x: 10,
         y: 45,
     }
@@ -48,7 +48,7 @@ examples:
     type: "build",
     player: "blue"
     item: {
-        name: "road"
+        type: "road"
         startX: 10,
         startY: 45,
         endX: 30,

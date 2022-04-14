@@ -68,7 +68,7 @@ class catanAPI extends Game {
         try {
             this.lastRoll = this.rollDice();
             this.giveResourcesByRoll(this.lastRoll);
-            this.#setDirectiveExpetation(directiveTypes.rollDice);
+            this.#setDirectiveExpetation(directiveObj);
             return `Player ${directiveObj.player} has rolled ${this.lastRoll}`;
         } catch (error) {
             return { Error: error };
@@ -96,7 +96,7 @@ class catanAPI extends Game {
                 default:
                     throw "Invalid build item";
             }
-            this.#setDirectiveExpetation(directiveTypes.build);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
             return { Error: error };
@@ -126,7 +126,7 @@ class catanAPI extends Game {
                 default:
                     throw "Invalid dev card type";
             }
-            this.#setDirectiveExpetation(directiveObj.type);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
             return { Error: error };
@@ -138,7 +138,7 @@ class catanAPI extends Game {
             const { player, tradeWith, givenResources, recievedResources } = directiveObj;
             this.#validateTradeReq(player, tradeWith, givenResources, recievedResources);
             this.#setPendingTrade(player, tradeWith, givenResources, recievedResources);
-            this.#setDirectiveExpetation(directiveObj.type);
+            this.#setDirectiveExpetation(directiveObj);
             return `Trade request sent from player ${player} to player ${tradeWith}`;
         } catch (error) {
             return { Error: error };
@@ -167,7 +167,7 @@ class catanAPI extends Game {
                 const { offeringPlayer, offeringPlayerResources, offeredPlayer, offeredPlayerResources } = this.pendingTrade;
                 retMsg = this.executeTrade(offeringPlayer, offeredPlayer, offeringPlayerResources, offeredPlayerResources);
             }
-            this.#setDirectiveExpetation(directiveObj.type);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
             return { Error: error };
@@ -179,7 +179,7 @@ class catanAPI extends Game {
             const { player, playerToRob } = directiveObj;
             const retMsg = this.robbPlayer(player, playerToRob);
             this.isAwaitingRobb = false;
-            this.#setDirectiveExpetation(directiveTypes.robbPlayer);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
             return { Error: error };
@@ -206,14 +206,14 @@ class catanAPI extends Game {
                 this.isSetupPhase = false;
             }
 
-            this.#setDirectiveExpetation(directiveTypes.setupBuild);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
             return { Error: error };
         }
     }
 
-    #parseEndTurn() {
+    #parseEndTurn(directiveObj) {
         try {
             let retMsg;
             if (this.isSetupPhase) {
@@ -229,10 +229,10 @@ class catanAPI extends Game {
                 const lastPlayer = this.playerOrder.shift()
                 this.playerOrder.push(lastPlayer);
                 this.isAwaitingRobb = false;
-                this.#setDirectiveExpetation(directiveObj.type);
+                this.#setDirectiveExpetation(directiveObj);
                 retMsg = `${lastPlayer} has finished his turn. Now Its ${this.playerOrder[0]}'s turn.`;
             }
-            this.#setDirectiveExpetation(directiveObj.type);
+            this.#setDirectiveExpetation(directiveObj);
             const victory = this.checkVictory();
             if (victory) {
                 this.#handleVictory(victory);
@@ -289,7 +289,8 @@ class catanAPI extends Game {
 
     }
 
-    #setDirectiveExpetation(lastDirectiveType) {
+    #setDirectiveExpetation(lastDirective) {
+        const lastDirectiveType = lastDirective.type;
         this.directiveExpectation = [];
         const { endTurn, robbPlayer, rollDice, build, activateDevCard, tradeReq, tradeRes, setupBuild } = directiveTypes;
         switch (lastDirectiveType) {
@@ -316,7 +317,11 @@ class catanAPI extends Game {
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
             case directiveTypes.setupBuild:
                 if (this.isSetupPhase) {
-                    this.directiveExpectation = [endTurn, setupBuild];
+                    this.directiveExpectation = [setupBuild];
+                    if (lastDirective.item.type === pieceTypes.ROAD) {
+                        this.directiveExpectation.push(endTurn);
+                    }
+
                 }
                 else {
                     this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard];
@@ -341,7 +346,7 @@ class catanAPI extends Game {
             throw "Invalid directive. The next directive has to be one of: " + this.directiveExpectation;
         }
     }
-    
+
     #handleVictory(winnerObj) {
         const { color, points } = winnerObj;
         this.directiveExpectation = [];
