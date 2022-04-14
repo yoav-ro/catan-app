@@ -205,6 +205,12 @@ class catanAPI extends Game {
             if (this.setupItemsCount === 4 * this.players.length) {
                 this.isSetupPhase = false;
             }
+            if (this.#shouldAdvanceTurnAfterSetup(directiveObj)) {
+                this.#parseEndTurn({
+                    type: "endTurn",
+                    player: directiveObj.player,
+                })
+            }
 
             this.#setDirectiveExpetation(directiveObj);
             return retMsg;
@@ -259,6 +265,12 @@ class catanAPI extends Game {
         }
     }
 
+    #validatePlayerSetup(playerColor) {
+        if (playerColor !== this.setupOrder[0].color) {
+            throw `This is not ${playerColor}'s turn`;
+        }
+    }
+
     #validateSetupBuild(directiveObj) {
         if (!this.isSetupPhase) {
             throw "Setup phase is already over";
@@ -287,7 +299,16 @@ class catanAPI extends Game {
                 throw "Build a second road first";
             }
         }
+    }
 
+    #shouldAdvanceTurnAfterSetup(directiveObj) {
+        const player = directiveObj.player;
+        const settelmentsByPlayer = this.getPiecesByPlayer(player, pieceTypes.SETTELMENT);
+        const roadsByPlayer = this.getPiecesByPlayer(player, pieceTypes.ROAD);
+        if ((settelmentsByPlayer === 1 && roadsByPlayer === 1) || (settelmentsByPlayer === 2 && roadsByPlayer === 2)) {
+            return true;
+        }
+        return false;
     }
 
     #setDirectiveExpetation(lastDirective) {
@@ -342,9 +363,17 @@ class catanAPI extends Game {
     }
 
     #validateDirective(directiveObj) {
-        this.#validatePlayer(directiveObj.player);
-        if (!this.directiveExpectation.includes(directiveObj.type)) {
-            throw "Invalid directive. The next directive has to be one of: " + this.directiveExpectation;
+        if (this.isSetupPhase) {
+            if (directiveObj.type !== directiveTypes.setupBuild) {
+                throw "Invalid directive. At setup phase only a setup build is accepted.";
+            }
+            this.#validatePlayerSetup(directiveObj.player);
+        }
+        else {
+            this.#validatePlayer(directiveObj.player);
+            if (!this.directiveExpectation.includes(directiveObj.type)) {
+                throw "Invalid directive. The next directive has to be one of: " + this.directiveExpectation;
+            }
         }
     }
 
