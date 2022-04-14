@@ -47,14 +47,21 @@ io.sockets.on("connection", (socket) => {
     socket.on("newDirective", ({ directive }) => {
         const game = findGameBySocketId(socket.id);
 
-        if (directive) {
-            game.game.sendDirective(directive);
+        console.log(directive)
+
+        const directiveOutput = game.game.sendDirective(directive);
+        const objToEmit = {
+            id: game.id,
+            game: directiveOutput.gameData,
+            message: directiveOutput.message,
+            expectation: game.directiveExpectation,
+            players: game.players,
         }
 
         if (game) {
             game.players.forEach(player => {
                 console.log(`sending to ${player.name}(${player.id})`)
-                io.to(player.id).emit("game-data", game);
+                io.to(player.id).emit("game-data", objToEmit);
             });
         }
 
@@ -113,6 +120,8 @@ function gameCreator(playersArray) {
     return {
         id: "game" + nanoid(),
         game: game,
+        message: "New game created",
+        expectation: game.directiveExpectation,
         players: playersArray.slice(),
     };
 }

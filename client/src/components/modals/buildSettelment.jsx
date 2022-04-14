@@ -1,18 +1,26 @@
 import React from "react";
 import { Modal, Button, Row, Col, Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { buildSettelmentDir } from "../../utils/directiveCreator";
+import { buildSettelmentDir, setupBuildSettelmetDir } from "../../utils/directiveCreator";
 
 function BuildSettelment({ show, handleClose, x, y, gameSocketRef }) {
     const currPlayer = useSelector(state => state.playerReducer);
     const gameData = useSelector(state => state.gameReducer);
     const players = gameData.game.game.players;
 
+
     const player = players.find(player => player.playerName.username === currPlayer);
+    const isSetup = player.settelments.length < 2;
 
     const handleConfirm = () => {
-        const buildDir = buildSettelmentDir(x, y, player.color);
-        gameSocketRef.current.emit("newDirective", { directive: buildDir });
+        let directive;
+        if (isSetup) {
+            directive = setupBuildSettelmetDir(x - 30, y - 30, player.color);
+        }
+        else {
+            directive = buildSettelmentDir(x - 30, y - 30, player.color);
+        }
+        gameSocketRef.current.emit("newDirective", { directive: directive });
         handleClose();
     }
 
@@ -25,7 +33,7 @@ function BuildSettelment({ show, handleClose, x, y, gameSocketRef }) {
                 <Modal.Body>
                     <Container>
                         <div>You are about to build a new {player.color} settelment.</div>
-                        <div>It will cost:</div>
+                        <div>It will cost (first two settelment are free):</div>
                         <Row>
                             <Col>
                                 1 x Wood

@@ -67,10 +67,10 @@ function Tile({ number, resource, coordinates, robber, junctions, gameSocketRef 
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
                 {junctions.map((junction, key) => {
                     if (junction.type === "city") {
-                        return <City key={key} centerX={junction.x} centerY={junction.y} color={junction.color} />
+                        return <City key={key} centerX={junction.x} centerY={junction.y} color={junction.player} />
                     }
                     if (junction.type === "settelment") {
-                        return <Settlement key={key} centerX={junction.x} centerY={junction.y} color={junction.color} />
+                        return <Settlement key={key} centerX={junction.x} centerY={junction.y} color={junction.player} />
                     }
                 })}
                 <circle cx={center.x} cy={center.y} r="20" fill="white" stroke="black" />

@@ -2,8 +2,8 @@ import React from "react";
 import { Polygon, Rect } from "react-svg-path";
 
 function SvgHouse({ color, centerX, centerY, scale }) {
-    const width = 25 * scale;
-    const height = 25 * scale;
+    const width = 18 * scale;
+    const height = 18 * scale;
 
     const hatCoords = {
         left: { x: centerX - (width - scale * 3), y: centerY - (height / 2) },
@@ -24,9 +24,9 @@ function SvgHouse({ color, centerX, centerY, scale }) {
                 [hatCoords.left.x, hatCoords.left.y],
                 [hatCoords.top.x, hatCoords.top.y],
                 [hatCoords.right.x, hatCoords.right.y],
-            ]} fill={color} strokeWidth={2} stroke="black">
+            ]} fill={color} strokeWidth={1.5} stroke="black">
             </Polygon>
-            <Rect cx={centerX} cy={centerY} stroke="black" strokeWidth={2} width={width} height={height} fill={color} />
+            <Rect cx={centerX} cy={centerY} stroke="black" strokeWidth={1.5} width={width} height={height} fill={color} />
             <line x1={lineData.x1} y1={lineData.y1} x2={lineData.x2} y2={lineData.y2} stroke={color} strokeWidth={scale*5}></line>
         </>
     )

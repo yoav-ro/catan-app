@@ -27,9 +27,8 @@ class catanAPI extends Game {
 
     sendDirective(directiveObj) {
         const directiveMsg = this.#parseDirective(directiveObj);
-        const gameData = this.#getGameState();
         return {
-            gameData: gameData,
+            gameData: this,
             message: directiveMsg,
             exectation: this.directiveExpectation,
         }
@@ -337,21 +336,12 @@ class catanAPI extends Game {
     }
 
     #validateDirective(directiveObj) {
-        this.#validatePlayer();
+        this.#validatePlayer(directiveObj.player);
         if (!this.directiveExpectation.includes(directiveObj.type)) {
             throw "Invalid directive. The next directive has to be one of: " + this.directiveExpectation;
         }
     }
-
-    #getGameState() {
-        const gameStateObj = {
-            board: this.board,
-            players: this.players,
-        }
-
-        return gameStateObj;
-    }
-
+    
     #handleVictory(winnerObj) {
         const { color, points } = winnerObj;
         this.directiveExpectation = [];

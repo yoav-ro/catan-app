@@ -17,6 +17,16 @@ class Game {
         this.longestRoadPlayer = undefined;
     }
 
+    #getPlayerByColor(color) {
+        let ret;
+        this.players.forEach(player => {
+            if (player.color === color) {
+                ret = player;
+            }
+        })
+        return ret;
+    }
+
     activateMonopoly(playerColor, resourceType) {
         const resourceToAdd = [];
         playerColors.forEach(player => {
@@ -261,13 +271,7 @@ class Game {
         return false;
     }
 
-    #getPlayerByColor(color) {
-        this.players.forEach(player => {
-            if (player.color === color) {
-                return player;
-            }
-        })
-    }
+
 }
 
 module.exports = Game;

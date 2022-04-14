@@ -3,7 +3,19 @@ export function buildSettelmentDir(x, y, player) {
         type: "build",
         player: player,
         item: {
-            name: "settelment",
+            type: "settelment",
+            x: x,
+            y: y,
+        }
+    }
+}
+
+export function setupBuildSettelmetDir(x, y, player) {
+    return {
+        type: "setupBuild",
+        player: player,
+        item: {
+            type: "settelment",
             x: x,
             y: y,
         }
