@@ -66,16 +66,21 @@ io.sockets.on("connection", (socket) => {
         }
 
         emitToPlayers(io, game);
+    })
 
-        socket.on("leaveQueue", ({ username }) => {
-            removeFromQueue(username);
-        })
+    socket.on("leaveQueue", ({ username }) => {
+        if (removeFromQueue(username)) {
+            io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
+        }
+    })
 
-        socket.on("disconnect", (reason) => {
-            console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
-            removeFromQueue(findUserNameBySocketId(socket.id));
-            //todo- find the game disconnected from and end it end game
-        })
+    socket.on("disconnect", (reason) => {
+        console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
+        const username= findUserNameBySocketId(socket.id);
+        if (removeFromQueue(username)) {
+            io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
+        }
+        //todo- find the game disconnected from and end it end game
     })
 })
 
@@ -83,8 +88,9 @@ function removeFromQueue(userName) {
     const playerIndex = playersQueue.findIndex(user => user.username === userName);
     if (playerIndex !== -1) {
         playersQueue.splice(playerIndex, 1);
-        io.to(socket.id).emit("lobby", { msg: `Player "${userName}" has left the lobby` });
+        return true;
     }
+    return false;
 }
 
 function emitToPlayers(io, game) {
