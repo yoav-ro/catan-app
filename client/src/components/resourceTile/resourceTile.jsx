@@ -3,13 +3,10 @@ import { Polygon } from "react-svg-path";
 import { resourcesTypes } from "../../utils/constants";
 import Junction from "./junction";
 import "./styles/road.css"
-import Road from "./road";
+import Road from "../boardPieces/road";
 import Robber from "../boardPieces/robber";
-import City from "../boardPieces/city";
-import Settlement from "../boardPieces/settlement";
 
-
-function Tile({ number, resource, coordinates, robber, junctions, gameSocketRef }) {
+function Tile({ number, resource, coordinates, robber, gameSocketRef }) {
     const center = {
         x: (coordinates.top.x + coordinates.bottom.x) / 2,
         y: (coordinates.top.y + coordinates.bottom.y) / 2,

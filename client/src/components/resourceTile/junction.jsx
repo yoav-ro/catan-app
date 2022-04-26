@@ -3,7 +3,6 @@ import BuildSettelment from "../modals/buildSettelment";
 
 function Junction({ centerX, centerY, gameSocketRef }) {
     const [radius, setRadius] = useState("3px");
-
     const handleHover = () => {
         setRadius("10px");
     }

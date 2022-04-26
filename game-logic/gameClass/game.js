@@ -182,25 +182,32 @@ class Game {
 
     buildSettelment(playerColor, x, y, shouldTakeResources, shouldBeConnected) {
         const player = this.#getPlayerByColor(playerColor);
-        player.buildSettelment(x, y, shouldTakeResources);
-        this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT, shouldBeConnected);
-        const longestRoadMsg = this.#setLongestRoadPlayer();
-        return `Player ${playerColor} built a settelment` + longestRoadMsg;
+
+        if (player.canBuildSettlement(x, y, shouldTakeResources) && this.board.canPlaceSettelment(player, x, y, pieceTypes.SETTELMENT, shouldTakeResources)) {
+            player.buildSettelment(x, y, shouldTakeResources);
+            this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT, shouldBeConnected);
+            const longestRoadMsg = this.#setLongestRoadPlayer();
+            return `Player ${playerColor} built a settelment` + longestRoadMsg;
+        }
     }
 
     buildCity(playerColor, x, y) {
         const player = this.#getPlayerByColor(playerColor);
-        player.buildCity(x, y);
-        this.board.addJunction(playerColor, x, y, pieceTypes.CITY, true);
-        return `Player ${playerColor} built a city`;
+        if (player.canBuildCity(x, y) && this.board.addJunction(playerColor, x, y, pieceTypes.CITY, true)) {
+            player.buildCity(x, y);
+            this.board.addJunction(playerColor, x, y, pieceTypes.CITY, true);
+            return `Player ${playerColor} built a city`;
+        }
     }
 
     buildRoad(playerColor, startX, startY, endX, endY, shouldTakeResources) {
         const player = this.#getPlayerByColor(playerColor);
-        player.buildRoad(startX, startY, endX, endY, shouldTakeResources);
-        this.board.addRoad(playerColor, startX, startY, endX, endY);
-        const longestRoadMsg = this.#setLongestRoadPlayer();
-        return `Player ${playerColor} built a road` + longestRoadMsg;
+        if (player.canBuildRoad(startX, startY, endX, endY, shouldTakeResources) && this.board.canPlaceRoad(playerColor, startX, startY, endX, endY)) {
+            player.buildRoad(startX, startY, endX, endY, shouldTakeResources);
+            this.board.addRoad(playerColor, startX, startY, endX, endY);
+            const longestRoadMsg = this.#setLongestRoadPlayer();
+            return `Player ${playerColor} built a road` + longestRoadMsg;
+        }
     }
 
     buildDevCard(playerColor) {
@@ -270,8 +277,6 @@ class Game {
         })
         return false;
     }
-
-
 }
 
 module.exports = Game;

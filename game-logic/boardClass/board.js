@@ -70,24 +70,18 @@ class Board {
 
     //Validates junction input and adds it to the board if valid.
     addJunction(player, x, y, type, shouldBeConnected) {
-        if (this.#canPlaceSettelment(player, x, y, shouldBeConnected)) {
-            // const tilesToAddJunc = this.getTilesByJunction(x, y);
-            const settelment = {
-                type: pieceTypes.SETTELMENT,
-                x: x,
-                y: y,
-                player: player,
-            }
-            this.builtJunctions.push(settelment);
-            // tilesToAddJunc.forEach(tile => {
-            //     tile.setJunction(x, y, player, type);
-            // })
-            this.#calcLongestRoad();
+        const settelment = {
+            type: pieceTypes.SETTELMENT,
+            x: x,
+            y: y,
+            player: player,
         }
+        this.builtJunctions.push(settelment);
+        this.#calcLongestRoad();
     }
 
     //Validates if the settelment can be build
-    #canPlaceSettelment(player, x, y, newPieceType, shouldBeConnected) {
+    canPlaceSettelment(player, x, y, newPieceType, shouldBeConnected) {
         if (!this.doCoordinatesExist(x, y)) { //Checks if the coordinates are valid
             throw "Invalid junction coordinates";
         }
@@ -141,20 +135,18 @@ class Board {
 
     //Validates road input and adds it to the board if valid.
     addRoad(player, startX, startY, endX, endY) {
-        if (this.#canPlaceRoad(player, startX, startY, endX, endY)) {
-            const newRoadObj = {
-                player: player,
-                startX: startX,
-                startY: startY,
-                endX: endX,
-                endY: endY,
-            }
-            this.roads = [...this.roads, newRoadObj];
-            this.#calcLongestRoad();
+        const newRoadObj = {
+            player: player,
+            startX: startX,
+            startY: startY,
+            endX: endX,
+            endY: endY,
         }
+        this.roads = [...this.roads, newRoadObj];
+        this.#calcLongestRoad();
     }
 
-    #canPlaceRoad(player, startX, startY, endX, endY) {
+    canPlaceRoad(player, startX, startY, endX, endY) {
         //Checks if the coordinates are valid
         if (!this.doCoordinatesExist(startX, startY) || !this.doCoordinatesExist(endX, endY) || Math.round(getDistance(startX, startY, endX, endY)) !== this.#tileRadius) {
             throw "Invalid road";

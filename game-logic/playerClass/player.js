@@ -67,26 +67,24 @@ class Player {
     }
 
     buildCity(x, y) {
-        if (this.#canBuildCity(x, y)) {
-            for (let i = 0; i < this.settelments.length; i++) {
-                if (this.settelments[i].x === x && this.settelments[i].y === y) {
-                    const cityObject = {
-                        x: x,
-                        y: y,
-                    }
-                    this.cities.push(cityObject);
-                    this.citiesLeft--;
-                    this.settelmentsLeft++;
-                    this.settelments.splice(i, 1);
-                    this.removeResources(buildingCosts.city);
-                    this.addPoints(2);
-                    break;
+        for (let i = 0; i < this.settelments.length; i++) {
+            if (this.settelments[i].x === x && this.settelments[i].y === y) {
+                const cityObject = {
+                    x: x,
+                    y: y,
                 }
+                this.cities.push(cityObject);
+                this.citiesLeft--;
+                this.settelmentsLeft++;
+                this.settelments.splice(i, 1);
+                this.removeResources(buildingCosts.city);
+                this.addPoints(2);
+                break;
             }
         }
     }
 
-    #canBuildCity(x, y) {
+    canBuildCity(x, y) {
         if (this.citiesLeft === 0) {
             throw "4 cities already build";
         }
@@ -100,17 +98,15 @@ class Player {
     }
 
     buildSettelment(x, y, shouldTakeResources) {
-        if (this.#canBuildSettlement(x, y)) {
-            this.settelments.push({ x: x, y: y });
-            if (shouldTakeResources) {
-                this.removeResources(buildingCosts.settelment);
-            }
-            this.settelmentsLeft--;
-            this.addPoints(1);
+        this.settelments.push({ x: x, y: y });
+        if (shouldTakeResources) {
+            this.removeResources(buildingCosts.settelment);
         }
+        this.settelmentsLeft--;
+        this.addPoints(1);
     }
 
-    #canBuildSettlement(x, y, shouldTakeResources) {
+    canBuildSettlement(x, y, shouldTakeResources) {
         if (this.settelmentsLeft < 0) {
             throw "5 settelments already built";
         }
@@ -124,16 +120,14 @@ class Player {
     }
 
     buildRoad(startX, startY, endX, endY, shouldTakeResources) {
-        if (this.#canBuildRoad(startX, startY, endX, endY)) {
-            this.roads.push({ startX: startX, startY: startY, endX: endX, endY: endY });
-            if (!shouldTakeResources) {
-                this.removeResources(buildingCosts.road);
-            }
-            this.roadsLeft--;
+        this.roads.push({ startX: startX, startY: startY, endX: endX, endY: endY });
+        if (!shouldTakeResources) {
+            this.removeResources(buildingCosts.road);
         }
+        this.roadsLeft--;
     }
 
-    #canBuildRoad(startX, startY, endX, endY, shouldTakeResources) {
+    canBuildRoad(startX, startY, endX, endY, shouldTakeResources) {
         if (this.roadsLeft < 0) {
             throw "15 roads already built";
         }

@@ -1,7 +1,7 @@
 import React from "react";
 import ResourceTile from "./resourceTile/resourceTile";
 import "./styles/hexagon.css"
-import Road from "./resourceTile/road";
+import Road from "./boardPieces/road";
 import Port from "./boardPieces/port";
 import City from "./boardPieces/city";
 import Settlement from "./boardPieces/settlement";

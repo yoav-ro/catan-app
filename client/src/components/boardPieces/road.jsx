@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import BuildRoad from "../modals/buildRoad";
+import Junction from "../resourceTile/junction";
 import "./styles/road.css"
 
 function Road({ x1, y1, x2, y2, status, player, gameSocketRef }) {
     const color = player ? player : "black";
-
     const handleClick = () => {
         console.log(`Road, status: ${status}, from (${x1}, ${y1}) to (${x2}, ${y2})`);
         setShow(true);
@@ -27,6 +27,8 @@ function Road({ x1, y1, x2, y2, status, player, gameSocketRef }) {
         <>
             <line x1={x1} y1={y1} x2={x2} y2={y2} className="roadBorder" stroke="black" onClick={handleClick} />
             <line x1={x1} y1={y1} x2={x2} y2={y2} className="builtRoad" stroke={color} onClick={handleClick} />
+            <Junction centerX={x1} centerY={y1} gameSocketRef={gameSocketRef} />
+            <Junction centerX={x2} centerY={y2} gameSocketRef={gameSocketRef} />
         </>
     )
 }
