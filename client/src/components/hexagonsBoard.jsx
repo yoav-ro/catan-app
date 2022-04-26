@@ -19,7 +19,6 @@ function HexagonBoard({ boardData: board, gameSocketRef }) {
                         resource={tile.resource}
                         coordinates={tile.coordinates}
                         robber={tile.isRobber}
-                    // junctions={tile.surroundingJunctions}
                     />
                 })}
                 {board.roads.map((road, key) => {

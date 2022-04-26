@@ -17,10 +17,10 @@ class Board {
     //Returns the status of the requested junction, if exists.
     getJunctionStatus(x, y) {
         if (this.doCoordinatesExist(x, y)) {
-            const junctionItem = this.builtJunctions.find(junction => {
-                return (junction.x === x && junction.y === y)
-            })
-            return junctionItem ? junctionItem.player : "free";
+            const junctionItem = this.builtJunctions.find(junction =>
+                (junction.x === x && junction.y === y)
+            )
+            return junctionItem ? { type: junctionItem.type, player: junctionItem.player } : "free";
         }
         else {
             throw "Invalid junction coordinates";
@@ -167,7 +167,6 @@ class Board {
         //Checks if the road is connected to another player
         const isConnectedToJunction = this.#isConnectedToJunction(player, startX, startY, endX, endY);
         const isConnectedToRoad = this.#isConnectedToRoad(player, startX, startY, endX, endY);
-        console.log(isConnectedToJunction, isConnectedToRoad);
         if (!isConnectedToJunction && !isConnectedToRoad) {
             throw "Cant place road here"
         }
@@ -177,7 +176,6 @@ class Board {
     #isConnectedToJunction(player, startX, startY, endX, endY) {
         const startStatus = this.getJunctionStatus(startX, startY);
         const endStatus = this.getJunctionStatus(endX, endY);
-        console.log((startStatus, endStatus));
         if (startStatus !== "free" || endStatus !== "free") {
             if (endStatus.player === player || startStatus.player === player) {
                 return true;
