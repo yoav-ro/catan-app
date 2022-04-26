@@ -31,11 +31,12 @@ function alignBoardCoords(board) {
         road.endY += 30;
     })
 
+    board.builtJunctions.forEach(junction => {
+        junction.x += 30;
+        junction.y += 30;
+    })
+
     tiles.forEach(tile => {
-        tile.surroundingJunctions.forEach(junction => {
-            junction.x += 30;
-            junction.y += 30;
-        })
         const { coordinates } = tile;
         coordinates.top.x += 30;
         coordinates.top.y += 30;

@@ -8,6 +8,7 @@ class Board {
     constructor(tileRadius) {
         this.#tileRadius = tileRadius;
         this.roads = [];
+        this.builtJunctions = [];
         this.longestRoad = [];
         this.tiles = getTilesData(tileRadius);
         this.portsData = getPortsData(this.tiles);
@@ -16,12 +17,13 @@ class Board {
     //Returns the status of the requested junction, if exists.
     getJunctionStatus(x, y) {
         if (this.doCoordinatesExist(x, y)) {
-            const tiles = this.getTilesByJunction(x, y);
-            const junctionStatus = tiles[0].getJunctionStatus(x, y);
-            return junctionStatus;
+            const junctionItem = this.builtJunctions.find(junction =>
+                (junction.x === x && junction.y === y)
+            )
+            return junctionItem ? { type: junctionItem.type, player: junctionItem.player } : "free";
         }
         else {
-            throw "Invalid junction coordinates"
+            throw "Invalid junction coordinates";
         }
     }
 
@@ -69,10 +71,17 @@ class Board {
     //Validates junction input and adds it to the board if valid.
     addJunction(player, x, y, type, shouldBeConnected) {
         if (this.#canPlaceSettelment(player, x, y, shouldBeConnected)) {
-            const tilesToAddJunc = this.getTilesByJunction(x, y);
-            tilesToAddJunc.forEach(tile => {
-                tile.setJunction(x, y, player, type);
-            })
+            // const tilesToAddJunc = this.getTilesByJunction(x, y);
+            const settelment = {
+                type: pieceTypes.SETTELMENT,
+                x: x,
+                y: y,
+                player: player,
+            }
+            this.builtJunctions.push(settelment);
+            // tilesToAddJunc.forEach(tile => {
+            //     tile.setJunction(x, y, player, type);
+            // })
             this.#calcLongestRoad();
         }
     }
@@ -123,7 +132,7 @@ class Board {
             if (roundBySecondDec(road.startX) === roundBySecondDec(x) && roundBySecondDec(road.startY) === roundBySecondDec(y) && road.status === player) {
                 return true;
             }
-            if  (roundBySecondDec(road.endX) === roundBySecondDec(x) && roundBySecondDec(road.endY) === roundBySecondDec(y) && road.status === player) {
+            if (roundBySecondDec(road.endX) === roundBySecondDec(x) && roundBySecondDec(road.endY) === roundBySecondDec(y) && road.status === player) {
                 return true;
             }
         })
@@ -278,15 +287,15 @@ class Board {
         return portsByType;
     }
 
-    getTilesByJunction(x, y) {
-        const tilesToRet = [];
-        this.tiles.forEach(tile => {
-            if (tile.doesHaveJunction(x, y)) {
-                tilesToRet.push(tile);
-            }
-        })
-        return tilesToRet;
-    }
+    // getTilesByJunction(x, y) {
+    //     const tilesToRet = [];
+    //     this.tiles.forEach(tile => {
+    //         if (tile.doesHaveJunction(x, y)) {
+    //             tilesToRet.push(tile);
+    //         }
+    //     })
+    //     return tilesToRet;
+    // }
 
     doCoordinatesExist(x, y) {
         for (let tile of this.tiles) {

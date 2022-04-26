@@ -16,15 +16,4 @@ describe("Construction testing", () => {
         }
         expect(mockTile.coordinates).toStrictEqual(expectedCoords);
     })
-
-    test("All junctions should me empty", () => {
-        expect(mockTile.surroundingJunctions.length).toBe(0);
-    })
-})
-
-describe("Junction modifing", () => {
-    test("Adding a junction", () => {
-        mockTile.setJunction(181.86533479473212, 0, "blue", pieceTypes.SETTELMENT);
-        expect(mockTile.getJunctionStatus(181.86533479473212, 0)).toStrictEqual({ player: "blue", type: pieceTypes.SETTELMENT })
-    })
 })

@@ -65,14 +65,6 @@ function Tile({ number, resource, coordinates, robber, junctions, gameSocketRef 
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
-                {junctions.map((junction, key) => {
-                    if (junction.type === "city") {
-                        return <City key={key} centerX={junction.x} centerY={junction.y} color={junction.player} />
-                    }
-                    if (junction.type === "settelment") {
-                        return <Settlement key={key} centerX={junction.x} centerY={junction.y} color={junction.player} />
-                    }
-                })}
                 <circle cx={center.x} cy={center.y} r="20" fill="white" stroke="black" />
                 <text fill={numColor} x={center.x} y={center.y} strokeWidth="4px" fontFamily="Arial" dy=".3em" dx={numberPosCorrection}>{number}</text>
                 <Robber tileCX={center.x} tileCY={center.y} shouldRender={robber} resourceType={resource} />
@@ -103,14 +95,6 @@ function Tile({ number, resource, coordinates, robber, junctions, gameSocketRef 
             <Junction centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
             <Junction centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
             <Junction centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
-            {junctions.map(junction => {
-                if (junction.type === "city") {
-                    return <City centerX={junction.x} centerY={junction.y} color={junction.color} />
-                }
-                if (junction.type === "settelment") {
-                    return <Settlement centerX={junction.x} centerY={junction.y} color={junction.color} />
-                }
-            })}
             <Robber tileCX={center.x} tileCY={center.y} shouldRender={robber} />
         </g>
     )
