@@ -68,25 +68,40 @@ io.sockets.on("connection", (socket) => {
         emitToPlayers(io, game);
 
         socket.on("leaveQueue", ({ username }) => {
-            const playerIndex = playersQueue.findIndex(user => user.username === username);
-            if (playerIndex !== -1) {
-                playersQueue.splice(playerIndex, 1);
-                io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
-            }
+            removeFromQueue(username);
         })
 
         socket.on("disconnect", (reason) => {
             console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
+            removeFromQueue(findUserNameBySocketId(socket.id));
             //todo- find the game disconnected from and end it end game
         })
     })
 })
+
+function removeFromQueue(userName) {
+    const playerIndex = playersQueue.findIndex(user => user.username === userName);
+    if (playerIndex !== -1) {
+        playersQueue.splice(playerIndex, 1);
+        io.to(socket.id).emit("lobby", { msg: `Player "${userName}" has left the lobby` });
+    }
+}
 
 function emitToPlayers(io, game) {
     game.players.forEach(player => {
         console.log(`sending to ${player.name}(${player.id})`)
         io.to(player.id).emit("game-data", game);
     });
+}
+
+function findUserNameBySocketId(socketId) {
+    let ret;
+    playersQueue.forEach(user => {
+        if (user.id === socketId) {
+            ret = user.username;
+        }
+    })
+    return ret;
 }
 
 
