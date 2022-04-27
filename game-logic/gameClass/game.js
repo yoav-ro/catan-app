@@ -1,4 +1,4 @@
-const { dicesRoll, mixArray, randomItemFromArray, doesArrayContain } = require("../utils/helperFunctions");
+const { dicesRoll, mixArray, randomItemFromArray, doesArrayContain, roundBySecondDec } = require("../utils/helperFunctions");
 const { pieceTypes, resourcesTypes, devCardsArr, playerColors, devCards, ports } = require("../utils/constants");
 const Player = require("../playerClass/player");
 const Board = require("../boardClass/board");
@@ -177,8 +177,7 @@ class Game {
             const surroundingJunctions = this.#getTileCoordsArr(tile);
             for (let junction of surroundingJunctions) {
                 const resourceToGive = tile.resource;
-                if (resourceToGive !== resourcesTypes.DESERT && junction.x === settelmentX && junction.y === settelmentY) {
-                    console.log("ginving")
+                if (resourceToGive !== resourcesTypes.DESERT && roundBySecondDec(junction.x) === roundBySecondDec(settelmentX) && roundBySecondDec(junction.y) === roundBySecondDec(settelmentY)) {
                     player.addResources([resourceToGive]);
                 }
             }
@@ -279,7 +278,7 @@ class Game {
         const player = this.#getPlayerByColor(playerColor);
         const portsByType = this.board.getPortsByType(portType);
 
-        player.settelments.forEach(settelment => {
+        for (let settelment of player.settelments) {
             portsByType.forEach(port => {
                 if (port.junctionA.x === settelment.x && port.junctionA.x === settelment.y) {
                     return true;
@@ -288,19 +287,19 @@ class Game {
                     return true;
                 }
             })
-        })
+        }
         return false;
     }
 
     checkVictory() {
-        this.players.forEach(player => {
+        for (let player of this.players) {
             if (player.points >= 10) {
                 return {
                     color: player.color,
                     points: player.points,
                 };
             }
-        })
+        }
         return false;
     }
 }

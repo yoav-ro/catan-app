@@ -18,7 +18,7 @@ class Board {
     getJunctionStatus(x, y) {
         if (this.doCoordinatesExist(x, y)) {
             const junctionItem = this.builtJunctions.find(junction =>
-                (junction.x === x && junction.y === y)
+                (roundBySecondDec(junction.x) === roundBySecondDec(x) && roundBySecondDec(junction.y) === roundBySecondDec(y))
             )
             return junctionItem ? { type: junctionItem.type, player: junctionItem.player } : "free";
         }
@@ -111,25 +111,28 @@ class Board {
     }
 
     #isJunction2RoadsApart(x, y) {
-        this.tiles.forEach(tile => {
-            for (let coord in tile.coordinates) {
-                if (Math.round(getDistance(tile.coordinates[coord].x, tile.coordinates[coord].y, x, y)) === this.#tileRadius) {
-                    return false;
+        if (this.builtJunctions.length > 0) {
+            let ret = true;
+            for (let builtJunction of this.builtJunctions) {
+                const distanceFromNearest = Math.round(getDistance(builtJunction.x, builtJunction.y, x, y));
+                if (distanceFromNearest <= this.#tileRadius) {
+                    ret = false;
                 }
             }
-        })
+            return ret;
+        }
         return true;
     }
 
     #isJunctionConnectedToPlayer(player, x, y) {
-        this.roads.forEach(road => {
+        for (let road of this.roads) {
             if (roundBySecondDec(road.startX) === roundBySecondDec(x) && roundBySecondDec(road.startY) === roundBySecondDec(y) && road.status === player) {
                 return true;
             }
             if (roundBySecondDec(road.endX) === roundBySecondDec(x) && roundBySecondDec(road.endY) === roundBySecondDec(y) && road.status === player) {
                 return true;
             }
-        })
+        }
         return false;
     }
 
@@ -168,6 +171,8 @@ class Board {
     #isConnectedToJunction(player, startX, startY, endX, endY) {
         const startStatus = this.getJunctionStatus(startX, startY);
         const endStatus = this.getJunctionStatus(endX, endY);
+        console.log(`startStatus: ${startStatus}, endStatus: ${endStatus}`)
+
         if (startStatus !== "free" || endStatus !== "free") {
             if (endStatus.player === player || startStatus.player === player) {
                 return true;
@@ -278,16 +283,6 @@ class Board {
         })
         return portsByType;
     }
-
-    // getTilesByJunction(x, y) {
-    //     const tilesToRet = [];
-    //     this.tiles.forEach(tile => {
-    //         if (tile.doesHaveJunction(x, y)) {
-    //             tilesToRet.push(tile);
-    //         }
-    //     })
-    //     return tilesToRet;
-    // }
 
     doCoordinatesExist(x, y) {
         for (let tile of this.tiles) {
