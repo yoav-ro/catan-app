@@ -153,17 +153,44 @@ class Game {
         this.board.tiles.forEach(tile => {
             if (tile.number === roll && tile.resource !== resourcesTypes.DESERT && !tile.isRobber) {
                 const resourceToGive = tile.resource;
+                const surroundingJunctions = this.#getTileCoordsArr(tile);
                 for (let junction of surroundingJunctions) {
-                    const player = this.#getPlayerByColor(junction.player);
-                    if (junction.type === pieceTypes.CITY) {
-                        player.addResources([resourceToGive, resourceToGive]);
-                    }
-                    if (junction.type === pieceTypes.SETTELMENT) {
-                        player.addResources([resourceToGive]);
+                    for (let builtJunction of this.board.builtJunctions) {
+                        if (junction.x === builtJunction.x && surroundingJunctions.y === builtJunction.y) {
+                            const player = this.#getPlayerByColor(builtJunction.player);
+                            if (builtJunction.type === pieceTypes.CITY) {
+                                player.addResources([resourceToGive, resourceToGive]);
+                            }
+                            if (builtJunction.type === pieceTypes.SETTELMENT) {
+                                player.addResources([resourceToGive]);
+                            }
+                        }
                     }
                 }
             }
         });
+    }
+
+    giveInitialResources(settelmentX, settelmentY, playerColor) {
+        const player = this.#getPlayerByColor(playerColor);
+        for (let tile of this.board.tiles) {
+            const surroundingJunctions = this.#getTileCoordsArr(tile);
+            for (let junction of surroundingJunctions) {
+                const resourceToGive = tile.resource;
+                if (resourceToGive !== resourcesTypes.DESERT && junction.x === settelmentX && junction.y === settelmentY) {
+                    console.log("ginving")
+                    player.addResources([resourceToGive]);
+                }
+            }
+        }
+    }
+
+    #getTileCoordsArr(tile) {
+        const junctionsArr = [];
+        for (let junction in tile.coordinates) {
+            junctionsArr.push(tile.coordinates[junction]);
+        }
+        return junctionsArr;
     }
 
     getPiecesByPlayer(playerColor, pieceType) {
@@ -182,7 +209,6 @@ class Game {
 
     buildSettelment(playerColor, x, y, shouldTakeResources, shouldBeConnected) {
         const player = this.#getPlayerByColor(playerColor);
-
         if (player.canBuildSettlement(x, y, shouldTakeResources) && this.board.canPlaceSettelment(player, x, y, pieceTypes.SETTELMENT, shouldTakeResources)) {
             player.buildSettelment(x, y, shouldTakeResources);
             this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT, shouldBeConnected);

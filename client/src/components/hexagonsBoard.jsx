@@ -29,6 +29,7 @@ function HexagonBoard({ boardData: board, gameSocketRef }) {
                         x2={road.endX}
                         y2={road.endY}
                         player={road.player}
+                        gameSocketRef={gameSocketRef}
                     />
                 })}
                 {board.builtJunctions.map((junction, key) => {

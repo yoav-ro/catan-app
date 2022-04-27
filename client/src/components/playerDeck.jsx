@@ -30,10 +30,10 @@ function PlayerDeck({ playerData }) {
             <Container style={{ marginBottom: "10px" }}>
                 <Row className="topRow">
                     <Col>
-                        <h3 style={{ color: color, float: "left" }}>{playerName} ({color})</h3>
+                        <h3 className="playerHeader" style={{ color: color, float: "left" }}>{playerName} ({color})</h3>
                     </Col>
                     <Col>
-                        <h3 style={{ color: color, float: "right" }}>Points: {points}</h3>
+                        <h3 className="playerHeader" style={{ color: color, float: "right" }}>Points: {points}</h3>
                     </Col>
                 </Row>
                 <Row>

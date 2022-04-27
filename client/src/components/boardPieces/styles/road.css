@@ -3,12 +3,12 @@
 }
 
 .builtRoad{
-    stroke-width: 8;
+    stroke-width: 6;
     stroke-linecap: round;
 }
 
 .roadBorder{
-    stroke-width: 10;
+    stroke-width: 8;
     stroke-linecap: round;
 }
 

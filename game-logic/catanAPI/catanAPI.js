@@ -293,6 +293,7 @@ class catanAPI extends Game {
             if (pieceToBuild !== pieceTypes.SETTELMENT) {
                 throw "Build a second settelment first";
             }
+            this.giveInitialResources(directiveObj.item.x, directiveObj.item.y, player)
         }
         if (settelmentsByPlayer === 2 && roadsByPlayer === 1) {
             if (pieceToBuild !== pieceTypes.ROAD) {

@@ -12,7 +12,6 @@ function Junction({ centerX, centerY, gameSocketRef }) {
     }
 
     const handleClick = () => {
-        console.log(`Junction, at (${centerX}, ${centerY})`)
         setShow(true);
     }
 
@@ -25,9 +24,6 @@ function Junction({ centerX, centerY, gameSocketRef }) {
             <circle stroke="black" cx={centerX} cy={centerY} r={radius} onMouseEnter={handleHover} onMouseLeave={handleLeave} onClick={handleClick} />
             <BuildSettelment gameSocketRef={gameSocketRef} show={show} handleClose={handleClose} x={centerX} y={centerY} />
         </>
-
-
-
     )
 }
 

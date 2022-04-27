@@ -142,7 +142,7 @@ class Board {
             endX: endX,
             endY: endY,
         }
-        this.roads = [...this.roads, newRoadObj];
+        this.roads.push(newRoadObj);
         this.#calcLongestRoad();
     }
 

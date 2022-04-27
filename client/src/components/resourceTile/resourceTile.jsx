@@ -2,7 +2,6 @@ import React from "react";
 import { Polygon } from "react-svg-path";
 import { resourcesTypes } from "../../utils/constants";
 import Junction from "./junction";
-import "./styles/road.css"
 import Road from "../boardPieces/road";
 import Robber from "../boardPieces/robber";
 

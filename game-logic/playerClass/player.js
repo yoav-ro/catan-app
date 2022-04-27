@@ -18,7 +18,7 @@ class Player {
     }
 
     addResources(resourcesToAddArr) {
-        this.resources = [...this.resources, ...resourcesToAddArr];
+        this.resources = this.resources.concat(resourcesToAddArr);
     }
 
     activateDevCard(devCardType) {
@@ -121,7 +121,7 @@ class Player {
 
     buildRoad(startX, startY, endX, endY, shouldTakeResources) {
         this.roads.push({ startX: startX, startY: startY, endX: endX, endY: endY });
-        if (!shouldTakeResources) {
+        if (shouldTakeResources) {
             this.removeResources(buildingCosts.road);
         }
         this.roadsLeft--;
