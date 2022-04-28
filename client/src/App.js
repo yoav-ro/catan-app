@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import GameTab from './components/gameTab';
 import { setGameData } from "./actions";
-import DiceRoller from './components/diceRoller';
 
 //http://localhost:3008
 
@@ -31,13 +30,12 @@ function App() {
 
   return (
     <div>
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Routes>
           <Route exact path="/" element={<JoinGameForm gameSocketRef={socketRef} setCurrUser={setCurrUser} currUser={currUser} />} />
           <Route exact path="/game" element={<GameTab gameSocketRef={socketRef} />} />
         </Routes>
-      </BrowserRouter> */}
-      <DiceRoller number={7}/>
+      </BrowserRouter>
     </div>
   );
 }
