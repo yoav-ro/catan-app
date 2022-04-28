@@ -3,10 +3,12 @@ import "./styles/playerDeck.css";
 import { Container, Row, Col } from "react-bootstrap";
 
 function Chat({ gameData }) {
-    const currTurn = gameData.setupOrder[0];
+
     const isSetup = gameData.isSetupPhase;
-    console.log(isSetup)
+
     if (isSetup) {
+        const currTurn = gameData.setupOrder[0];
+        console.log(gameData.setupOrder);
         return (
             <div className="chat">
                 <Container>
@@ -25,6 +27,7 @@ function Chat({ gameData }) {
         )
     }
 
+    const currTurn = gameData.playerOrder[0];
     return (
         <div className="chat">
             <Container>

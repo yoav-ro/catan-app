@@ -171,7 +171,6 @@ class Board {
     #isConnectedToJunction(player, startX, startY, endX, endY) {
         const startStatus = this.getJunctionStatus(startX, startY);
         const endStatus = this.getJunctionStatus(endX, endY);
-        console.log(`startStatus: ${startStatus}, endStatus: ${endStatus}`)
 
         if (startStatus !== "free" || endStatus !== "free") {
             if (endStatus.player === player || startStatus.player === player) {

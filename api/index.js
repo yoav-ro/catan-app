@@ -47,20 +47,20 @@ io.sockets.on("connection", (socket) => {
     socket.on("newDirective", ({ directive }) => {
         const game = findGameBySocketId(socket.id);
 
-        // console.log(directive)
+        console.log("new directive: " + directive.type);
 
         const directiveOutput = game.game.sendDirective(directive);
         const objToEmit = {
             id: game.id,
             game: directiveOutput.gameData,
             message: directiveOutput.message,
-            expectation: game.directiveExpectation,
+            expectation: game.expectation,
             players: game.players,
         }
 
         if (game) {
             game.players.forEach(player => {
-                console.log(`sending to ${player.name}(${player.id})`)
+                console.log(`sending to ${player.username}(${player.id})`)
                 io.to(player.id).emit("game-data", objToEmit);
             });
         }
@@ -76,7 +76,7 @@ io.sockets.on("connection", (socket) => {
 
     socket.on("disconnect", (reason) => {
         console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
-        const username= findUserNameBySocketId(socket.id);
+        const username = findUserNameBySocketId(socket.id);
         if (removeFromQueue(username)) {
             io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
         }

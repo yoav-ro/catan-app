@@ -28,7 +28,7 @@ function RollDiceBtn({ gameSocketRef }) {
     return (
         <>
             <Button onClick={handleClick}>Roll Dice</Button>
-            <DiceRoller gameSocketRef={gameSocketRef} show={show} handleClose={handleClose} number={7} />
+            {/* <DiceRoller gameSocketRef={gameSocketRef} show={show} handleClose={handleClose} number={7} /> */}
         </>
     )
 }

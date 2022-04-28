@@ -150,25 +150,27 @@ class Game {
 
     //Give player their resources by roll
     giveResourcesByRoll(roll) {
-        this.board.tiles.forEach(tile => {
-            if (tile.number === roll && tile.resource !== resourcesTypes.DESERT && !tile.isRobber) {
-                const resourceToGive = tile.resource;
-                const surroundingJunctions = this.#getTileCoordsArr(tile);
-                for (let junction of surroundingJunctions) {
-                    for (let builtJunction of this.board.builtJunctions) {
-                        if (junction.x === builtJunction.x && surroundingJunctions.y === builtJunction.y) {
-                            const player = this.#getPlayerByColor(builtJunction.player);
-                            if (builtJunction.type === pieceTypes.CITY) {
-                                player.addResources([resourceToGive, resourceToGive]);
-                            }
-                            if (builtJunction.type === pieceTypes.SETTELMENT) {
-                                player.addResources([resourceToGive]);
+        if (roll !== 7) {
+            this.board.tiles.forEach(tile => {
+                if (tile.number === roll && tile.resource !== resourcesTypes.DESERT && !tile.isRobber) {
+                    const resourceToGive = tile.resource;
+                    const surroundingJunctions = this.#getTileCoordsArr(tile);
+                    for (let junction of surroundingJunctions) {
+                        for (let builtJunction of this.board.builtJunctions) {
+                            if (roundBySecondDec(junction.x) === roundBySecondDec(builtJunction.x) && roundBySecondDec(junction.y) === roundBySecondDec(builtJunction.y)) {
+                                const player = this.#getPlayerByColor(builtJunction.player);
+                                if (builtJunction.type === pieceTypes.CITY) {
+                                    player.addResources([resourceToGive, resourceToGive]);
+                                }
+                                if (builtJunction.type === pieceTypes.SETTELMENT) {
+                                    player.addResources([resourceToGive]);
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     giveInitialResources(settelmentX, settelmentY, playerColor) {

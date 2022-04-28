@@ -18,7 +18,6 @@ class catanAPI extends Game {
         this.playerOrder = mixArray(playersDataArr.slice()); //playerOrder[0] is the current player
         this.setupOrder = mixArray(playersDataArr.slice())
         this.directiveExpectation = [directiveTypes.setupBuild];
-        this.setupItemsCount = 0;
         this.isSetupPhase = true;
         this.isAwaitingRobb = false;
         this.lastRoll = undefined;
@@ -27,10 +26,11 @@ class catanAPI extends Game {
 
     sendDirective(directiveObj) {
         const directiveMsg = this.#parseDirective(directiveObj);
+        console.log(this.directiveExpectation); 
         return {
             gameData: this,
             message: directiveMsg,
-            exectation: this.directiveExpectation,
+            expectation: this.directiveExpectation,
         }
     }
 
@@ -201,10 +201,6 @@ class catanAPI extends Game {
                     retMsg = this.buildRoad(directiveObj.player, startX, startY, endX, endY, false);
                     break;
             }
-            this.setupItemsCount++;
-            if (this.setupItemsCount === 4 * this.players.length) {
-                this.isSetupPhase = false;
-            }
             if (this.#shouldAdvanceTurnAfterSetup(directiveObj)) {
                 this.#parseEndTurn({
                     type: "endTurn",
@@ -226,18 +222,19 @@ class catanAPI extends Game {
             if (this.isSetupPhase) {
                 const lastPlayer = this.setupOrder.shift()
                 this.setupOrder.push(lastPlayer);
-                if (this.setupItemsCount === 8) {
+                const builtItemsCount = this.board.builtJunctions.length + this.board.roads.length;
+                if (builtItemsCount === 2 * this.players.length) {
                     this.setupOrder.reverse();
                 }
 
-                retMsg = `${lastPlayer} has finished his turn. Now Its ${this.setupOrder[0]}'s turn.`;
+                retMsg = `${lastPlayer.name} has finished his turn. Now Its ${this.setupOrder[0].name}'s turn.`;
             }
             else {
                 const lastPlayer = this.playerOrder.shift()
                 this.playerOrder.push(lastPlayer);
                 this.isAwaitingRobb = false;
                 this.#setDirectiveExpetation(directiveObj);
-                retMsg = `${lastPlayer} has finished his turn. Now Its ${this.playerOrder[0]}'s turn.`;
+                retMsg = `${lastPlayer.name} has finished his turn. Now Its ${this.playerOrder[0].name}'s turn.`;
             }
             this.#setDirectiveExpetation(directiveObj);
             const victory = this.checkVictory();
@@ -319,36 +316,48 @@ class catanAPI extends Game {
         switch (lastDirectiveType) {
             case directiveTypes.endTurn:
                 this.directiveExpectation = [rollDice, activateDevCard];
+                break;
             case directiveTypes.rollDice:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
                 if (this.lastRoll === 7) {
                     this.directiveExpectation.push(robbPlayer);
                     this.isAwaitingRobb = true;
                 }
+                break;
             case directiveTypes.build:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                break;
             case directiveTypes.activateDevCard:
                 this.directiveExpectation = [endTurn, build, tradeReq];
                 if (this.isAwaitingRobb) {
                     this.directiveExpectation.push(robbPlayer);
                 }
+                break;
             case directiveTypes.tradeReq:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeRes];
+                break;
             case directiveTypes.tradeRes:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                break;
             case directiveTypes.robbPlayer:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                break;
             case directiveTypes.setupBuild:
                 if (this.isSetupPhase) {
                     this.directiveExpectation = [setupBuild];
                     if (lastDirective.item.type === pieceTypes.ROAD) {
                         this.directiveExpectation.push(endTurn);
                     }
-
+                    const builtItemsCount = this.board.builtJunctions.length + this.board.roads.length;
+                    if (builtItemsCount === 4 * this.players.length) {
+                        this.isSetupPhase = false;
+                        this.directiveExpectation = [rollDice, activateDevCard];
+                    }
                 }
                 else {
                     this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard];
                 }
+                break;
         }
     }
 
