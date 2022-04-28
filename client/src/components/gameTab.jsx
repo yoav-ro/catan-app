@@ -23,7 +23,7 @@ function GameTab({ gameSocketRef }) {
                 <Opponents playersData={mockPlayers} />
                 <Chat gameData={gameData.game.game} />
                 <HexagonBoard boardData={gameData.game.game.board} gameSocketRef={gameSocketRef} />
-                <PlayerDeck playerData={players[currPlayerIndex]} />
+                <PlayerDeck playerData={players[currPlayerIndex]} gameSocketRef={gameSocketRef} />
             </div>
         )
     }

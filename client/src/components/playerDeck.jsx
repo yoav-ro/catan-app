@@ -1,9 +1,10 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { resourcesTypes } from "../utils/constants";
+import ActionsDeck from "./actionsTab";
 import "./styles/playerDeck.css";
 
-function PlayerDeck({ playerData }) {
+function PlayerDeck({ playerData, gameSocketRef }) {
     const playerName = playerData.playerName.username;
     const { color, points, resources, devCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = playerData;
 
@@ -60,13 +61,7 @@ function PlayerDeck({ playerData }) {
                         <div>Victory point: {victoryPointCards.length - activeVictoryPointCards} ({activeVictoryPointCards} used)</div>
 
                     </Col>
-                    <Col>
-                        <h5>Actions:</h5>
-                        <div>Roll Dice</div>
-                        <div>Activate dev card</div>
-                        <div>Offer a trade</div>
-                        <div>end turn</div>
-                    </Col>
+                    <ActionsDeck gameSocketRef={gameSocketRef} />
                 </Row>
             </Container >
         </div >
