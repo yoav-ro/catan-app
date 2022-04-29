@@ -17,8 +17,15 @@ function JoinGameForm({ gameSocketRef }) {
         if (!userName) {
             alert("Invalid input!")
         } else {
-            dispatch(setCurrPlayer(userName));
             gameSocketRef.current.emit("joinGame", { username: userName });
+            gameSocketRef.current.on("lobby", data => {
+                if (data !== "User name already taken") {
+                    dispatch(setCurrPlayer(userName));
+                }
+                else {
+                    alert("User name already taken")
+                }
+            })
             setUserName("");
         }
 
