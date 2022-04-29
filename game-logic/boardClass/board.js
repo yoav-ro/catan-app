@@ -151,6 +151,9 @@ class Board {
 
     canPlaceRoad(player, startX, startY, endX, endY) {
         //Checks if the coordinates are valid
+        const startStatus= this.doCoordinatesExist(startX, startY);
+        const endStatus= this.doCoordinatesExist(endX, endY);
+        console.log(`start: ${startStatus}, end: ${endStatus}`)
         if (!this.doCoordinatesExist(startX, startY) || !this.doCoordinatesExist(endX, endY) || Math.round(getDistance(startX, startY, endX, endY)) !== this.#tileRadius) {
             throw "Invalid road";
         }

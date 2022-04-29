@@ -6,7 +6,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import GameTab from './components/gameTab';
 import { setGameData } from "./actions";
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
+import 'react-notifications/lib/notifications.css';
 //http://localhost:3008
 
 function App() {
@@ -19,6 +21,10 @@ function App() {
 
     socketRef.current.on("lobby", data => {
       console.log(data);
+    })
+
+    socketRef.current.on("game-error", data => {
+      NotificationManager.error(data);
     })
 
     socketRef.current.on("game-data", data => {
@@ -36,6 +42,7 @@ function App() {
           <Route exact path="/game" element={<GameTab gameSocketRef={socketRef} />} />
         </Routes>
       </BrowserRouter>
+      <NotificationContainer />
     </div>
   );
 }

@@ -48,6 +48,7 @@ io.sockets.on("connection", (socket) => {
         const game = findGameBySocketId(socket.id);
 
         console.log("new directive: " + directive.type);
+        console.log(directive)
 
         const directiveOutput = game.game.sendDirective(directive);
         const objToEmit = {
@@ -59,10 +60,15 @@ io.sockets.on("connection", (socket) => {
         }
 
         if (game) {
-            game.players.forEach(player => {
-                console.log(`sending to ${player.username}(${player.id})`)
-                io.to(player.id).emit("game-data", objToEmit);
-            });
+            if (objToEmit.message.error) {
+                io.to(socket.id).emit("game-error", objToEmit.message.error)
+            }
+            else {
+                game.players.forEach(player => {
+                    console.log(`sending to ${player.username}(${player.id})`)
+                    io.to(player.id).emit("game-data", objToEmit);
+                });
+            }
         }
 
         emitToPlayers(io, game);

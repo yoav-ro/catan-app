@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MainNav from "./navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrPlayer, resetCurrPlayer } from "../actions";
+import { NotificationManager } from 'react-notifications';
+
 
 function JoinGameForm({ gameSocketRef }) {
     const [userName, setUserName] = useState("");
@@ -15,7 +17,7 @@ function JoinGameForm({ gameSocketRef }) {
     const handleClick = (e) => {
         e.preventDefault();
         if (!userName) {
-            alert("Invalid input!")
+            NotificationManager.error("Invalid input");
         } else {
             gameSocketRef.current.emit("joinGame", { username: userName });
             gameSocketRef.current.on("lobby", data => {
@@ -23,10 +25,12 @@ function JoinGameForm({ gameSocketRef }) {
                     dispatch(setCurrPlayer(userName));
                 }
                 else {
-                    alert("User name already taken")
+                    NotificationManager.error("User name already taken");
+                    document.querySelector("#userNameInput").value = "";
                 }
             })
             setUserName("");
+            
         }
 
     }
@@ -43,7 +47,7 @@ function JoinGameForm({ gameSocketRef }) {
                 <Container>
                     <h2>Find a game</h2>
                     <Form>
-                        <Form.Control type="text" placeholder="Enter player name" onChange={(e) => setUserName(e.target.value)} />
+                        <Form.Control id="userNameInput" type="text" placeholder="Enter player name" value={userName} onChange={(e) => setUserName(e.target.value)} />
                         <Button type="submit" onClick={handleClick}>Join</Button>
                     </Form>
                 </Container>
@@ -72,6 +76,7 @@ function JoinGameForm({ gameSocketRef }) {
     return (
         <div>
             <MainNav />
+
             <Container>
                 <h2>Welcome {currUser}</h2>
                 <h3>Looking for game...</h3>

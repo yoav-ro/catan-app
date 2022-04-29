@@ -57,10 +57,10 @@ class catanAPI extends Game {
                 case directiveTypes.tradeWithPort:
                     return this.#parseTradeWithPort(directiveObj); //good
                 default:
-                    return { Error: "Invalid directive type" };
+                    return { error: "Invalid directive type" };
             }
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -71,7 +71,7 @@ class catanAPI extends Game {
             this.#setDirectiveExpetation(directiveObj);
             return `Player ${directiveObj.player} has rolled ${this.lastRoll}`;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -99,7 +99,7 @@ class catanAPI extends Game {
             this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -129,7 +129,7 @@ class catanAPI extends Game {
             this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -141,7 +141,7 @@ class catanAPI extends Game {
             this.#setDirectiveExpetation(directiveObj);
             return `Trade request sent from player ${player} to player ${tradeWith}`;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -170,7 +170,7 @@ class catanAPI extends Game {
             this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -182,7 +182,7 @@ class catanAPI extends Game {
             this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -212,7 +212,7 @@ class catanAPI extends Game {
             return retMsg;
         } catch (error) {
             console.log(error);
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -243,7 +243,7 @@ class catanAPI extends Game {
             }
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -252,7 +252,7 @@ class catanAPI extends Game {
             const { player, portType, resourceToGive, resourceToTake } = directiveObj;
             return this.tradeWithPort(portType, player, resourceToGive, resourceToTake);
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 

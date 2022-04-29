@@ -90,22 +90,26 @@ describe("Roads tests", () => {
         mockBoard.addJunction("blue", 181.86533479473212, 0, pieceTypes.SETTELMENT, false);
 
         const roadInvalidCoords = () => {
+            mockBoard.canPlaceRoad("blue", 1, 1, 2, 2)
             mockBoard.addRoad("blue", 1, 1, 2, 2);
         }
         expect(roadInvalidCoords).toThrow("Invalid road");
 
         const roadOnExistingRoad = () => {
+            mockBoard.canPlaceRoad("blue", 181.86533479473212, 0, 121.2435565298214, 35);
             mockBoard.addRoad("blue", 181.86533479473212, 0, 121.2435565298214, 35);
-            mockBoard.addRoad("blue", 181.86533479473212, 0, 121.2435565298214, 35);
+            mockBoard.canPlaceRoad("blue", 181.86533479473212, 0, 121.2435565298214, 35);
         }
         expect(roadOnExistingRoad).toThrow("Road already accupied");
 
         const roadNotConnected = () => {
+            mockBoard.canPlaceRoad("blue", 606.2177826491071, 315, 606.2177826491071, 245)
             mockBoard.addRoad("blue", 606.2177826491071, 315, 606.2177826491071, 245);
         }
         expect(roadNotConnected).toThrow("Cant place road here");
 
         const notBySamePlayer = () => {
+            mockBoard.canPlaceRoad("red", 242.48711305964284, 35, 181.86533479473212, 0);
             mockBoard.addRoad("red", 242.48711305964284, 35, 181.86533479473212, 0);
         }
         expect(notBySamePlayer).toThrow("Cant place road here");
