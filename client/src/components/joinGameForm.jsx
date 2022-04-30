@@ -1,11 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MainNav from "./navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrPlayer, resetCurrPlayer } from "../actions";
 import { NotificationManager } from 'react-notifications';
-
 
 function JoinGameForm({ gameSocketRef }) {
     const [userName, setUserName] = useState("");
@@ -30,14 +29,13 @@ function JoinGameForm({ gameSocketRef }) {
                 }
             })
             setUserName("");
-            
         }
-
     }
 
     const leaveQueue = () => {
-        gameSocketRef.current.emit("leaveQueue", { username: currUser });
         dispatch(resetCurrPlayer());
+        gameSocketRef.current.emit("leaveQueue", { username: currUser });
+        setUserName("");
     }
 
     if (!currUser) {
@@ -52,7 +50,6 @@ function JoinGameForm({ gameSocketRef }) {
                     </Form>
                 </Container>
             </div>
-
         )
     }
     if (isInGame) {

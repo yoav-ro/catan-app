@@ -105,7 +105,7 @@ class Board {
             throw "Junction is to close to another settelment";
         }
         if (!this.#isJunctionConnectedToPlayer(player, x, y) && shouldBeConnected) { //Check if the junction is connected to a road build by the same player
-            throw "Junction is not connected to any road build by player " + player;
+            throw "Junction is not connected to any road build by player " + player.color;
         }
         return true;
     }
@@ -126,10 +126,10 @@ class Board {
 
     #isJunctionConnectedToPlayer(player, x, y) {
         for (let road of this.roads) {
-            if (roundBySecondDec(road.startX) === roundBySecondDec(x) && roundBySecondDec(road.startY) === roundBySecondDec(y) && road.status === player) {
+            if (roundBySecondDec(road.startX) === roundBySecondDec(x) && roundBySecondDec(road.startY) === roundBySecondDec(y) && road.player === player) {
                 return true;
             }
-            if (roundBySecondDec(road.endX) === roundBySecondDec(x) && roundBySecondDec(road.endY) === roundBySecondDec(y) && road.status === player) {
+            if (roundBySecondDec(road.endX) === roundBySecondDec(x) && roundBySecondDec(road.endY) === roundBySecondDec(y) && road.player === player) {
                 return true;
             }
         }

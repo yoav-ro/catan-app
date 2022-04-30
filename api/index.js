@@ -77,6 +77,7 @@ io.sockets.on("connection", (socket) => {
     socket.on("leaveQueue", ({ username }) => {
         if (removeFromQueue(username)) {
             io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
+            console.log(playersQueue)
         }
     })
 
@@ -115,7 +116,6 @@ function findUserNameBySocketId(socketId) {
     })
     return ret;
 }
-
 
 function findGameBySocketId(socketId) {
     let ret;

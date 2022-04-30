@@ -48,9 +48,6 @@ class Player {
                 this.resources.splice(itemIndex, 1);
             });
         }
-        else {
-            throw "Player doenst have enough resources";
-        }
     }
 
     addPoints(pointsToAdd) {
@@ -110,7 +107,7 @@ class Player {
         if (this.settelmentsLeft < 0) {
             throw "5 settelments already built";
         }
-        if (!doesArrayContain(this.resources, buildingCosts.settelment) && !shouldTakeResources) {
+        if (!doesArrayContain(this.resources, buildingCosts.settelment) && shouldTakeResources) {
             throw "Not enough resources";
         }
         if (this.settelments.includes({ x: x, y: y })) {
@@ -131,7 +128,7 @@ class Player {
         if (this.roadsLeft < 0) {
             throw "15 roads already built";
         }
-        if (!doesArrayContain(this.resources, buildingCosts.road) && !shouldTakeResources) {
+        if (!doesArrayContain(this.resources, buildingCosts.road) && shouldTakeResources) {
             throw "Not enough resources";
         }
         if (this.roads.includes({ startX: startX, startY: startY, endX: endX, endY: endY })) {

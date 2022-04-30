@@ -11,11 +11,11 @@ function getDistance(x1, y1, x2, y2) {
 }
 
 function doesArrayContain(array, items) {
-    items.forEach(item => {
+    for (let item of items) {
         if (!array.includes(item)) {
             return false;
         }
-    });
+    }
     return true;
 }
 
@@ -31,7 +31,7 @@ function randomItemFromArray(array) {
     array[Math.floor(Math.random() * array.length)];
 }
 
-function roundBySecondDec(num){
+function roundBySecondDec(num) {
     return Math.round((num + Number.EPSILON) * 100) / 100;
 }
 
