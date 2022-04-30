@@ -81,13 +81,13 @@ class catanAPI extends Game {
             const itemToBuild = directiveObj.item.type;
             switch (itemToBuild) {
                 case pieceTypes.SETTELMENT:
-                    retMsg = this.buildSettelment(directiveObj.player, itemToBuild.x, itemToBuild.y, true);
+                    retMsg = this.buildSettelment(directiveObj.player, directiveObj.item.x, directiveObj.item.y, true);
                     break;
                 case pieceTypes.CITY:
-                    retMsg = this.buildCity(directiveObj.player, itemToBuild.x, itemToBuild.y, true);
+                    retMsg = this.buildCity(directiveObj.player, directiveObj.item.x, directiveObj.item.y, true);
                     break;
                 case pieceTypes.ROAD:
-                    const { startX, startY, endX, endY } = itemToBuild;
+                    const { startX, startY, endX, endY } = directiveObj.item;
                     retMsg = this.buildRoad(directiveObj.player, startX, startY, endX, endY, true);
                     break;
                 case pieceTypes.DEVCARD:
