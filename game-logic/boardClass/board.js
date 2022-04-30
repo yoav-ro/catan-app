@@ -104,7 +104,7 @@ class Board {
         if (!this.#isJunction2RoadsApart(x, y)) { //Check if the junction isnt too close to any other junctions
             throw "Junction is to close to another settelment";
         }
-        if (!this.#isJunctionConnectedToPlayer(player, x, y) && shouldBeConnected) { //Check if the junction is connected to a road build by the same player
+        if (!this.#isJunctionConnectedToPlayer(player.color, x, y) && shouldBeConnected) { //Check if the junction is connected to a road build by the same player
             throw "Junction is not connected to any road build by player " + player.color;
         }
         return true;
