@@ -8,7 +8,6 @@ function Chat({ gameData }) {
 
     if (isSetup) {
         const currTurn = gameData.setupOrder[0];
-        console.log(gameData.setupOrder);
         return (
             <div className="chat">
                 <Container>

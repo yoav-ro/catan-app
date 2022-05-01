@@ -20,7 +20,9 @@ function doesArrayContain(array, items) {
 }
 
 function dicesRoll() {
-    return Math.round(Math.random() * (6 - 1) + 1) + Math.round(Math.random() * (6 - 1) + 1)
+    const dice1 = Math.round(Math.random() * (6 - 1) + 1);
+    const dice2 = Math.round(Math.random() * (6 - 1) + 1);
+    return { dice1: dice1, dice2: dice2 };
 }
 
 function countItemsInArray(array, itemToCount) {

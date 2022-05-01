@@ -28,7 +28,6 @@ function App() {
     })
 
     socketRef.current.on("game-data", data => {
-      console.log("New game update")
       console.log(data)
       dispatch(setGameData(data));
     })

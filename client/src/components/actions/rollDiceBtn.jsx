@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
-import DiceRoller from "../modals/diceRoller";
 import { rollDiceDir } from "../../utils/directiveCreator";
 import { useSelector } from "react-redux";
 

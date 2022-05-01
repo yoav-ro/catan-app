@@ -41,3 +41,10 @@ export const resourcesArr = [
     resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
     resourcesTypes.DESERT,
 ]
+
+export const eventTypes = {
+    rollDice: "rollDice",
+    victory: "victory",
+    gameOver: "gameOver",
+    activateDevCard: "activateDevCard",
+}

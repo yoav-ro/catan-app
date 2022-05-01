@@ -26,7 +26,7 @@ class catanAPI extends Game {
 
     sendDirective(directiveObj) {
         const directiveMsg = this.#parseDirective(directiveObj);
-        console.log(this.directiveExpectation); 
+        console.log(this.directiveExpectation);
         return {
             gameData: this,
             message: directiveMsg,
@@ -67,9 +67,10 @@ class catanAPI extends Game {
     #parseDiceRoll(directiveObj) {
         try {
             this.lastRoll = this.rollDice();
-            this.giveResourcesByRoll(this.lastRoll);
+            const totalRoll=this.lastRoll.dice1 + this.lastRoll.dice2;
+            this.giveResourcesByRoll(totalRoll);
             this.#setDirectiveExpetation(directiveObj);
-            return `Player ${directiveObj.player} has rolled ${this.lastRoll}`;
+            return `Player ${directiveObj.player} has rolled ${totalRoll} (${this.lastRoll.dice1} + ${this.lastRoll.dice2})`;
         } catch (error) {
             return { error: error };
         }

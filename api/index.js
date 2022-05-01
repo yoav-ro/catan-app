@@ -5,6 +5,8 @@ const io = require("socket.io")(http);
 const { nanoid } = require("nanoid");
 const CatanGame = require("../game-logic/catanAPI/catanAPI");
 const cors = require("cors");
+const { eventDirectivesArr } = require("./constants");
+const { eventObjCreator } = require("./helperFunctions");
 
 require("dotenv").config();
 const port = process.env.PORT || 3001;
@@ -45,33 +47,38 @@ io.sockets.on("connection", (socket) => {
     })
 
     socket.on("newDirective", ({ directive }) => {
-        const game = findGameBySocketId(socket.id);
+        const fullGameData = findGameBySocketId(socket.id);
 
         console.log("new directive: " + directive.type);
         console.log(directive)
 
-        const directiveOutput = game.game.sendDirective(directive);
+        const directiveOutput = fullGameData.game.sendDirective(directive);
         const objToEmit = {
-            id: game.id,
+            id: fullGameData.id,
             game: directiveOutput.gameData,
             message: directiveOutput.message,
-            expectation: game.expectation,
-            players: game.players,
+            expectation: fullGameData.expectation,
+            players: fullGameData.players,
         }
 
-        if (game) {
+        if (fullGameData) {
             if (objToEmit.message.error) {
                 io.to(socket.id).emit("game-error", objToEmit.message.error)
             }
             else {
-                game.players.forEach(player => {
+                fullGameData.players.forEach(player => {
                     console.log(`sending to ${player.username}(${player.id})`)
                     io.to(player.id).emit("game-data", objToEmit);
                 });
+
+                if (eventDirectivesArr.includes(directive.type)) {
+                    const eventObj = eventObjCreator(directive.type, fullGameData.game);
+                    fullGameData.players.forEach(player => {
+                        io.to(player.id).emit("game-event", eventObj);
+                    });
+                }
             }
         }
-
-        emitToPlayers(io, game);
     })
 
     socket.on("leaveQueue", ({ username }) => {
