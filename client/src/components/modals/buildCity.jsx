@@ -9,7 +9,7 @@ function BuildCity({ show, handleClose, x, y, gameSocketRef }) {
     const players = gameData.game.game.players;
 
     const player = players.find(player => player.playerName.username === currPlayer);
-    const isSetup = player.settelments.length < 2;
+    const isSetup= gameData.game.game.isSetupPhase;
 
     const handleConfirm = () => {
         let directive;

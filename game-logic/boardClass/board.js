@@ -69,19 +69,27 @@ class Board {
     }
 
     //Validates junction input and adds it to the board if valid.
-    addJunction(player, x, y, type, shouldBeConnected) {
-        const settelment = {
-            type: pieceTypes.SETTELMENT,
+    addJunction(player, x, y, type) {
+        const newJunction = {
+            type: type,
             x: x,
             y: y,
             player: player,
         }
-        this.builtJunctions.push(settelment);
+        if (type === pieceTypes.CITY) {
+            for (let i = 0; i < this.builtJunctions.length; i++) {
+                if (this.builtJunctions[i].x === x && this.builtJunctions[i].y === y) {
+                    this.builtJunctions.splice(i, 1);
+                }
+            }
+        }
+        console.log("adding the city");
+        this.builtJunctions.push(newJunction);
         this.#calcLongestRoad();
     }
 
     //Validates if the settelment can be build
-    canPlaceSettelment(player, x, y, newPieceType, shouldBeConnected) {
+    canPlaceSettelmentOrCity(player, x, y, newPieceType, shouldBeConnected) {
         if (!this.doCoordinatesExist(x, y)) { //Checks if the coordinates are valid
             throw "Invalid junction coordinates";
         }
@@ -92,11 +100,8 @@ class Board {
                 throw "Junction is already a " + newPieceType;
             }
             if (newPieceType === pieceTypes.CITY) {
-                if (junctionStatus.player !== player) {
+                if (junctionStatus.player !== player.color) {
                     throw "Cant upgrade a settlement that doesnt belong to the player";
-                }
-                if (junctionStatus.type === pieceTypes.SETTELMENT) {
-                    throw "Cant change a city to a settelment";
                 }
             }
         }
@@ -115,7 +120,7 @@ class Board {
             let ret = true;
             for (let builtJunction of this.builtJunctions) {
                 const distanceFromNearest = Math.round(getDistance(builtJunction.x, builtJunction.y, x, y));
-                if (distanceFromNearest <= this.#tileRadius) {
+                if (distanceFromNearest <= this.#tileRadius && builtJunction.x !== x && builtJunction.y !== y) {
                     ret = false;
                 }
             }

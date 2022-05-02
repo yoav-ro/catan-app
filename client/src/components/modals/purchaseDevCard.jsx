@@ -9,16 +9,11 @@ function BuyDevCard({ show, handleClose, gameSocketRef }) {
     const players = gameData.game.game.players;
 
     const player = players.find(player => player.playerName.username === currPlayer);
-    const isSetup = player.settelments.length < 2;
 
     const handleConfirm = () => {
         const directive = buyDevCardDir(player.color);
         gameSocketRef.current.emit("newDirective", { directive: directive });
         handleClose();
-    }
-
-    if (isSetup) {
-        return <></>
     }
 
     return (
@@ -29,7 +24,7 @@ function BuyDevCard({ show, handleClose, gameSocketRef }) {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <div>You are about to purchese a new development card.</div>
+                        <div>You are about to purchase a new development card.</div>
                         <div>It will cost:</div>
                         <Row>
                             <Col>

@@ -24,7 +24,8 @@ function App() {
     })
 
     socketRef.current.on("game-error", data => {
-      NotificationManager.error(data);
+      console.log(data)
+      NotificationManager.error(data.toString());
     })
 
     socketRef.current.on("game-data", data => {

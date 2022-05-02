@@ -1,4 +1,4 @@
-const { buildingCosts, devCards, pieceTypes } = require("../utils/constants");
+const { buildingCosts, devCards, pieceTypes, resourcesTypes } = require("../utils/constants");
 const { doesArrayContain, countItemsInArray } = require("../utils/helperFunctions")
 
 class Player {
@@ -9,7 +9,14 @@ class Player {
         this.citiesLeft = 4;
         this.settelmentsLeft = 5;
         this.roadsLeft = 15;
-        this.resources = [];
+        // this.resources = [];
+        this.resources = [ //for easier testing
+            resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD,
+            resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
+            resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK,
+            resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON,
+            resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP,
+        ]
         this.settelments = [];
         this.cities = [];
         this.roads = [];
@@ -75,7 +82,7 @@ class Player {
                 this.settelmentsLeft++;
                 this.settelments.splice(i, 1);
                 this.removeResources(buildingCosts.city);
-                this.addPoints(2);
+                this.addPoints(1);
                 break;
             }
         }
@@ -139,6 +146,7 @@ class Player {
 
     buyDevCard(devCardObj) {
         this.devCards.push(devCardObj);
+        this.removeResources(buildingCosts.devCard);
         if (this.devCards.name === devCards.victoryPoint.name) {
             this.points++;
         }

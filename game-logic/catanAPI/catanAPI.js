@@ -3,15 +3,6 @@ const { pieceTypes, devCards } = require("../utils/constants");
 const { mixArray } = require("../utils/helperFunctions");
 const { directiveTypes } = require("./apiConstants");
 
-//todo:
-//set return messages - good
-//also return updated game data on every request - good
-//longest road 
-//largest army - good
-//ports - good
-//bank trade - good
-// handle victory
-
 class catanAPI extends Game {
     constructor(playersDataArr, tileRadius) {
         super(playersDataArr, tileRadius)
@@ -56,7 +47,7 @@ class catanAPI extends Game {
                     return this.#parseBuildSetup(directiveObj); //good
                 case directiveTypes.tradeWithPort:
                     return this.#parseTradeWithPort(directiveObj); //good
-                case directiveTypes.getDevCard:
+                case directiveTypes.buyDevCard:
                     return this.#parseGetDevCard(directiveObj);
                 default:
                     return { error: "Invalid directive type" };
@@ -88,6 +79,7 @@ class catanAPI extends Game {
                     break;
                 case pieceTypes.CITY:
                     retMsg = this.buildCity(directiveObj.player, directiveObj.item.x, directiveObj.item.y, true);
+                    console.log("city ret " + retMsg)
                     break;
                 case pieceTypes.ROAD:
                     const { startX, startY, endX, endY } = directiveObj.item;
@@ -109,7 +101,7 @@ class catanAPI extends Game {
     #parseGetDevCard(directiveObj) {
         try {
             const buyingPlayer = directiveObj.player;
-            return this.buildDevCard(buyingPlayer.color);
+            return this.buildDevCard(buyingPlayer);
         } catch (error) {
             return { error: error }
         }
@@ -324,35 +316,35 @@ class catanAPI extends Game {
     #setDirectiveExpetation(lastDirective) {
         const lastDirectiveType = lastDirective.type;
         this.directiveExpectation = [];
-        const { endTurn, robbPlayer, rollDice, build, activateDevCard, tradeReq, tradeRes, setupBuild } = directiveTypes;
+        const { endTurn, robbPlayer, rollDice, build, activateDevCard, tradeReq, tradeRes, setupBuild, buyDevCard } = directiveTypes;
         switch (lastDirectiveType) {
             case directiveTypes.endTurn:
                 this.directiveExpectation = [rollDice, activateDevCard];
                 break;
             case directiveTypes.rollDice:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
                 if (this.lastRoll === 7) {
                     this.directiveExpectation.push(robbPlayer);
                     this.isAwaitingRobb = true;
                 }
                 break;
             case directiveTypes.build:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
                 break;
             case directiveTypes.activateDevCard:
-                this.directiveExpectation = [endTurn, build, tradeReq];
+                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard];
                 if (this.isAwaitingRobb) {
                     this.directiveExpectation.push(robbPlayer);
                 }
                 break;
             case directiveTypes.tradeReq:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeRes];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeRes, buyDevCard];
                 break;
             case directiveTypes.tradeRes:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
                 break;
             case directiveTypes.robbPlayer:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
                 break;
             case directiveTypes.setupBuild:
                 if (this.isSetupPhase) {
@@ -367,7 +359,7 @@ class catanAPI extends Game {
                     }
                 }
                 else {
-                    this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard];
+                    this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard, buyDevCard];
                 }
                 break;
         }

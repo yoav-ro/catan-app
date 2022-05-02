@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Modal, Button } from "react-bootstrap";
 
-function DiceRoller({ dice1, dice2, rollerName, rollerColor }) {
+function DiceRoller({ event }) {
+    const { dice1, dice2, rollerColor, rollerName } = event;
+
     const [show, setShow] = useState(true);
     const handleClose = () => setShow(false);
+    setTimeout(() => {
+        setShow(false);
+    }, 2000);
+    // popCallBack();
 
     return (
         <div>

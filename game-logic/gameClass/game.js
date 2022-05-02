@@ -210,7 +210,7 @@ class Game {
 
     buildSettelment(playerColor, x, y, shouldTakeResources, shouldBeConnected) {
         const player = this.#getPlayerByColor(playerColor);
-        if (player.canBuildSettlement(x, y, shouldTakeResources) && this.board.canPlaceSettelment(player, x, y, pieceTypes.SETTELMENT, shouldTakeResources)) {
+        if (player.canBuildSettlement(x, y, shouldTakeResources) && this.board.canPlaceSettelmentOrCity(player, x, y, pieceTypes.SETTELMENT, shouldTakeResources)) {
             player.buildSettelment(x, y, shouldTakeResources);
             this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT, shouldBeConnected);
             const longestRoadMsg = this.#setLongestRoadPlayer();
@@ -220,7 +220,7 @@ class Game {
 
     buildCity(playerColor, x, y) {
         const player = this.#getPlayerByColor(playerColor);
-        if (player.canBuildCity(x, y) && this.board.addJunction(playerColor, x, y, pieceTypes.CITY, true)) {
+        if (player.canBuildCity(x, y) && this.board.canPlaceSettelmentOrCity(player, x, y, pieceTypes.CITY, true)) {
             player.buildCity(x, y);
             this.board.addJunction(playerColor, x, y, pieceTypes.CITY, true);
             return `Player ${playerColor} built a city`;
