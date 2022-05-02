@@ -75,3 +75,10 @@ export function rollDiceDir(player) {
         player: player,
     }
 }
+
+export function buyDevCardDir(player) {
+    return {
+        type: "buyDevCard",
+        player: "blue",
+    }
+}

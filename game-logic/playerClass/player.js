@@ -138,15 +138,13 @@ class Player {
     }
 
     buyDevCard(devCardObj) {
-        if (this.#canBuyDevCard()) {
-            this.devCards.push(devCardObj);
-            if (this.devCards.name === devCards.victoryPoint.name) {
-                this.points++;
-            }
+        this.devCards.push(devCardObj);
+        if (this.devCards.name === devCards.victoryPoint.name) {
+            this.points++;
         }
     }
 
-    #canBuyDevCard() {
+    canBuyDevCard() {
         if (!doesArrayContain(this.resources, buildingCosts.devCard)) {
             throw "Not enough resources";
         }

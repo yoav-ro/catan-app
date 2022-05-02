@@ -56,6 +56,20 @@ examples:
     }
 }
 ----------------------------------------------------------
+{
+    type: "buyDevCard"
+    action: adds a new dev card to a player
+    condition: after rollDice
+    expectation: any but dice roll and trade response
+}
+
+{
+    type: "buyDevCard",
+    player: "blue",
+}
+
+
+----------------------------------------------------------
 
 {
     type: "activateDevCard"

@@ -1,5 +1,5 @@
 const { dicesRoll, mixArray, randomItemFromArray, doesArrayContain, roundBySecondDec } = require("../utils/helperFunctions");
-const { pieceTypes, resourcesTypes, devCardsArr, playerColors, devCards, ports } = require("../utils/constants");
+const { pieceTypes, resourcesTypes, devCardsArr, playerColors, devCards, ports, buildingCosts } = require("../utils/constants");
 const Player = require("../playerClass/player");
 const Board = require("../boardClass/board");
 
@@ -238,10 +238,23 @@ class Game {
     }
 
     buildDevCard(playerColor) {
-        const card = this.devCards.pop();
+        if (this.devCards.length > 0) {
+            const card = this.devCards.pop();
+            const player = this.#getPlayerByColor(playerColor);
+            player.buyDevCard(card);
+            return `Player ${playerColor} purchesed a development card`;
+        }
+        throw "No development cards left";
+    }
+
+    canBuildDevCard(playerColor) {
         const player = this.#getPlayerByColor(playerColor);
-        player.buyDevCard(card);
-        return `Player ${playerColor} purchesed a development card`;
+        if (this.devCards.length === 0) {
+            throw "All development cards used";
+        }
+        if (player.canBuyDevCard()) {
+            return true;
+        }
     }
 
     executeTrade(playerAColor, playerBColor, resPlayerA, resPlayerB) {

@@ -56,6 +56,8 @@ class catanAPI extends Game {
                     return this.#parseBuildSetup(directiveObj); //good
                 case directiveTypes.tradeWithPort:
                     return this.#parseTradeWithPort(directiveObj); //good
+                case directiveTypes.getDevCard:
+                    return this.#parseGetDevCard(directiveObj);
                 default:
                     return { error: "Invalid directive type" };
             }
@@ -67,7 +69,7 @@ class catanAPI extends Game {
     #parseDiceRoll(directiveObj) {
         try {
             this.lastRoll = this.rollDice();
-            const totalRoll=this.lastRoll.dice1 + this.lastRoll.dice2;
+            const totalRoll = this.lastRoll.dice1 + this.lastRoll.dice2;
             this.giveResourcesByRoll(totalRoll);
             this.#setDirectiveExpetation(directiveObj);
             return `Player ${directiveObj.player} has rolled ${totalRoll} (${this.lastRoll.dice1} + ${this.lastRoll.dice2})`;
@@ -101,6 +103,15 @@ class catanAPI extends Game {
             return retMsg;
         } catch (error) {
             return { error: error };
+        }
+    }
+
+    #parseGetDevCard(directiveObj) {
+        try {
+            const buyingPlayer = directiveObj.player;
+            return this.buildDevCard(buyingPlayer.color);
+        } catch (error) {
+            return { error: error }
         }
     }
 
