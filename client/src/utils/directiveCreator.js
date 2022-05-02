@@ -22,6 +22,18 @@ export function setupBuildSettelmetDir(x, y, player) {
     }
 }
 
+export function buildCityDir(x, y, player) {
+    return {
+        type: "build",
+        player: player,
+        item: {
+            type: "city",
+            x: x,
+            y: y,
+        }
+    }
+}
+
 export function buildRoadDir(x1, y1, x2, y2, player) {
     return {
         type: "build",

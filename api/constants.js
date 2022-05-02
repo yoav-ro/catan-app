@@ -3,6 +3,7 @@ const eventTypes = {
     victory: "victory",
     gameOver: "gameOver",
     activateDevCard: "activateDevCard",
+    rolledSeven: "rolledSeven",
 }
 
 const directiveTypes = {
