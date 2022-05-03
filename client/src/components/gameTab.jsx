@@ -21,10 +21,10 @@ function GameTab({ gameSocketRef }) {
         return (
             <div>
                 <MainNav />
-                <Opponents playersData={mockPlayers} />
+                <Opponents playersData={mockPlayers} gameData={gameData.game.game} />
                 <Chat gameData={gameData.game.game} />
                 <HexagonBoard boardData={gameData.game.game.board} gameSocketRef={gameSocketRef} />
-                <PlayerDeck playerData={players[currPlayerIndex]} gameSocketRef={gameSocketRef} />
+                <PlayerDeck playerData={players[currPlayerIndex]} gameData={gameData.game.game} gameSocketRef={gameSocketRef} />
                 <MainEventComp gameSocketRef={gameSocketRef} />
             </div>
         )

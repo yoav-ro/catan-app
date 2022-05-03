@@ -2,12 +2,13 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { resourcesTypes } from "../utils/constants";
 import ActionsDeck from "./actionsTab";
+import LongestRoadIcon from "./icons/longestRoadIcon";
+import LargestArmyIcon from "./icons/largestArmyIcon";
 import "./styles/playerDeck.css";
 
-function PlayerDeck({ playerData, gameSocketRef }) {
+function PlayerDeck({ playerData, gameData, gameSocketRef }) {
     const playerName = playerData.playerName.username;
     const { color, points, resources, devCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = playerData;
-
     const woodCount = resources.filter(item => item === resourcesTypes.WOOD.name).length;
     const sheepCount = resources.filter(item => item === resourcesTypes.SHEEP.name).length;
     const ironCount = resources.filter(item => item === resourcesTypes.IRON.name).length;
@@ -25,7 +26,6 @@ function PlayerDeck({ playerData, gameSocketRef }) {
     const activeMonopolyCards = monopolyCards.filter(item => item.isUsed === true).length;
     const activeYearOfPlentyCards = yearOfPlentyCards.filter(item => item.isUsed === true).length;
     const activeVictoryPointCards = victoryPointCards.filter(item => item.isUsed === true).length;
-
     return (
         <div className="playerDeck">
             <Container style={{ marginBottom: "10px" }}>
@@ -35,6 +35,8 @@ function PlayerDeck({ playerData, gameSocketRef }) {
                     </Col>
                     <Col>
                         <h3 className="playerHeader" style={{ color: color, float: "right" }}>Points: {points}</h3>
+                        <LongestRoadIcon playerColor={color} longestRoadPlayer={gameData.longestRoadPlayer} />
+                        <LargestArmyIcon playerColor={color} lasrgestArmyPlayer={gameData.lasrgestArmyPlayer} />
                     </Col>
                 </Row>
                 <Row>

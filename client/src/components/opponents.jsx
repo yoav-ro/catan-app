@@ -1,9 +1,10 @@
 import React from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
-import { resourcesTypes } from "../utils/constants";
+import { Col, Container, Row } from "react-bootstrap";
+import LargestArmyIcon from "./icons/largestArmyIcon";
+import LongestRoadIcon from "./icons/longestRoadIcon";
 import "./styles/playerDeck.css";
 
-function Opponents({ playersData }) {
+function Opponents({ playersData, gameData }) {
     return (
         <div className="opponentsTab">
             <Container>
@@ -20,9 +21,18 @@ function Opponents({ playersData }) {
                     const monopolyCards = usedDevCards.filter(item => item.name === "Monopoly");
                     const yearOfPlentyCards = usedDevCards.filter(item => item.name === "Year of Plenty");
                     const victoryPointCards = usedDevCards.filter(item => item.name === "Victory Point");
+
                     return (
                         <Row key={key} className="opponent">
-                            <h4 className="playerHeader" style={{ color: color }}>{playerName} ({color})</h4>
+                            <Row>
+                                <Col>
+                                    <h4 className="playerHeader" style={{ color: color }}>{playerName} ({color})</h4>
+                                </Col>
+                                <Col>
+                                    <LongestRoadIcon playerColor={color} longestRoadPlayer={gameData.longestRoadPlayer} />
+                                    <LargestArmyIcon playerColor={color} lasrgestArmyPlayer={gameData.lasrgestArmyPlayer} />
+                                </Col>
+                            </Row>
                             <div>Resources: {resources.length}</div>
                             <div>Unused development cards: {devCards.length - usedDevCards.length}</div>
                             <div>Development cards:</div>
