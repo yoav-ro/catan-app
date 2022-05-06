@@ -17,9 +17,9 @@ function UseMonopoly({ show, handleClose, gameSocketRef }) {
     const handleConfirm = () => {
         if (!resource) {
             NotificationManager.error("No resource selected!")
+            return;
         }
         const directive = activateMonopolyDir(player.color, resource);
-        console.log(directive)
         gameSocketRef.current.emit("newDirective", { directive: directive });
         handleClose();
     }

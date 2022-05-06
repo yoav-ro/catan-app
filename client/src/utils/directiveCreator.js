@@ -94,7 +94,7 @@ export function activateMonopolyDir(player, resource) {
     }
 }
 
-export function useYoPDir(player, resourceA, resourceB) {
+export function activateYoPDir(player, resourceA, resourceB) {
     return {
         type: "activateDevCard",
         player: player,
