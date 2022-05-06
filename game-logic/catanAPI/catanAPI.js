@@ -79,7 +79,6 @@ class catanAPI extends Game {
                     break;
                 case pieceTypes.CITY:
                     retMsg = this.buildCity(directiveObj.player, directiveObj.item.x, directiveObj.item.y, true);
-                    console.log("city ret " + retMsg)
                     break;
                 case pieceTypes.ROAD:
                     const { startX, startY, endX, endY } = directiveObj.item;

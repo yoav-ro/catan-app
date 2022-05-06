@@ -92,7 +92,7 @@ examples:
     type "activateDevCard",
     player: "blue",
     card: {
-        type: "monopolty",
+        type: "monopoly",
         resource: "wood",
     }
 }
@@ -102,7 +102,7 @@ examples:
     card: {
         type: "yearOfPlenty",
         resourceA: "iron",
-        newRobberY: "sheep",
+        resourceB: "sheep",
     }
 }
 {

@@ -83,7 +83,6 @@ class Board {
                 }
             }
         }
-        console.log("adding the city");
         this.builtJunctions.push(newJunction);
         this.#calcLongestRoad();
     }

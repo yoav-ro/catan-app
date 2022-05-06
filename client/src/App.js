@@ -9,6 +9,7 @@ import { setGameData } from "./actions";
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 import 'react-notifications/lib/notifications.css';
+import UseMonopoly from './components/modals/useMonopoly';
 //http://localhost:3008
 
 function App() {
@@ -33,6 +34,10 @@ function App() {
       dispatch(setGameData(data));
     })
   }, [])
+
+  const [show, setShow] = useState(true);
+
+  const handleClose = () => setShow(false);
 
   return (
     <div>

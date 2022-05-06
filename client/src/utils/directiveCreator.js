@@ -82,3 +82,26 @@ export function buyDevCardDir(player) {
         player: player,
     }
 }
+
+export function activateMonopolyDir(player, resource) {
+    return {
+        type: "activateDevCard",
+        player: player,
+        card: {
+            type: "monopoly",
+            resource: resource,
+        }
+    }
+}
+
+export function useYoPDir(player, resourceA, resourceB) {
+    return {
+        type: "activateDevCard",
+        player: player,
+        card: {
+            type: "yearOfPlenty",
+            resourceA: resourceA,
+            resourceB: resourceB,
+        }
+    }
+}
