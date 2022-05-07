@@ -3,6 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import RollDiceBtn from "./actions/rollDiceBtn";
 import EndTurnBtn from "./actions/endTurnBtn";
 import BuyDevCardBtn from "./actions/getDevCardBtn";
+import DevCardMenuBtn from "./actions/devCardMenuBtn";
 
 function ActionsDeck({ gameSocketRef }) {
 
@@ -14,7 +15,7 @@ function ActionsDeck({ gameSocketRef }) {
             <Row>
                 <Col>
                     <RollDiceBtn gameSocketRef={gameSocketRef} />
-                    <div>Activate dev card</div>
+                    <DevCardMenuBtn gameSocketRef={gameSocketRef} />
                     <div>Offer a trade</div>
                     <EndTurnBtn gameSocketRef={gameSocketRef} />
                 </Col>

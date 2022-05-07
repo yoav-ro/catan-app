@@ -8,7 +8,6 @@ function BuildRoad({ show, handleClose, x1, y1, x2, y2, gameSocketRef }) {
     const gameData = useSelector(state => state.gameReducer);
     const players = gameData.game.game.players;
 
-
     const player = players.find(player => player.playerName.username === currPlayer);
     const isSetup = player.roads.length < 2;
 

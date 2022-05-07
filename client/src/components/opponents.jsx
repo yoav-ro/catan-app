@@ -30,7 +30,7 @@ function Opponents({ playersData, gameData }) {
                                 </Col>
                                 <Col>
                                     <LongestRoadIcon playerColor={color} longestRoadPlayer={gameData.longestRoadPlayer} />
-                                    <LargestArmyIcon playerColor={color} lasrgestArmyPlayer={gameData.lasrgestArmyPlayer} />
+                                    <LargestArmyIcon playerColor={color} largestArmyPlayer={gameData.lasrgestArmyPlayer} />
                                 </Col>
                             </Row>
                             <div>Resources: {resources.length}</div>

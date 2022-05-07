@@ -36,7 +36,7 @@ function PlayerDeck({ playerData, gameData, gameSocketRef }) {
                     <Col>
                         <h3 className="playerHeader" style={{ color: color, float: "right" }}>Points: {points}</h3>
                         <LongestRoadIcon playerColor={color} longestRoadPlayer={gameData.longestRoadPlayer} />
-                        <LargestArmyIcon playerColor={color} lasrgestArmyPlayer={gameData.lasrgestArmyPlayer} />
+                        <LargestArmyIcon playerColor={color} largestArmyPlayer={gameData.lasrgestArmyPlayer} />
                     </Col>
                 </Row>
                 <Row>
