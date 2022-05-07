@@ -17,9 +17,7 @@ class Board {
     //Returns the status of the requested junction, if exists.
     getJunctionStatus(x, y) {
         if (this.doCoordinatesExist(x, y)) {
-            const junctionItem = this.builtJunctions.find(junction =>
-                (roundBySecondDec(junction.x) === roundBySecondDec(x) && roundBySecondDec(junction.y) === roundBySecondDec(y))
-            )
+            const junctionItem = this.builtJunctions.find(junction => this.#compareJunctions(junction.x, junction.y, x, y))
             return junctionItem ? { type: junctionItem.type, player: junctionItem.player } : "free";
         }
         else {
@@ -119,7 +117,7 @@ class Board {
             let ret = true;
             for (let builtJunction of this.builtJunctions) {
                 const distanceFromNearest = Math.round(getDistance(builtJunction.x, builtJunction.y, x, y));
-                if (distanceFromNearest <= this.#tileRadius && builtJunction.x !== x && builtJunction.y !== y) {
+                if (distanceFromNearest <= this.#tileRadius && !this.#compareJunctions(builtJunction.x, builtJunction.y, x, y)) {
                     ret = false;
                 }
             }
@@ -277,6 +275,10 @@ class Board {
         return true;
     }
 
+    #compareJunctions(j1x, j1y, j2x, j2y) {
+        return ((roundBySecondDec(j1x) === roundBySecondDec(j2x)) && (roundBySecondDec(j1y) === roundBySecondDec(j2y)));
+    }
+
     getPortsByType(boardType) {
         const portsByType = [];
         this.portsData.forEach(port => {
@@ -290,7 +292,7 @@ class Board {
     doCoordinatesExist(x, y) {
         for (let tile of this.tiles) {
             for (let coord in tile.coordinates) {
-                if (roundBySecondDec(tile.coordinates[coord].x) === roundBySecondDec(x) && roundBySecondDec(tile.coordinates[coord].y) === roundBySecondDec(y)) {
+                if (this.#compareJunctions(tile.coordinates[coord].x, tile.coordinates[coord].y, x, y)) {
                     return true;
                 }
             }
