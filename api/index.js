@@ -24,7 +24,7 @@ io.sockets.on("connection", (socket) => {
     console.log(`Connection with id ${socket.id}`);
     const gamePlayerCap = 4;
 
-    socket.on("joinGame", ({ username }) => {
+    socket.on("joinGame", async ({ username }) => {
         if (playersQueue.some((player) => player.username === username)) {
             io.to(socket.id).emit("lobby", "User name already taken");
         }
@@ -40,9 +40,14 @@ io.sockets.on("connection", (socket) => {
 
         if (playersQueue.length === gamePlayerCap) {
             const gameObj = gameCreator(playersQueue);
+            const gameId = gameObj.id;
+            const connectedSockets= await io.fetchSockets();
+            for (let connectedSocket of connectedSockets) {
+                connectedSocket.join(gameId);
+            }
             playersQueue.length = 0;
             games.push(gameObj);
-            emitToPlayers(io, gameObj);
+            io.to(gameId).emit("game-data", gameObj);
         }
     })
 
@@ -67,16 +72,11 @@ io.sockets.on("connection", (socket) => {
                 io.to(socket.id).emit("game-error", objToEmit.message.error)
             }
             else {
-                fullGameData.players.forEach(player => {
-                    console.log(`sending to ${player.username}(${player.id})`)
-                    io.to(player.id).emit("game-data", objToEmit);
-                });
+                io.to(fullGameData.id).emit("game-data", objToEmit);
 
                 if (eventDirectivesArr.includes(directive.type)) {
                     const eventObj = eventObjCreator(directive.type, fullGameData.game);
-                    fullGameData.players.forEach(player => {
-                        io.to(player.id).emit("game-event", eventObj);
-                    });
+                    io.to(fullGameData.id).emit("game-event", eventObj);
                 }
             }
         }
@@ -106,13 +106,6 @@ function removeFromQueue(userName) {
         return true;
     }
     return false;
-}
-
-function emitToPlayers(io, game) {
-    game.players.forEach(player => {
-        console.log(`sending to ${player.name}(${player.id})`)
-        io.to(player.id).emit("game-data", game);
-    });
 }
 
 function findUserNameBySocketId(socketId) {
