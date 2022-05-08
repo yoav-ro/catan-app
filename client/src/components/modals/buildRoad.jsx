@@ -19,7 +19,6 @@ function BuildRoad({ show, handleClose, x1, y1, x2, y2, gameSocketRef }) {
         else {
             directive = buildRoadDir(x1 - 30, y1 - 30, x2 - 30, y2 - 30, player.color);
         }
-        console.log(gameSocketRef)
         gameSocketRef.current.emit("newDirective", { directive: directive });
         handleClose();
     }
