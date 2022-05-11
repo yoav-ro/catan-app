@@ -41,7 +41,7 @@ io.sockets.on("connection", (socket) => {
         if (playersQueue.length === gamePlayerCap) {
             const gameObj = gameCreator(playersQueue);
             const gameId = gameObj.id;
-            const connectedSockets= await io.fetchSockets();
+            const connectedSockets = await io.fetchSockets();
             for (let connectedSocket of connectedSockets) {
                 connectedSocket.join(gameId);
             }
@@ -68,6 +68,7 @@ io.sockets.on("connection", (socket) => {
 
         if (fullGameData) {
             if (objToEmit.message.error) {
+                console.log(objToEmit.message.error);
                 io.to(socket.id).emit("game-error", objToEmit.message.error)
             }
             else {

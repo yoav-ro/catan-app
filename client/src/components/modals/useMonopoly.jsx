@@ -13,7 +13,7 @@ function UseMonopoly({ show, handleClose, gameSocketRef }) {
 
     const player = players.find(player => player.playerName.username === currPlayer);
     const isSetup = gameData.game.game.isSetupPhase;
-    
+
     const handleConfirm = () => {
         if (!resource) {
             NotificationManager.error("No resource selected!")

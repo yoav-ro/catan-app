@@ -88,7 +88,7 @@ export function activateMonopolyDir(player, resource) {
         type: "activateDevCard",
         player: player,
         card: {
-            type: "monopoly",
+            type: "Monopoly",
             resource: resource,
         }
     }
@@ -99,7 +99,7 @@ export function activateYoPDir(player, resourceA, resourceB) {
         type: "activateDevCard",
         player: player,
         card: {
-            type: "yearOfPlenty",
+            type: "Year of Plenty",
             resourceA: resourceA,
             resourceB: resourceB,
         }

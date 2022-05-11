@@ -5,7 +5,7 @@ import { activateYoPDir } from "../../utils/directiveCreator";
 import { NotificationManager } from "react-notifications";
 import { resourcesTypes } from "../../utils/constants";
 
-function UseYoF({ show, handleClose, gameSocketRef }) {
+function UseYoP({ show, handleClose, gameSocketRef }) {
     const [resourceA, setResourceA] = useState("");
     const [resourceB, setResourceB] = useState("");
     const currPlayer = useSelector(state => state.playerReducer);
@@ -106,4 +106,4 @@ function UseYoF({ show, handleClose, gameSocketRef }) {
         </div >
     );
 }
-export default UseYoF;
+export default UseYoP;

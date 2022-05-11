@@ -30,7 +30,9 @@ class Game {
 
     activateMonopoly(playerColor, resourceType) {
         const resourceToAdd = [];
-        playerColors.forEach(player => {
+        const activatingPlayer = this.#getPlayerByColor(playerColor);
+        activatingPlayer.validateDevCard(devCards.monopoly.name);
+        this.players.forEach(player => {
             if (player.color !== player) {
                 const resCount = player.countResources(resourceType);
                 const resourcesToRemove = Array(resCount).fill(resourceType);
@@ -45,18 +47,20 @@ class Game {
 
     activateRoadBuilding(playerColor, road1StartX, road1StartY, road1EndX, road1EndY, road2StartX, road2StartY, road2EndX, road2EndY) {
         const player = this.#getPlayerByColor(playerColor);
+        player.validateDevCard(devCards.roadBuilding.name);
         player.buildRoad(road1StartX, road1StartY, road1EndX, road1EndY, false);
         player.buildRoad(road2StartX, road2StartY, road2EndX, road2EndY, false);
         this.board.addRoad(playerColor, road1StartX, road1StartY, road1EndX, road1EndY);
         this.board.addRoad(playerColor, road2StartX, road2StartY, road2EndX, road2EndY);
-        player.activateDevCard(devCards.monopoly.name);
+        player.activateDevCard(devCards.roadBuilding.name);
         return `Road building was used by player ${playerColor}`;
     }
 
     activateYearOfPlenty(playerColor, resourceA, resourceB) {
         const player = this.#getPlayerByColor(playerColor);
-        player.addResources([resourceA, resourceB]);
+        player.validateDevCard(devCards.yearOfPlenty.name);
         player.activateDevCard(devCards.yearOfPlenty.name);
+        player.addResources([resourceA, resourceB]);
         return `Year of plenty was used by player ${playerColor}`;
     }
 
@@ -172,13 +176,13 @@ class Game {
                 }
             });
         }
-        else {
-            for (let i = 0; i < this.players.length; i++) {
-                if (this.players[i].resources.length > 7) {
-                    this.droppingPlayers.push(this.players[i]);
-                }
-            }
-        }
+        // else {
+        //     for (let i = 0; i < this.players.length; i++) {
+        //         if (this.players[i].resources.length > 7) {
+        //             this.droppingPlayers.push(this.players[i]);
+        //         }
+        //     }
+        // }
     }
 
     dropResources(playerColor, resourcesToDrop) {
@@ -262,10 +266,12 @@ class Game {
 
     buildDevCard(playerColor) {
         if (this.devCards.length > 0) {
-            const card = this.devCards.pop();
-            const player = this.#getPlayerByColor(playerColor);
-            player.buyDevCard(card);
-            return `Player ${playerColor} purchesed a development card`;
+            if (this.canBuildDevCard(playerColor)) {
+                const card = this.devCards.pop();
+                const player = this.#getPlayerByColor(playerColor);
+                player.buyDevCard(card);
+                return `Player ${playerColor} purchesed a development card`;
+            }
         }
         throw "No development cards left";
     }
@@ -278,6 +284,11 @@ class Game {
         if (player.canBuyDevCard()) {
             return true;
         }
+    }
+
+    makeDevCardUseAble(playerColor) {
+        const player = this.#getPlayerByColor(playerColor);
+        player.makeDevCardUseAble();
     }
 
     executeTrade(playerAColor, playerBColor, resPlayerA, resPlayerB) {

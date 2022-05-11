@@ -28,24 +28,49 @@ class Player {
         this.resources = this.resources.concat(resourcesToAddArr);
     }
 
-    activateDevCard(devCardType) {
+    validateDevCard(devCardType) {
         let doesPlayerHaveCard = false;
-        this.devCards.forEach(devCard => {
-            if (devCard.name === devCardType && !devCard.isUsed) {
+        let doesPlayerHaveUnusedCard = false;
+        let isCardUseAble = false;
+        for (let card of this.devCards) {
+            if (card.name === devCardType) {
                 doesPlayerHaveCard = true;
-                devCard.isUsed = true;
+                if (!card.isUsed) {
+                    doesPlayerHaveUnusedCard = true;
+                }
+                if (!card.isCardUseAble) {
+                    isCardUseAble = true;
+                }
             }
-            else {
-                throw "Development card already used"
-            }
-        })
+        }
+
         if (!doesPlayerHaveCard) {
-            throw "Player doesnt have this card (" + devCardType + ")"
+            throw "Player doesnt have this card (" + devCardType + ")";
+        }
+        if (!doesPlayerHaveUnusedCard) {
+            throw "Development card already used";
+        }
+        if (!isCardUseAble) {
+            throw "Cant use this card yet";
+        }
+    }
+
+    activateDevCard(devCardType) {
+        console.log(devCardType, this.devCards)
+        const card = this.devCards.find(card => card.name === devCardType);
+        if (!card.isUsed) {
+            card.isUsed = true;
         }
     }
 
     countResources(resourceType) {
         return countItemsInArray(this.resources, resourceType);
+    }
+
+    makeDevCardUseAble() {
+        this.devCards.forEach(card => {
+            card.isUseAble = true;
+        })
     }
 
     removeResources(resourcesToRemoveArr) {

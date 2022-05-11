@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Button, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import UseMonopoly from "./useMonopoly";
+import UseYoP from "./useYoP";
 
 function UseDevCardMenu({ show, handleClose, gameSocketRef }) {
+    const [showYoP, setShowYoP] = useState(false);
+    const [showMonopoly, setShowMonopoly] = useState(false);
     const currPlayer = useSelector(state => state.playerReducer);
     const gameData = useSelector(state => state.gameReducer);
+    const didDiceRoll = !gameData.game.game.directiveExpectation.includes("rollDice");
     const players = gameData.game.game.players;
 
     const player = players.find(player => player.playerName.username === currPlayer);
-    const doesHaveMonopoly = player.devCards.some(card => card.name === "Monopoly" && !card.isUsed)
-    const doesHaveKnight = player.devCards.some(card => card.name === "Knight" && !card.isUsed)
-    const doesHaveRoadBuilding = player.devCards.some(card => card.name === "Road Building" && !card.isUsed)
-    const doesHaveYoP = player.devCards.some(card => card.name === "Year of Plenty" && !card.isUsed)
+    const canUseMonopoly = player.devCards.some(card => card.name === "Monopoly" && !card.isUsed && card.isUseAble && didDiceRoll);
+    const canUseKnight = player.devCards.some(card => card.name === "Knight" && !card.isUsed && card.isUseAble);
+    const canUseRoadBuilding = player.devCards.some(card => card.name === "Road Building" && !card.isUsed && card.isUseAble && didDiceRoll);
+    const canUseYoP = player.devCards.some(card => card.name === "Year of Plenty" && !card.isUsed && card.isUseAble && didDiceRoll);
+
+    const handleCloseMonopoly = () => {
+        setShowMonopoly(false);
+    }
+    const handleCloseYoP = () => {
+        setShowYoP(false);
+    }
 
     const monopolyClick = () => {
-
+        handleClose();
+        setShowMonopoly(true);
     }
 
     const yopClick = () => {
-
+        handleClose();
+        setShowYoP(true);
     }
 
     const knightClick = () => {
@@ -32,26 +46,28 @@ function UseDevCardMenu({ show, handleClose, gameSocketRef }) {
     return (
         <div>
             <Modal show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Use a development card</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Container>
-                            <div>Choose a development card to use:</div>
-                            <Row>
-                                <Button onClick={knightClick} disabled={!doesHaveKnight}>Knight</Button>
-                                <Button onClick={monopolyClick} disabled={!doesHaveMonopoly}>Monopoly</Button>
-                                <Button onClick={yopClick} disabled={!doesHaveYoP}>Year of Plenty</Button>
-                                <Button onClick={roadBuildingClick} disabled={!doesHaveRoadBuilding}>Road Building</Button>
-                            </Row>
-                        </Container>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                            Close
-                        </Button>
-                    </Modal.Footer>
+                <Modal.Header closeButton>
+                    <Modal.Title>Use a development card</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Container>
+                        <div>Choose a development card to use:</div>
+                        <Row>
+                            <Button onClick={knightClick} disabled={!canUseKnight}>Knight</Button>
+                            <Button onClick={monopolyClick} disabled={!canUseMonopoly}>Monopoly</Button>
+                            <Button onClick={yopClick} disabled={!canUseYoP}>Year of Plenty</Button>
+                            <Button onClick={roadBuildingClick} disabled={!canUseRoadBuilding}>Road Building</Button>
+                        </Row>
+                    </Container>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
             </Modal>
+            <UseMonopoly show={showMonopoly} handleClose={handleCloseMonopoly} gameSocketRef={gameSocketRef} />
+            <UseYoP show={showYoP} handleClose={handleCloseYoP} gameSocketRef={gameSocketRef} />
         </div>
     );
 }
