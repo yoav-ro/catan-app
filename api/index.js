@@ -58,7 +58,6 @@ io.sockets.on("connection", (socket) => {
         console.log(directive)
 
         const directiveOutput = fullGameData.game.sendDirective(directive);
-        console.log(directiveOutput);
         const objToEmit = {
             id: fullGameData.id,
             game: directiveOutput.gameData,

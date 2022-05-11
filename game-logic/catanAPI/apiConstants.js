@@ -9,6 +9,7 @@ const directiveTypes = {
     setupBuild: "setupBuild",
     tradeWithPort: "tradeWithPort",
     buyDevCard: "buyDevCard",
+    dropResources: "dropResources",
 }
 
 

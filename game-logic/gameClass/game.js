@@ -13,6 +13,7 @@ class Game {
             new Player(playersDataArr[3].name, playersDataArr[3].color)];
         this.devCards = mixArray(devCardsArr);
         this.initPickOrder = mixArray(playerColors);
+        this.droppingPlayers = [];
         this.largestArmyPlayer = undefined;
         this.longestRoadPlayer = undefined;
     }
@@ -171,6 +172,28 @@ class Game {
                 }
             });
         }
+        else {
+            for (let i = 0; i < this.players.length; i++) {
+                if (this.players[i].resources.length > 7) {
+                    this.droppingPlayers.push(this.players[i]);
+                }
+            }
+        }
+    }
+
+    dropResources(playerColor, resourcesToDrop) {
+        const player = this.#getPlayerByColor(playerColor);
+        if (!doesArrayContain(player.resources, resourcesToDrop)) {
+            throw `Drop declined. Player ${playerColor} doesnt have the required resources.`;
+        }
+        const requiredDropCount = player.resources.length % 2 > 0 ? (player.resources.length / 2) - 0.5 : player.resources.length / 2;
+        if (resourcesToDrop.length !== requiredDropCount) {
+            throw `Drop declined. Player ${playerColor} should drop exactly ${requiredDropCount} resources.`;
+        }
+        player.removeResources(resourcesToDrop);
+        const playerIndex = this.droppingPlayers.findIndex(player => player.color === player);
+        this.dropResources.splice(playerIndex, 1);
+        return `Player ${playerColor} has dropped ${resourcesToDrop.length} resources`;
     }
 
     giveInitialResources(settelmentX, settelmentY, playerColor) {

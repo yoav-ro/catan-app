@@ -26,6 +26,19 @@ example:
     player: "blue"
 }
 ----------------------------------------------------------
+{
+    type: "dropResources"
+    action: drop resources if more that 7 resources after a 7 roll.
+}
+
+example:
+{
+    type: "dropResources",
+    player: "blue",
+    resources: ["wood","wood","wood","wood"]
+}
+
+----------------------------------------------------------
 
 {
     type: "build"
