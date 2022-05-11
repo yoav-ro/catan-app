@@ -29,19 +29,19 @@ class Game {
     }
 
     activateMonopoly(playerColor, resourceType) {
-        const resourceToAdd = [];
+        let resourceToAdd = [];
         const activatingPlayer = this.#getPlayerByColor(playerColor);
         activatingPlayer.validateDevCard(devCards.monopoly.name);
         this.players.forEach(player => {
-            if (player.color !== player) {
+            if (player.color !== playerColor) {
                 const resCount = player.countResources(resourceType);
                 const resourcesToRemove = Array(resCount).fill(resourceType);
                 player.removeResources(resourcesToRemove);
-                resourceToAdd.concat(resourcesToRemove);
-                player.activateDevCard(devCards.monopoly.name);
+                resourceToAdd = resourceToAdd.concat(resourcesToRemove);
             }
         })
-        this.#getPlayerByColor(playerColor).addResources(resourceToAdd);
+        activatingPlayer.activateDevCard(devCards.monopoly.name);
+        activatingPlayer.addResources(resourceToAdd);
         return `Monopoly (${resourceType}) was used by player ${playerColor}`;
     }
 

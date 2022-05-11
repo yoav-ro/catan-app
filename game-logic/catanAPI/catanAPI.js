@@ -121,7 +121,6 @@ class catanAPI extends Game {
     #parseDevCard(directiveObj) {
         try {
             const { player, card } = directiveObj;
-            console.log(card)
             let retMsg;
             switch (card.type) {
                 case devCards.knight.name:
@@ -243,15 +242,16 @@ class catanAPI extends Game {
                     this.setupOrder.reverse();
                 }
 
-                retMsg = `${lastPlayer.name} has finished his turn. Now Its ${this.setupOrder[0].name}'s turn.`;
+                retMsg = `${lastPlayer.color} has finished his turn. Now Its ${this.setupOrder[0].color}'s turn.`;
             }
             else {
+                
                 const lastPlayer = this.playerOrder.shift()
                 this.playerOrder.push(lastPlayer);
                 this.isAwaitingRobb = false;
                 this.makeDevCardUseAble(lastPlayer.color);
                 this.#setDirectiveExpetation(directiveObj);
-                retMsg = `${lastPlayer.name} has finished his turn. Now Its ${this.playerOrder[0].name}'s turn.`;
+                retMsg = `${lastPlayer.color} has finished his turn. Now Its ${this.playerOrder[0].color}'s turn.`;
             }
             this.#setDirectiveExpetation(directiveObj);
             const victory = this.checkVictory();

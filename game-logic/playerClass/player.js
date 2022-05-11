@@ -56,7 +56,6 @@ class Player {
     }
 
     activateDevCard(devCardType) {
-        console.log(devCardType, this.devCards)
         const card = this.devCards.find(card => card.name === devCardType);
         if (!card.isUsed) {
             card.isUsed = true;
@@ -68,9 +67,11 @@ class Player {
     }
 
     makeDevCardUseAble() {
-        this.devCards.forEach(card => {
+        console.log("setting cards of " + this.color + " as useable");
+        console.log(this.devCards);
+        for (let card of this.devCards) {
             card.isUseAble = true;
-        })
+        }
     }
 
     removeResources(resourcesToRemoveArr) {
