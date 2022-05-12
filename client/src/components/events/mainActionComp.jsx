@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { eventTypes } from "../../utils/constants";
+import DevCardEvent from "./devCardEvent";
 import DiceRoller from "./diceRoller";
 
 function MainEventComp({ gameSocketRef }) {
@@ -7,8 +8,10 @@ function MainEventComp({ gameSocketRef }) {
 
     useEffect(() => {
         gameSocketRef.current.on("game-event", data => {
+            console.log(data);
+            const eventDuraction = data.type !== eventTypes.rollDice ? 3000 : 1500;
             setEvent(data);
-            showForDuration(1500);
+            showForDuration(eventDuraction);
         })
     })
 
@@ -22,6 +25,11 @@ function MainEventComp({ gameSocketRef }) {
         if (event.type === eventTypes.rollDice) {
             return (
                 <DiceRoller event={event} />
+            )
+        }
+        if (event.type === eventTypes.activateDevCard) {
+            return (
+                <DevCardEvent event={event} />
             )
         }
     }

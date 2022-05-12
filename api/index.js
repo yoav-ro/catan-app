@@ -75,7 +75,7 @@ io.sockets.on("connection", (socket) => {
                 io.to(fullGameData.id).emit("game-data", objToEmit);
 
                 if (eventDirectivesArr.includes(directive.type)) {
-                    const eventObj = eventObjCreator(directive.type, fullGameData.game);
+                    const eventObj = eventObjCreator(directive, fullGameData.game);
                     io.to(fullGameData.id).emit("game-event", eventObj);
                 }
             }

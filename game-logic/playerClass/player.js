@@ -173,8 +173,8 @@ class Player {
     buyDevCard(devCardObj) {
         this.devCards.push(devCardObj);
         this.removeResources(buildingCosts.devCard);
-        if (this.devCards.name === devCards.victoryPoint.name) {
-            this.points++;
+        if (devCardObj.name === devCards.victoryPoint.name) {
+            this.addPoints(1);
         }
     }
 

@@ -9,7 +9,6 @@ function DiceRoller({ event }) {
     setTimeout(() => {
         setShow(false);
     }, 2000);
-    // popCallBack();
 
     return (
         <div>
