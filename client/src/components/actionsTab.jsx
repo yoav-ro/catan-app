@@ -16,11 +16,11 @@ function ActionsDeck({ gameSocketRef }) {
                 <Col>
                     <RollDiceBtn gameSocketRef={gameSocketRef} />
                     <DevCardMenuBtn gameSocketRef={gameSocketRef} />
-                    <div>Offer a trade</div>
-                    <EndTurnBtn gameSocketRef={gameSocketRef} />
+                    {/* <div>Offer a trade</div> */}
                 </Col>
                 <Col>
                     <BuyDevCardBtn gameSocketRef={gameSocketRef} />
+                    <EndTurnBtn gameSocketRef={gameSocketRef} />
                 </Col>
             </Row>
 

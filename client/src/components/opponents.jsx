@@ -13,14 +13,13 @@ function Opponents({ playersData, gameData }) {
                 </Row>
                 {playersData.map((player, key) => {
                     const playerName = player.playerName.username;
-                    const { color, points, resources, devCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = player;
+                    const { color, resources, devCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = player;
                     const usedDevCards = devCards.filter(card => card.isUsed);
 
                     const knightCards = usedDevCards.filter(item => item.name === "Knight");
                     const roadBuildingCards = usedDevCards.filter(item => item.name === "Road Building");
                     const monopolyCards = usedDevCards.filter(item => item.name === "Monopoly");
                     const yearOfPlentyCards = usedDevCards.filter(item => item.name === "Year of Plenty");
-                    const victoryPointCards = usedDevCards.filter(item => item.name === "Victory Point");
 
                     return (
                         <Row key={key} className="opponent">

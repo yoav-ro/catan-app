@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import GameTab from './components/gameTab';
 import { setGameData } from "./actions";
 import { NotificationContainer, NotificationManager } from 'react-notifications';
+import DropResourcesForm from './components/dropResourcesForm';
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -43,6 +44,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       <NotificationContainer />
+      {/* <DropResourcesForm></DropResourcesForm> */}
     </div>
   );
 }
