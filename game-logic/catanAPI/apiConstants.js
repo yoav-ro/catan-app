@@ -8,6 +8,8 @@ const directiveTypes = {
     robbPlayer: "robbPlayer",
     setupBuild: "setupBuild",
     tradeWithPort: "tradeWithPort",
+    buyDevCard: "buyDevCard",
+    dropResources: "dropResources",
 }
 
 

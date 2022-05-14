@@ -12,3 +12,18 @@ export const resetGameData = () => (
         description: "Deletes the last game's data",
     }
 )
+
+export const setCurrPlayer = (username) => (
+    {
+        type: "SET_CURR_PLAYER",
+        description: "Sets the current player by input",
+        data: username,
+    }
+)
+
+export const resetCurrPlayer = () => (
+    {
+        type: "RESET_CURR_PLAYER",
+        description: "Resets the current player",
+    }
+)

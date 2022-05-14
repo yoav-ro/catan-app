@@ -26,6 +26,19 @@ example:
     player: "blue"
 }
 ----------------------------------------------------------
+{
+    type: "dropResources"
+    action: drop resources if more that 7 resources after a 7 roll.
+}
+
+example:
+{
+    type: "dropResources",
+    player: "blue",
+    resources: ["wood","wood","wood","wood"]
+}
+
+----------------------------------------------------------
 
 {
     type: "build"
@@ -39,7 +52,7 @@ examples:
     type: "build",
     player: "blue"
     item: {
-        name: "settelment"
+        type: "settelment"
         x: 10,
         y: 45,
     }
@@ -48,13 +61,27 @@ examples:
     type: "build",
     player: "blue"
     item: {
-        name: "road"
+        type: "road"
         startX: 10,
         startY: 45,
         endX: 30,
         endY: 45,
     }
 }
+----------------------------------------------------------
+{
+    type: "buyDevCard"
+    action: adds a new dev card to a player
+    condition: after rollDice
+    expectation: any but dice roll and trade response
+}
+
+{
+    type: "buyDevCard",
+    player: "blue",
+}
+
+
 ----------------------------------------------------------
 
 {
@@ -78,7 +105,7 @@ examples:
     type "activateDevCard",
     player: "blue",
     card: {
-        type: "monopolty",
+        type: "monopoly",
         resource: "wood",
     }
 }
@@ -88,7 +115,7 @@ examples:
     card: {
         type: "yearOfPlenty",
         resourceA: "iron",
-        newRobberY: "sheep",
+        resourceB: "sheep",
     }
 }
 {

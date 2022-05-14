@@ -2,17 +2,19 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 import JoinGameForm from './components/joinGameForm';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import GameTab from './components/gameTab';
 import { setGameData } from "./actions";
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import DropResourcesForm from './components/dropResourcesForm';
+import 'react-notifications/lib/notifications.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 //http://localhost:3008
 
 function App() {
   const socketRef = useRef(null);
   const [currUser, setCurrUser] = useState("");
-  console.log(currUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,8 +24,13 @@ function App() {
       console.log(data);
     })
 
+    socketRef.current.on("game-error", data => {
+      console.log(data)
+      NotificationManager.error(data.toString());
+    })
+
     socketRef.current.on("game-data", data => {
-      console.log("New game update")
+      console.log(data)
       dispatch(setGameData(data));
     })
   }, [])
@@ -36,6 +43,8 @@ function App() {
           <Route exact path="/game" element={<GameTab gameSocketRef={socketRef} />} />
         </Routes>
       </BrowserRouter>
+      <NotificationContainer />
+      {/* <DropResourcesForm></DropResourcesForm> */}
     </div>
   );
 }

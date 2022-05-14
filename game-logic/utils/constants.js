@@ -39,8 +39,8 @@ const resourcesArr = [
 ];
 
 const portsArr = [
-    resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.IRON, resourcesTypes.IRON,
-    resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.SHEEP, resourcesTypes.SHEEP, "3to1", "3to1", "3to1", "3to1",
+    "3to1", resourcesTypes.WHEAT, resourcesTypes.IRON, "3to1", resourcesTypes.SHEEP, "3to1", "3to1",
+    resourcesTypes.BRICK, resourcesTypes.WOOD,
 ]
 
 const devCards = {
@@ -48,36 +48,36 @@ const devCards = {
         name: "Knight",
         description: "Allows you to move the robber and place it onto a new hex, and steal a random card from an opponent with settlements or cities adjacent to it",
         canPlayBeforeRoll: true,
-        canUseInstantly: false,
+        isUseAble: false,
         isUsed: false,
     },
     roadBuilding: {
         name: "Road Building",
         description: "Player can place 2 roads as if they just built them",
         canPlayBeforeRoll: false,
-        canUseInstantly: false,
+        isUseAble: false,
         isUsed: false,
     },
     yearOfPlenty: {
         name: "Year of Plenty",
         description: "The player can draw 2 resource cards of their choice from the bank",
         canPlayBeforeRoll: false,
-        canUseInstantly: true,
+        isUseAble: true,
         isUsed: false,
     },
     monopoly: {
         name: "Monopoly",
         description: "The player can claim all resource cards of a specific declared type",
         canPlayBeforeRoll: false,
-        canUseInstantly: false,
+        isUseAble: false,
         isUsed: false,
     },
     victoryPoint: {
         name: "Victory Point",
-        description: " 1 additional Victory Point is added to the owners total and doesn't need to be played to win.",
+        description: "1 additional Victory Point is added to the owners total and doesn't need to be played to win.",
         canPlayBeforeRoll: false,
-        canUseInstantly: false,
-        isUsed: true,
+        isUseAble: false,
+        isUsed: false,
     }
 }
 

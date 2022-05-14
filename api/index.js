@@ -5,6 +5,8 @@ const io = require("socket.io")(http);
 const { nanoid } = require("nanoid");
 const CatanGame = require("../game-logic/catanAPI/catanAPI");
 const cors = require("cors");
+const { eventDirectivesArr } = require("./constants");
+const { eventObjCreator } = require("./helperFunctions");
 
 require("dotenv").config();
 const port = process.env.PORT || 3001;
@@ -22,7 +24,7 @@ io.sockets.on("connection", (socket) => {
     console.log(`Connection with id ${socket.id}`);
     const gamePlayerCap = 4;
 
-    socket.on("joinGame", ({ username }) => {
+    socket.on("joinGame", async ({ username }) => {
         if (playersQueue.some((player) => player.username === username)) {
             io.to(socket.id).emit("lobby", "User name already taken");
         }
@@ -38,47 +40,83 @@ io.sockets.on("connection", (socket) => {
 
         if (playersQueue.length === gamePlayerCap) {
             const gameObj = gameCreator(playersQueue);
+            const gameId = gameObj.id;
+            const connectedSockets = await io.fetchSockets();
+            for (let connectedSocket of connectedSockets) {
+                connectedSocket.join(gameId);
+            }
             playersQueue.length = 0;
             games.push(gameObj);
-            emitToPlayers(io, gameObj);
+            io.to(gameId).emit("game-data", gameObj);
         }
     })
 
     socket.on("newDirective", ({ directive }) => {
-        const game = findGameBySocketId(socket.id);
+        const fullGameData = findGameBySocketId(socket.id);
 
-        //todo- parse directive
-        if (game) {
-            game.players.forEach(player => {
-                console.log(`sending to ${player.name}(${player.id})`)
-                io.to(player.id).emit("game-data", game.game);
-            });
+        console.log("new directive: " + directive.type);
+        console.log(directive)
+
+        const directiveOutput = fullGameData.game.sendDirective(directive);
+        const objToEmit = {
+            id: fullGameData.id,
+            game: directiveOutput.gameData,
+            message: directiveOutput.message,
+            expectation: fullGameData.expectation,
+            players: fullGameData.players,
         }
 
-        emitToPlayers(io, game);
-
-        socket.on("leaveQueue", ({ username }) => {
-            const playerIndex = playersQueue.findIndex(user => user.username === username);
-            if (playerIndex !== -1) {
-                playersQueue.splice(playerIndex, 1);
-                io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
+        if (fullGameData) {
+            if (objToEmit.message.error) {
+                console.log(objToEmit.message.error);
+                io.to(socket.id).emit("game-error", objToEmit.message.error)
             }
-        })
+            else {
+                io.to(fullGameData.id).emit("game-data", objToEmit);
 
-        socket.on("disconnect", (reason) => {
-            console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
-            //todo- find the game disconnected from and end it end game
-        })
+                if (eventDirectivesArr.includes(directive.type)) {
+                    const eventObj = eventObjCreator(directive, fullGameData.game);
+                    io.to(fullGameData.id).emit("game-event", eventObj);
+                }
+            }
+        }
+    })
+
+    socket.on("leaveQueue", ({ username }) => {
+        if (removeFromQueue(username)) {
+            io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
+            console.log(playersQueue)
+        }
+    })
+
+    socket.on("disconnect", (reason) => {
+        console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
+        const username = findUserNameBySocketId(socket.id);
+        if (removeFromQueue(username)) {
+            io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
+        }
+        //todo- find the game disconnected from and end it end game
     })
 })
 
-function emitToPlayers(io, game) {
-    game.players.forEach(player => {
-        console.log(`sending to ${player.name}(${player.id})`)
-        io.to(player.id).emit("game-data", game);
-    });
+function removeFromQueue(userName) {
+    const playerIndex = playersQueue.findIndex(user => user.username === userName);
+    if (playerIndex !== -1) {
+        playersQueue.splice(playerIndex, 1);
+        return true;
+    }
+    return false;
 }
 
+function findUserNameBySocketId(socketId) {
+    let ret;
+    playersQueue.forEach(user => {
+        if (user.id === socketId) {
+            ret = user.username;
+        }
+    })
+    return ret;
+}
 
 function findGameBySocketId(socketId) {
     let ret;
@@ -110,6 +148,8 @@ function gameCreator(playersArray) {
     return {
         id: "game" + nanoid(),
         game: game,
+        message: "New game created",
+        expectation: game.directiveExpectation,
         players: playersArray.slice(),
     };
 }

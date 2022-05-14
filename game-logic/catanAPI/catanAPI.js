@@ -3,22 +3,12 @@ const { pieceTypes, devCards } = require("../utils/constants");
 const { mixArray } = require("../utils/helperFunctions");
 const { directiveTypes } = require("./apiConstants");
 
-//todo:
-//set return messages - good
-//also return updated game data on every request - good
-//longest road 
-//largest army - good
-//ports - good
-//bank trade - good
-// handle victory
-
 class catanAPI extends Game {
     constructor(playersDataArr, tileRadius) {
         super(playersDataArr, tileRadius)
         this.playerOrder = mixArray(playersDataArr.slice()); //playerOrder[0] is the current player
         this.setupOrder = mixArray(playersDataArr.slice())
         this.directiveExpectation = [directiveTypes.setupBuild];
-        this.setupItemsCount = 0;
         this.isSetupPhase = true;
         this.isAwaitingRobb = false;
         this.lastRoll = undefined;
@@ -27,11 +17,11 @@ class catanAPI extends Game {
 
     sendDirective(directiveObj) {
         const directiveMsg = this.#parseDirective(directiveObj);
-        const gameData = this.#getGameState();
+        console.log(this.directiveExpectation);
         return {
-            gameData: gameData,
+            gameData: this,
             message: directiveMsg,
-            exectation: this.directiveExpectation,
+            expectation: this.directiveExpectation,
         }
     }
 
@@ -57,22 +47,28 @@ class catanAPI extends Game {
                     return this.#parseBuildSetup(directiveObj); //good
                 case directiveTypes.tradeWithPort:
                     return this.#parseTradeWithPort(directiveObj); //good
+                case directiveTypes.buyDevCard:
+                    return this.#parseGetDevCard(directiveObj); //good
+                case directiveTypes.dropResources:
+                    return this.#parseDropResources(directiveObj);
                 default:
-                    return { Error: "Invalid directive type" };
+                    return { error: "Invalid directive type" };
             }
         } catch (error) {
-            return { Error: error };
+            console.log(error)
+            return { error: error };
         }
     }
 
     #parseDiceRoll(directiveObj) {
         try {
             this.lastRoll = this.rollDice();
-            this.giveResourcesByRoll(this.lastRoll);
-            this.#setDirectiveExpetation(directiveTypes.rollDice);
-            return `Player ${directiveObj.player} has rolled ${this.lastRoll}`;
+            const totalRoll = this.lastRoll.dice1 + this.lastRoll.dice2;
+            this.giveResourcesByRoll(totalRoll);
+            this.#setDirectiveExpetation(directiveObj);
+            return `Player ${directiveObj.player} has rolled ${totalRoll} (${this.lastRoll.dice1} + ${this.lastRoll.dice2})`;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -82,13 +78,13 @@ class catanAPI extends Game {
             const itemToBuild = directiveObj.item.type;
             switch (itemToBuild) {
                 case pieceTypes.SETTELMENT:
-                    retMsg = this.buildSettelment(directiveObj.player, itemToBuild.x, itemToBuild.y, true);
+                    retMsg = this.buildSettelment(directiveObj.player, directiveObj.item.x, directiveObj.item.y, true);
                     break;
                 case pieceTypes.CITY:
-                    retMsg = this.buildCity(directiveObj.player, itemToBuild.x, itemToBuild.y, true);
+                    retMsg = this.buildCity(directiveObj.player, directiveObj.item.x, directiveObj.item.y, true);
                     break;
                 case pieceTypes.ROAD:
-                    const { startX, startY, endX, endY } = itemToBuild;
+                    const { startX, startY, endX, endY } = directiveObj.item;
                     retMsg = this.buildRoad(directiveObj.player, startX, startY, endX, endY, true);
                     break;
                 case pieceTypes.DEVCARD:
@@ -97,10 +93,28 @@ class catanAPI extends Game {
                 default:
                     throw "Invalid build item";
             }
-            this.#setDirectiveExpetation(directiveTypes.build);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
+        }
+    }
+
+    #parseDropResources(directiveObj) {
+        try {
+            const { player, resources } = directiveObj;
+            return this.dropResources(player, resources);
+        } catch (error) {
+            return { error: error }
+        }
+    }
+
+    #parseGetDevCard(directiveObj) {
+        try {
+            const buyingPlayer = directiveObj.player;
+            return this.buildDevCard(buyingPlayer);
+        } catch (error) {
+            return { error: error }
         }
     }
 
@@ -124,13 +138,14 @@ class catanAPI extends Game {
                 case devCards.yearOfPlenty.name:
                     const { resourceA, resourceB } = card;
                     retMsg = this.activateYearOfPlenty(player, resourceA, resourceB);
+                    break;
                 default:
                     throw "Invalid dev card type";
             }
-            this.#setDirectiveExpetation(directiveObj.type);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -139,10 +154,10 @@ class catanAPI extends Game {
             const { player, tradeWith, givenResources, recievedResources } = directiveObj;
             this.#validateTradeReq(player, tradeWith, givenResources, recievedResources);
             this.#setPendingTrade(player, tradeWith, givenResources, recievedResources);
-            this.#setDirectiveExpetation(directiveObj.type);
+            this.#setDirectiveExpetation(directiveObj);
             return `Trade request sent from player ${player} to player ${tradeWith}`;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -168,10 +183,10 @@ class catanAPI extends Game {
                 const { offeringPlayer, offeringPlayerResources, offeredPlayer, offeredPlayerResources } = this.pendingTrade;
                 retMsg = this.executeTrade(offeringPlayer, offeredPlayer, offeringPlayerResources, offeredPlayerResources);
             }
-            this.#setDirectiveExpetation(directiveObj.type);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -180,10 +195,10 @@ class catanAPI extends Game {
             const { player, playerToRob } = directiveObj;
             const retMsg = this.robbPlayer(player, playerToRob);
             this.isAwaitingRobb = false;
-            this.#setDirectiveExpetation(directiveTypes.robbPlayer);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -202,45 +217,50 @@ class catanAPI extends Game {
                     retMsg = this.buildRoad(directiveObj.player, startX, startY, endX, endY, false);
                     break;
             }
-            this.setupItemsCount++;
-            if (this.setupItemsCount === 4 * this.players.length) {
-                this.isSetupPhase = false;
+            if (this.#shouldAdvanceTurnAfterSetup(directiveObj)) {
+                this.#parseEndTurn({
+                    type: "endTurn",
+                    player: directiveObj.player,
+                })
             }
 
-            this.#setDirectiveExpetation(directiveTypes.setupBuild);
+            this.#setDirectiveExpetation(directiveObj);
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
-    #parseEndTurn() {
+    #parseEndTurn(directiveObj) {
         try {
             let retMsg;
             if (this.isSetupPhase) {
                 const lastPlayer = this.setupOrder.shift()
                 this.setupOrder.push(lastPlayer);
-                if (this.setupItemsCount === 8) {
+                const builtItemsCount = this.board.builtJunctions.length + this.board.roads.length;
+                if (builtItemsCount === 2 * this.players.length) {
                     this.setupOrder.reverse();
                 }
 
-                retMsg = `${lastPlayer} has finished his turn. Now Its ${this.setupOrder[0]}'s turn.`;
+                retMsg = `${lastPlayer.color} has finished his turn. Now Its ${this.setupOrder[0].color}'s turn.`;
             }
             else {
+                
                 const lastPlayer = this.playerOrder.shift()
                 this.playerOrder.push(lastPlayer);
                 this.isAwaitingRobb = false;
-                this.#setDirectiveExpetation(directiveObj.type);
-                retMsg = `${lastPlayer} has finished his turn. Now Its ${this.playerOrder[0]}'s turn.`;
+                this.makeDevCardUseAble(lastPlayer.color);
+                this.#setDirectiveExpetation(directiveObj);
+                retMsg = `${lastPlayer.color} has finished his turn. Now Its ${this.playerOrder[0].color}'s turn.`;
             }
-            this.#setDirectiveExpetation(directiveObj.type);
+            this.#setDirectiveExpetation(directiveObj);
             const victory = this.checkVictory();
             if (victory) {
                 this.#handleVictory(victory);
             }
             return retMsg;
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
@@ -249,12 +269,18 @@ class catanAPI extends Game {
             const { player, portType, resourceToGive, resourceToTake } = directiveObj;
             return this.tradeWithPort(portType, player, resourceToGive, resourceToTake);
         } catch (error) {
-            return { Error: error };
+            return { error: error };
         }
     }
 
     #validatePlayer(playerColor) {
         if (playerColor !== this.playerOrder[0].color) {
+            throw `This is not ${playerColor}'s turn`;
+        }
+    }
+
+    #validatePlayerSetup(playerColor) {
+        if (playerColor !== this.setupOrder[0].color) {
             throw `This is not ${playerColor}'s turn`;
         }
     }
@@ -281,47 +307,93 @@ class catanAPI extends Game {
             if (pieceToBuild !== pieceTypes.SETTELMENT) {
                 throw "Build a second settelment first";
             }
+            this.giveInitialResources(directiveObj.item.x, directiveObj.item.y, player)
         }
         if (settelmentsByPlayer === 2 && roadsByPlayer === 1) {
             if (pieceToBuild !== pieceTypes.ROAD) {
                 throw "Build a second road first";
             }
         }
-
     }
 
-    #setDirectiveExpetation(lastDirectiveType) {
+    #validateDropResources(directiveObj) {
+        const droppingPlayer = this.droppingPlayers.find(player => player.color === directiveObj.player);
+        if (!droppingPlayer) {
+            throw `Player ${directiveObj.color} isnt required to drop resources`;
+        }
+    }
+
+    #shouldAdvanceTurnAfterSetup(directiveObj) {
+        const player = directiveObj.player;
+        const settelmentsByPlayer = this.getPiecesByPlayer(player, pieceTypes.SETTELMENT);
+        const roadsByPlayer = this.getPiecesByPlayer(player, pieceTypes.ROAD);
+        if ((settelmentsByPlayer === 1 && roadsByPlayer === 1) || (settelmentsByPlayer === 2 && roadsByPlayer === 2)) {
+            return true;
+        }
+        return false;
+    }
+
+    #setDirectiveExpetation(lastDirective) {
+        const lastDirectiveType = lastDirective.type;
         this.directiveExpectation = [];
-        const { endTurn, robbPlayer, rollDice, build, activateDevCard, tradeReq, tradeRes, setupBuild } = directiveTypes;
+        const { endTurn, robbPlayer, rollDice, build, activateDevCard, tradeReq, tradeRes, setupBuild, buyDevCard, dropResources } = directiveTypes;
         switch (lastDirectiveType) {
             case directiveTypes.endTurn:
                 this.directiveExpectation = [rollDice, activateDevCard];
+                break;
             case directiveTypes.rollDice:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
-                if (this.lastRoll === 7) {
-                    this.directiveExpectation.push(robbPlayer);
-                    this.isAwaitingRobb = true;
-                }
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
+                // if (this.lastRoll === 7) {
+                //     if (this.droppingPlayers.length > 0) {
+                //         this.directiveExpectation = [dropResources];
+                //     }
+                //     else {
+                //         this.directiveExpectation.push(robbPlayer);
+                //     }
+                // }
+                break;
             case directiveTypes.build:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
+                break;
             case directiveTypes.activateDevCard:
-                this.directiveExpectation = [endTurn, build, tradeReq];
+                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard];
                 if (this.isAwaitingRobb) {
                     this.directiveExpectation.push(robbPlayer);
                 }
+                break;
             case directiveTypes.tradeReq:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeRes];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeRes, buyDevCard];
+                break;
             case directiveTypes.tradeRes:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
+                break;
             case directiveTypes.robbPlayer:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
+                break;
             case directiveTypes.setupBuild:
                 if (this.isSetupPhase) {
-                    this.directiveExpectation = [endTurn, setupBuild];
+                    this.directiveExpectation = [setupBuild];
+                    if (lastDirective.item.type === pieceTypes.ROAD) {
+                        this.directiveExpectation.push(endTurn);
+                    }
+                    const builtItemsCount = this.board.builtJunctions.length + this.board.roads.length;
+                    if (builtItemsCount === 4 * this.players.length) {
+                        this.isSetupPhase = false;
+                        this.directiveExpectation = [rollDice, activateDevCard];
+                    }
                 }
                 else {
-                    this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard];
+                    this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard, buyDevCard];
                 }
+                break;
+            // case directiveTypes.dropResources:
+            //     if (this.droppingPlayers.length > 0) {
+            //         this.directiveExpectation = [dropResources];
+            //     }
+            //     else {
+            //         this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, robbPlayer];
+            //     }
+            //     break;
         }
     }
 
@@ -337,19 +409,21 @@ class catanAPI extends Game {
     }
 
     #validateDirective(directiveObj) {
-        this.#validatePlayer();
-        if (!this.directiveExpectation.includes(directiveObj.type)) {
-            throw "Invalid directive. The next directive has to be one of: " + this.directiveExpectation;
+        if (this.isSetupPhase) {
+            if (directiveObj.type !== directiveTypes.setupBuild) {
+                throw "Invalid directive. At setup phase only a setup build is accepted.";
+            }
+            this.#validatePlayerSetup(directiveObj.player);
         }
-    }
-
-    #getGameState() {
-        const gameStateObj = {
-            board: this.board,
-            players: this.players,
+        // if (this.droppingPlayers.length > 0 && directiveObj.type !== directiveTypes.dropResources) {
+        //     throw "Wait for all players to finish dropping their resources.";
+        // }
+        else {
+            this.#validatePlayer(directiveObj.player);
+            if (!this.directiveExpectation.includes(directiveObj.type)) {
+                throw "Invalid directive. The next directive has to be one of: " + this.directiveExpectation;
+            }
         }
-
-        return gameStateObj;
     }
 
     #handleVictory(winnerObj) {

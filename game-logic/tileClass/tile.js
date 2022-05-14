@@ -8,58 +8,10 @@ class Tile {
         this.cell = cell;
         this.coordinates = calulateCoordinatesByBoardPosition(row, cell, radius);
         this.isRobber = resource === resourcesTypes.DESERT ? true : false;
-        this.surroundingJunctions = [];
-    }
-
-    setJunction(x, y, player, type) {
-        for (let coord in this.coordinates) {
-            if (this.coordinates[coord].x === x && this.coordinates[coord].y === y) {
-                this.#removeJunction(x, y);
-                const newJuncObj = getJuncObj(x, y, player, type);
-                this.surroundingJunctions = [...this.surroundingJunctions, newJuncObj];
-            }
-        }
-    }
-
-    doesHaveJunction(x, y) {
-        for (let coord in this.coordinates) {
-            if (this.coordinates[coord].x === x && this.coordinates[coord].y === y) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    getJunctionStatus(x, y) {
-        for (let i = 0; i < this.surroundingJunctions.length; i++) {
-            if (this.surroundingJunctions[i].x === x && this.surroundingJunctions[i].y === y) {
-                const { player, type } = this.surroundingJunctions[i];
-                return { player: player, type: type };
-            }
-        }
-        return "free";
-    }
-
-    #removeJunction(x, y) {
-        for (let i = 0; i < this.surroundingJunctions.length; i++) {
-            if (this.surroundingJunctions[i].x === x && this.surroundingJunctions[i].y === y) {
-                this.surroundingJunctions.splice(i, 1);
-            }
-        }
     }
 }
 
 module.exports = Tile;
-
-function getJuncObj(x, y, player, type, port) {
-    return {
-        x: x,
-        y: y,
-        player: player,
-        type: type,
-        port: port,
-    };
-}
 
 function calulateCoordinatesByBoardPosition(row, cell, radius) {
     const rad30 = 30 * Math.PI / 180;

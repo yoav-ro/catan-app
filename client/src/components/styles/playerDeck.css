@@ -1,0 +1,47 @@
+.playerDeck{
+    border-radius: 15px;
+    border-style: solid;
+    border-width: 3;
+    margin: auto;
+    width: 60%;
+    margin-top: 30px;
+}
+
+.resource{
+    font-weight: bolder;
+    -webkit-text-stroke: 0.5px black;
+}
+
+.topRow{
+    border-bottom: 2px solid black;
+}
+
+.playerHeader{
+    -webkit-text-stroke: 0.5px black;
+    font-weight: bolder;
+}
+
+.opponentsTab{
+    border-radius: 15px;
+    border-style: solid;
+    border-width: 3;
+    margin-top: 30px;
+    float: left;
+    width: 25%;
+    margin-left: 10px;
+}
+
+.chat{
+    border-radius: 15px;
+    border-style: solid;
+    border-width: 3;
+    margin-top: 30px;
+    float: right;
+    width: 25%;
+    margin-right: 10px;
+}
+
+.opponent:nth-child(3){
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+}

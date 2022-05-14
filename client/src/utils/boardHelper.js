@@ -18,7 +18,6 @@ export function getRowsData() {
         }
     });
 
-    console.log(tilesData.length, tilesData)
     const row0 = [tilesData[0], tilesData[1], tilesData[2]]
     const row1 = [tilesData[3], tilesData[4], tilesData[5], tilesData[6]]
     const row2 = [tilesData[7], tilesData[8], tilesData[9], tilesData[10], tilesData[11]]
