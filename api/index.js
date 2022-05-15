@@ -25,11 +25,11 @@ io.sockets.on("connection", (socket) => {
     const gamePlayerCap = 4;
 
     socket.on("joinGame", async ({ username }) => {
-        if (playersQueue.some((player) => player.username === username)) {
+        if (playersQueue.some((player) => player.username === username)) { //Validate user name
             io.to(socket.id).emit("lobby", "User name already taken");
         }
         else {
-            playersQueue.push({ username: username, id: socket.id });
+            playersQueue.push({ username: username, id: socket.id }); //Add to queue
             io.to(socket.id).emit("lobby",
                 {
                     msg: `Joined queue. Looking for ${gamePlayerCap - playersQueue.length} players`,
@@ -38,7 +38,7 @@ io.sockets.on("connection", (socket) => {
             );
         }
 
-        if (playersQueue.length === gamePlayerCap) {
+        if (playersQueue.length === gamePlayerCap) { //Create a new game when cap is filled
             const gameObj = gameCreator(playersQueue);
             const gameId = gameObj.id;
             const connectedSockets = await io.fetchSockets();
@@ -51,7 +51,7 @@ io.sockets.on("connection", (socket) => {
         }
     })
 
-    socket.on("newDirective", ({ directive }) => {
+    socket.on("newDirective", ({ directive }) => { //Handle incoming directive
         const fullGameData = findGameBySocketId(socket.id);
 
         console.log("new directive: " + directive.type);
@@ -82,14 +82,14 @@ io.sockets.on("connection", (socket) => {
         }
     })
 
-    socket.on("leaveQueue", ({ username }) => {
+    socket.on("leaveQueue", ({ username }) => { //Leaving queue
         if (removeFromQueue(username)) {
             io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
             console.log(playersQueue)
         }
     })
 
-    socket.on("disconnect", (reason) => {
+    socket.on("disconnect", (reason) => { //Handle user disconnecting
         console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
         const username = findUserNameBySocketId(socket.id);
         if (removeFromQueue(username)) {

@@ -112,6 +112,7 @@ class Board {
         return true;
     }
 
+    //Validates that the new junction is at least 2 roads apart from all other build junctions
     #isJunction2RoadsApart(x, y) {
         if (this.builtJunctions.length > 0) {
             let ret = true;
@@ -126,6 +127,7 @@ class Board {
         return true;
     }
 
+    //Validates that the new junction is connected to a road built by the building player
     #isJunctionConnectedToPlayer(player, x, y) {
         for (let road of this.roads) {
             if (roundBySecondDec(road.startX) === roundBySecondDec(x) && roundBySecondDec(road.startY) === roundBySecondDec(y) && road.player === player) {
@@ -170,6 +172,7 @@ class Board {
         return true;
     }
 
+    //Checks if the new road is connected to a junction build by the building player
     #isConnectedToJunction(player, startX, startY, endX, endY) {
         const startStatus = this.getJunctionStatus(startX, startY);
         const endStatus = this.getJunctionStatus(endX, endY);
@@ -182,6 +185,7 @@ class Board {
         return false;
     }
 
+    //Checks if the new road is connected to a road build by the building player
     #isConnectedToRoad(player, startX, startY, endX, endY) {
         const mockRoad = {
             player: player,
@@ -200,16 +204,18 @@ class Board {
         return ret;
     }
 
+    //Find the longest road on the board
     #calcLongestRoad() {
         this.longestRoad = [];
         this.roads.forEach(road => {
-            const longestByMyRoad = this.#getLongestFromSegment([road], []);
+            const longestByMyRoad = this.#getLongestFromSegment([road], []); //For every road on board, searches for the longest sequense based on it
             if (longestByMyRoad.length > this.longestRoad.length) {
                 this.longestRoad = longestByMyRoad;
             }
         });
     }
 
+    //Enlarges the given roads sequence by adding new connected roads until no new connected roads are found
     #getLongestFromSegment(currSeq, siblingRoads) {
         const nextSegments = this.#checkSegmentNeighbor(currSeq, siblingRoads);
         if (nextSegments.length > 0) {
@@ -223,6 +229,7 @@ class Board {
         return currSeq;
     }
 
+    //Finds all roads diverged from the last road of the given sequence
     #checkSegmentNeighbor(roadSeq, siblingRoads) {
         const lastRoad = roadSeq[roadSeq.length - 1];
         const connectedRoads = [];
@@ -236,6 +243,7 @@ class Board {
         return connectedRoads;
     }
 
+    //Checks if the given roads are connected 
     #areRoadsConnected(roadA, roadB) {
         let { player: colorA, startX: startXA, startY: startYA, endX: endXA, endY: endYA } = roadA;
         let { player: colorB, startX: startXB, startY: startYB, endX: endXB, endY: endYB } = roadB;
@@ -264,6 +272,7 @@ class Board {
         return false;
     }
 
+    //Checks if the connection point between two roads isnt blocked by an opponent player's junction
     #validateRoadSequence(player, x, y) {
         const junctionStatus = this.getJunctionStatus(x, y);
         if (junctionStatus === "free") {
@@ -274,7 +283,8 @@ class Board {
         }
         return true;
     }
-
+    
+    //Compares two junctions
     #compareJunctions(j1x, j1y, j2x, j2y) {
         return ((roundBySecondDec(j1x) === roundBySecondDec(j2x)) && (roundBySecondDec(j1y) === roundBySecondDec(j2y)));
     }
