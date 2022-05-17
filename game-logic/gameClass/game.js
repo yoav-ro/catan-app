@@ -176,13 +176,13 @@ class Game {
                 }
             });
         }
-        // else {
-        //     for (let i = 0; i < this.players.length; i++) {
-        //         if (this.players[i].resources.length > 7) {
-        //             this.droppingPlayers.push(this.players[i]);
-        //         }
-        //     }
-        // }
+        else {
+            for (let i = 0; i < this.players.length; i++) {
+                if (this.players[i].resources.length > 7) {
+                    this.droppingPlayers.push(this.players[i]);
+                }
+            }
+        }
     }
 
     dropResources(playerColor, resourcesToDrop) {
@@ -195,8 +195,8 @@ class Game {
             throw `Drop declined. Player ${playerColor} should drop exactly ${requiredDropCount} resources.`;
         }
         player.removeResources(resourcesToDrop);
-        const playerIndex = this.droppingPlayers.findIndex(player => player.color === player);
-        this.dropResources.splice(playerIndex, 1);
+        const playerIndex = this.droppingPlayers.findIndex(player => player.color === playerColor);
+        this.droppingPlayers.splice(playerIndex, 1);
         return `Player ${playerColor} has dropped ${resourcesToDrop.length} resources`;
     }
 

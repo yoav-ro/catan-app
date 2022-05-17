@@ -105,3 +105,11 @@ export function activateYoPDir(player, resourceA, resourceB) {
         }
     }
 }
+
+export function dropResourcesDir(player, resourcesToDrop) {
+    return {
+        type: "dropResources",
+        player: player,
+        resources: resourcesToDrop,
+    }
+}

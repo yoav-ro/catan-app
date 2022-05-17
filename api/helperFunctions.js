@@ -1,7 +1,7 @@
-const { eventTypes } = require("./constants");
+const { eventTypes, directiveTypes } = require("./constants");
 
-
-function eventObjCreator(directive, game) {
+//Creates a custom active event object based on the recent played directive
+function activeEventObjCreator(directive, game) {
     const eventType = directive.type;
     let eventObj;
     if (eventType === eventTypes.rollDice) {
@@ -25,7 +25,27 @@ function eventObjCreator(directive, game) {
     return eventObj;
 }
 
+//Creates a passive event object based on the next required directives
+function passiveEventObjCreator(eventType, game) {
+    let eventObj;
+    if (eventType === directiveTypes.dropResources) {
+        eventObj = {
+            type: directiveTypes.dropResources,
+            droppingPlayers: game.droppingPlayers,
+        }
+    }
 
+    return eventObj;
+}
+
+function createResourceDropEventObj(game) {
+    return eventObj = {
+        type: directiveTypes.dropResources,
+        droppingPlayers: game.droppingPlayers,
+    }
+}
+
+//Creates a development card event object based on type
 function getCardDirectiveInfo(directive) {
     if (directive.card.type === "Monopoly") {
         return {
@@ -43,5 +63,5 @@ function getCardDirectiveInfo(directive) {
 }
 
 module.exports = {
-    eventObjCreator,
+    activeEventObjCreator, passiveEventObjCreator, createResourceDropEventObj
 }

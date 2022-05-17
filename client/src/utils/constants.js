@@ -42,10 +42,14 @@ export const resourcesArr = [
     resourcesTypes.DESERT,
 ]
 
-export const eventTypes = {
+export const activeEventTypes = {
     rollDice: "rollDice",
     victory: "victory",
     gameOver: "gameOver",
     activateDevCard: "activateDevCard",
-    rolledSeven: "rolledSeven",
 }
+
+export const passiveEventTypes={
+    dropResources: "dropResources",
+}
+

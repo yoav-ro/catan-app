@@ -16,13 +16,18 @@ const directiveTypes = {
     robbPlayer: "robbPlayer",
     setupBuild: "setupBuild",
     tradeWithPort: "tradeWithPort",
+    dropResources: "dropResources",
 }
 
-const eventDirectivesArr=[
+const activeEventDirectivesArr=[
     directiveTypes.rollDice,
     directiveTypes.activateDevCard,
 ]
 
+const passiveEventDirectivesArr=[
+    directiveTypes.dropResources
+]
+
 module.exports={
-    eventTypes, directiveTypes, eventDirectivesArr
+    eventTypes, directiveTypes, activeEventDirectivesArr, passiveEventDirectivesArr
 }

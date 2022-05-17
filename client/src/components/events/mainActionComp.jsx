@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { eventTypes } from "../../utils/constants";
+import { activeEventTypes, passiveEventTypes } from "../../utils/constants";
+import DropResourcesModal from "./dropResourceEvent";
 import DevCardEvent from "./devCardEvent";
 import DiceRoller from "./diceRoller";
 
@@ -9,9 +10,14 @@ function MainEventComp({ gameSocketRef }) {
     useEffect(() => {
         gameSocketRef.current.on("game-event", data => {
             console.log(data);
-            const eventDuraction = data.type !== eventTypes.rollDice ? 3000 : 1500;
-            setEvent(data);
-            showForDuration(eventDuraction);
+            if (event.type !== passiveEventTypes.dropResources) {
+                const eventDuraction = data.type !== activeEventTypes.rollDice ? 3000 : 1500;
+                setEvent(data);
+                // showForDuration(eventDuraction);
+            }
+            else {
+                setEvent(data);
+            }
         })
     })
 
@@ -22,14 +28,19 @@ function MainEventComp({ gameSocketRef }) {
     }
 
     if (event) {
-        if (event.type === eventTypes.rollDice) {
+        if (event.type === activeEventTypes.rollDice) {
             return (
                 <DiceRoller event={event} />
             )
         }
-        if (event.type === eventTypes.activateDevCard) {
+        if (event.type === activeEventTypes.activateDevCard) {
             return (
                 <DevCardEvent event={event} />
+            )
+        }
+        if (event.type === passiveEventTypes.dropResources) {
+            return (
+                <DropResourcesModal gameSocketRef={gameSocketRef} />
             )
         }
     }

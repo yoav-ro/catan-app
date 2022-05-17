@@ -107,7 +107,9 @@ class catanAPI extends Game {
     // Parsing a resource drop directive
     #parseDropResources(directiveObj) {
         try {
+            this.#validateDropResources(directiveObj);
             const { player, resources } = directiveObj;
+
             return this.dropResources(player, resources);
         } catch (error) {
             return { error: error }
@@ -336,7 +338,7 @@ class catanAPI extends Game {
     #validateDropResources(directiveObj) {
         const droppingPlayer = this.droppingPlayers.find(player => player.color === directiveObj.player);
         if (!droppingPlayer) {
-            throw `Player ${directiveObj.color} isnt required to drop resources`;
+            throw `Player ${directiveObj.player} isnt required to drop resources`;
         }
     }
 
@@ -362,14 +364,14 @@ class catanAPI extends Game {
                 break;
             case directiveTypes.rollDice:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
-                // if (this.lastRoll === 7) {
-                //     if (this.droppingPlayers.length > 0) {
-                //         this.directiveExpectation = [dropResources];
-                //     }
-                //     else {
-                //         this.directiveExpectation.push(robbPlayer);
-                //     }
-                // }
+                if (this.lastRoll.dice1 + this.lastRoll.dice2 === 7) {
+                    if (this.droppingPlayers.length > 0) {
+                        this.directiveExpectation = [dropResources];
+                    }
+                    else {
+                        this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, robbPlayer];
+                    }
+                }
                 break;
             case directiveTypes.build:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
@@ -405,14 +407,16 @@ class catanAPI extends Game {
                     this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard, buyDevCard];
                 }
                 break;
-            // case directiveTypes.dropResources:
-            //     if (this.droppingPlayers.length > 0) {
-            //         this.directiveExpectation = [dropResources];
-            //     }
-            //     else {
-            //         this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, robbPlayer];
-            //     }
-            //     break;
+            case directiveTypes.dropResources:
+                if (this.droppingPlayers.length > 0) { //The games shouldnt accept any directive until all required players drop their resources
+                    this.directiveExpectation = [dropResources];
+                }
+                else {
+                    this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, robbPlayer];
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -436,14 +440,17 @@ class catanAPI extends Game {
             }
             this.#validatePlayerSetup(directiveObj.player);
         }
-        // if (this.droppingPlayers.length > 0 && directiveObj.type !== directiveTypes.dropResources) {
-        //     throw "Wait for all players to finish dropping their resources.";
-        // }
         else {
-            this.#validatePlayer(directiveObj.player);
+            if (this.droppingPlayers.length === 0) {
+                this.#validatePlayer(directiveObj.player);
+            }
             if (!this.directiveExpectation.includes(directiveObj.type)) {
                 throw "Invalid directive. The next directive has to be one of: " + this.directiveExpectation;
             }
+        }
+
+        if (this.droppingPlayers.length > 0 && directiveObj.type !== directiveTypes.dropResources) {
+            throw "Wait for all players to finish dropping their resources.";
         }
     }
 

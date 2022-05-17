@@ -44,7 +44,6 @@ function App() {
         </Routes>
       </BrowserRouter>
       <NotificationContainer />
-      {/* <DropResourcesForm></DropResourcesForm> */}
     </div>
   );
 }
