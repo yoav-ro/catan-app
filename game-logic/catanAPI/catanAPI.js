@@ -409,7 +409,6 @@ class catanAPI extends Game {
                 }
                 break;
             case directiveTypes.dropResources:
-                console.log("left to drop: " + this.droppingPlayers.length)
                 if (this.droppingPlayers.length > 0) { //The games shouldnt accept any directive until all required players drop their resources
                     this.directiveExpectation = [dropResources];
                 }
@@ -446,13 +445,12 @@ class catanAPI extends Game {
             if (this.droppingPlayers.length === 0) {
                 this.#validatePlayer(directiveObj.player);
             }
+            if (this.droppingPlayers.length > 0 && directiveObj.type !== directiveTypes.dropResources) {
+                throw "Wait for all players to finish dropping their resources.";
+            }
             if (!this.directiveExpectation.includes(directiveObj.type)) {
                 throw "Invalid directive. The next directive has to be one of: " + this.directiveExpectation;
             }
-        }
-
-        if (this.droppingPlayers.length > 0 && directiveObj.type !== directiveTypes.dropResources) {
-            throw "Wait for all players to finish dropping their resources.";
         }
     }
 

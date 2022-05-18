@@ -8,7 +8,7 @@ import DiceRoller from "./diceRoller";
 function MainEventComp({ gameSocketRef }) {
     const currPlayer = useSelector(state => state.playerReducer);
     const [event, setEvent] = useState("");
-
+    console.log("tender");
     const [showDropModal, setShowDropModal] = useState(false);
     const handleCloseDropModal = () => setShowDropModal(false);
 
@@ -24,9 +24,12 @@ function MainEventComp({ gameSocketRef }) {
         }, duration);
     }
 
+    gameSocketRef.current.on("game-event", data => {
+        setEvent(data)
+    })
+
     useEffect(() => {
-        gameSocketRef.current.on("game-event", data => {
-            console.log(data);
+        if (event) {
             if (event.type === activeEventTypes.rollDice) {
                 setShowDiceRoll(true);
                 showForDuration(handleCloseDiceRoll, 2000);
@@ -36,17 +39,13 @@ function MainEventComp({ gameSocketRef }) {
                 showForDuration(handleCloseDevCard, 2000);
             }
             if (event.type === passiveEventTypes.dropResources) {
-                const shouldCurrPlayerDrop = data.droppingPlayers.some(droppingPlayer => droppingPlayer.playerName.username === currPlayer);
-                console.log(shouldCurrPlayerDrop)
+                const shouldCurrPlayerDrop = event.droppingPlayers.some(droppingPlayer => droppingPlayer.playerName.username === currPlayer);
                 if (shouldCurrPlayerDrop) {
-                    console.log("shpwomg")
                     setShowDropModal(true);
                 }
             }
-            setEvent(data)
-        })
-    })
-
+        }
+    }, [event])
 
 
     return (
