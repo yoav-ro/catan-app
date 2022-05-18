@@ -196,6 +196,7 @@ class Game {
         }
         player.removeResources(resourcesToDrop);
         const playerIndex = this.droppingPlayers.findIndex(player => player.color === playerColor);
+        console.log(`Player ${player.color} has dropped`)
         this.droppingPlayers.splice(playerIndex, 1);
         return `Player ${playerColor} has dropped ${resourcesToDrop.length} resources`;
     }

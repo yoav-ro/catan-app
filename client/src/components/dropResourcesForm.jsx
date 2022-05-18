@@ -4,14 +4,9 @@ import { resourcesTypes } from "../utils/constants";
 import { useSelector } from "react-redux";
 
 function DropResourcesForm({ selectedResources, setSelectedResources }) {
-
     const gameData = useSelector(state => state.gameReducer);
     const currPlayer = useSelector(state => state.playerReducer);
     const players = gameData.game.game.players;
-    // const player = {
-    //     resources: ["wood", "wood", "wood", "wood", "wood", "wood", "wood", "wood", "wheat", "wheat", "wheat", "wheat"]
-    // }
-
     const player = players.find(player => player.playerName.username === currPlayer);
 
     const [resourcesMock, setResourcesMock] = useState(player.resources.slice()); //Modifiable resources array used to display updated resources after drop selections

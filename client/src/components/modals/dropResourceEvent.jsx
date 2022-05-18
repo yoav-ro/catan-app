@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { dropResourcesDir } from "../../utils/directiveCreator";
 import DropResourcesForm from "../dropResourcesForm";
 
-function DropResourcesModal({ gameSocketRef }) {
+function DropResourcesModal({ show, handleClose, gameSocketRef }) {
     const [selectedResources, setSelectedResources] = useState([]);
     const currPlayer = useSelector(state => state.playerReducer);
     const gameData = useSelector(state => state.gameReducer);
@@ -14,12 +14,11 @@ function DropResourcesModal({ gameSocketRef }) {
     const isSetup = gameData.game.game.isSetupPhase;
 
     const handleConfirm = () => {
-        const directive = dropResourcesDir(player.color, selectedResources.map(item=>item.toLowerCase()));
+        const directive = dropResourcesDir(player.color, selectedResources.map(item => item.toLowerCase()));
         gameSocketRef.current.emit("newDirective", { directive: directive });
+        setSelectedResources([]);
+        handleClose();
     }
-
-    const [show, setShow] = useState(true);
-    const handleClose = () => setShow(false);
 
     if (isSetup) {
         return <></>
@@ -27,9 +26,9 @@ function DropResourcesModal({ gameSocketRef }) {
 
     return (
         <div>
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={show} onHide={handleClose} backdrop="static">
                 <Modal.Header closeButton>
-                    <Modal.Title>Build a city</Modal.Title>
+                    <Modal.Title>Drop Resources</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <DropResourcesForm selectedResources={selectedResources} setSelectedResources={setSelectedResources} />

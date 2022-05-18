@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container, Modal, Button } from "react-bootstrap";
+import { activeEventTypes } from "../../utils/constants";
 
-function DevCardEvent({ event }) {
+function DevCardEvent({ show, handleClose, event }) {
+    if (event.type !== activeEventTypes.activateDevCard) {
+        return <></>
+    }
     const { card, activatingPlayerName, activatingPlayerColor } = event;
-
-    const [show, setShow] = useState(true);
-    const handleClose = () => setShow(false);
-    setTimeout(() => {
-        setShow(false);
-    }, 2000);
 
     let cardInfo;
     switch (card.type) {
@@ -19,7 +17,7 @@ function DevCardEvent({ event }) {
             ];
             break;
         case "Year of Plenty":
-            cardInfo=[
+            cardInfo = [
                 `${activatingPlayerName.username} (${activatingPlayerColor}) used a Year of Plenty card!`,
                 `He recieved ${card.resourceA} and ${card.resourceB}`
             ]

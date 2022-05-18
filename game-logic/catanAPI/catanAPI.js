@@ -109,8 +109,9 @@ class catanAPI extends Game {
         try {
             this.#validateDropResources(directiveObj);
             const { player, resources } = directiveObj;
-
-            return this.dropResources(player, resources);
+            const retMsg = this.dropResources(player, resources)
+            this.#setDirectiveExpetation(directiveObj);
+            return retMsg;
         } catch (error) {
             return { error: error }
         }
@@ -408,6 +409,7 @@ class catanAPI extends Game {
                 }
                 break;
             case directiveTypes.dropResources:
+                console.log("left to drop: " + this.droppingPlayers.length)
                 if (this.droppingPlayers.length > 0) { //The games shouldnt accept any directive until all required players drop their resources
                     this.directiveExpectation = [dropResources];
                 }

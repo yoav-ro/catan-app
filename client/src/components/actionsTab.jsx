@@ -4,6 +4,7 @@ import RollDiceBtn from "./actions/rollDiceBtn";
 import EndTurnBtn from "./actions/endTurnBtn";
 import BuyDevCardBtn from "./actions/getDevCardBtn";
 import DevCardMenuBtn from "./actions/devCardMenuBtn";
+import DropResourcesBtn from "./actions/dropResourceFormBtn";
 
 function ActionsDeck({ gameSocketRef }) {
 
@@ -20,6 +21,7 @@ function ActionsDeck({ gameSocketRef }) {
                 </Col>
                 <Col>
                     <BuyDevCardBtn gameSocketRef={gameSocketRef} />
+                    <DropResourcesBtn gameSocketRef={gameSocketRef} />
                     <EndTurnBtn gameSocketRef={gameSocketRef} />
                 </Col>
             </Row>
