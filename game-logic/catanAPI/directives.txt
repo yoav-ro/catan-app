@@ -188,6 +188,20 @@ example:
     isAccepted: true
 }
 ----------------------------------------------------------
+{
+    type: "moveRobber"
+    action: moves the robber between tiles
+    condition: after knight or rolling 7
+    expectation: any
+}
+example:
+{
+    type: "robbPlayer",
+    player: "blue",
+    newRow: 2,
+    newCell: 3,
+}
+----------------------------------------------------------
 
 {
     type: "robbPlayer"

@@ -42,14 +42,30 @@ export const resourcesArr = [
     resourcesTypes.DESERT,
 ]
 
-export const activeEventTypes = {
+export const directiveTypes = {
+    endTurn: "endTurn",
     rollDice: "rollDice",
+    build: "build",
+    activateDevCard: "activateDevCard",
+    tradeReq: "tradeReq",
+    tradeRes: "tradeRes",
+    robbPlayer: "robbPlayer",
+    setupBuild: "setupBuild",
+    tradeWithPort: "tradeWithPort",
+    buyDevCard: "buyDevCard",
+    dropResources: "dropResources",
+    moveRobber: "moveRobber",
+}
+
+
+export const activeEventTypes = {
+    rollDice: directiveTypes.rollDice,
     victory: "victory",
     gameOver: "gameOver",
-    activateDevCard: "activateDevCard",
+    activateDevCard: directiveTypes.activateDevCard,
 }
 
 export const passiveEventTypes={
-    dropResources: "dropResources",
+    dropResources: directiveTypes.dropResources,
 }
 

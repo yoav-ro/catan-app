@@ -22,9 +22,7 @@ function doesArrayContain(array, items) {
 function dicesRoll() {
     const dice1 = Math.round(Math.random() * (6 - 1) + 1);
     const dice2 = Math.round(Math.random() * (6 - 1) + 1);
-    // return { dice1: dice1, dice2: dice2 };
-    return { dice1: 2, dice2: 5 }; //testing
-
+    return { dice1: dice1, dice2: dice2 };
 }
 
 function countItemsInArray(array, itemToCount) {

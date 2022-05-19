@@ -10,6 +10,7 @@ const directiveTypes = {
     tradeWithPort: "tradeWithPort",
     buyDevCard: "buyDevCard",
     dropResources: "dropResources",
+    moveRobber: "moveRobber",
 }
 
 
