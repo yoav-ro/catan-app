@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { NotificationManager } from "react-notifications";
 import { useSelector } from "react-redux";
 import { directiveTypes, resourcesTypes } from "../../utils/constants";
 
 function Robber({ tileCX, tileCY, shouldRender, resourceType }) {
+    const [scale, setScale] = useState(1);
     const opacity = resourceType === resourcesTypes.DESERT ? 0.6 : 1;
     const currPlayer = useSelector(state => state.playerReducer);
     const gameData = useSelector(state => state.gameReducer);
@@ -21,6 +22,19 @@ function Robber({ tileCX, tileCY, shouldRender, resourceType }) {
         }
     }
 
+
+    const handleMouseEnter = () => {
+        if (canRobb) {
+            setScale(1.3);
+        }
+
+    }
+    const handleMouseLeave = () => {
+        if (canRobb) {
+            setScale(1);
+        }
+    }
+    
     if (!shouldRender) {
         return (
             <></>
@@ -28,10 +42,10 @@ function Robber({ tileCX, tileCY, shouldRender, resourceType }) {
     }
 
     return (
-        <g onClick={handleClick}>
-            <circle cx={tileCX} cy={tileCY - 15} r={8} opacity={opacity} />
-            <ellipse cx={tileCX} cy={tileCY + 3} rx={10} ry={17} opacity={opacity} />
-            <rect x={tileCX - 11} y={tileCY + 13} width={22} height={8} opacity={opacity} />
+        <g onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            <circle cx={tileCX} cy={tileCY - 15 * scale} r={8 * scale} opacity={opacity} />
+            <ellipse cx={tileCX} cy={tileCY + 3 * scale} rx={10} ry={17 * scale} opacity={opacity} />
+            <rect x={tileCX - 11 * scale} y={tileCY + 13 * scale} width={22 * scale} height={8 * scale} opacity={opacity} />
         </g>
     )
 }
