@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setCanMoveRobber } from "../../actions";
 import "../styles/resourceTile.css";
 
-function Tile({ number, resource, coordinates, robber, row, cell, gameSocketRef }) {
+function Tile({ number, resource, coordinates, robber, row, cell, gameSocketRef, setShowRobbModal }) {
     const canMoveRobber = useSelector(state => state.robberReducer);
     const currPlayer = useSelector(state => state.playerReducer);
     const gameData = useSelector(state => state.gameReducer);
@@ -52,6 +52,7 @@ function Tile({ number, resource, coordinates, robber, row, cell, gameSocketRef 
             const directive = moveRobberDir(player.color, row, cell);
             gameSocketRef.current.emit("newDirective", { directive: directive });
             dispatch(setCanMoveRobber(false));
+            setShowRobbModal(true);
         }
     }
 

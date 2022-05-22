@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ResourceTile from "./resourceTile/resourceTile";
 import "./styles/hexagon.css"
 import Road from "./boardPieces/road";
@@ -6,8 +6,12 @@ import Port from "./boardPieces/port";
 import City from "./boardPieces/city";
 import Settlement from "./boardPieces/settlement";
 import "./styles/board.css";
+import RobbPlayer from "./modals/robbPlayerModal";
 
 function HexagonBoard({ boardData: board, gameSocketRef }) {
+    const [showRobbModal, setShowRobbModal] = useState(false);
+    const handleCloseRobbModal = () => setShowRobbModal(false);
+
     return (
         <div id="board" className="center">
             <svg height={625} width={673.2177826} className="centerSvg">
@@ -21,6 +25,7 @@ function HexagonBoard({ boardData: board, gameSocketRef }) {
                         robber={tile.isRobber}
                         row={tile.row}
                         cell={tile.cell}
+                        setShowRobbModal={setShowRobbModal}
                     />
                 })}
                 {board.roads.map((road, key) => {
@@ -52,6 +57,7 @@ function HexagonBoard({ boardData: board, gameSocketRef }) {
                 <Port x={60} y={398} type={board.portsData[1].type} junctionA={board.portsData[1].junctionA} junctionB={board.portsData[1].junctionB} scale={0.06} />
                 <Port x={60} y={188} type={board.portsData[0].type} junctionA={board.portsData[0].junctionA} junctionB={board.portsData[0].junctionB} scale={0.06} />
             </svg>
+            <RobbPlayer show={showRobbModal} handleClose={handleCloseRobbModal} />
         </div>
     )
 }

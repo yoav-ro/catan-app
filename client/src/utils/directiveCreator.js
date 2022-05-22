@@ -124,3 +124,11 @@ export function moveRobberDir(player, newRow, newCell) {
         newCell: newCell,
     }
 }
+
+export function robbPlayerDir(robbingPlayer, robbedPlayer) {
+    return {
+        type: directiveTypes.robbPlayer,
+        player: robbedPlayer,
+        playerToRobb: robbedPlayer,
+    }
+}

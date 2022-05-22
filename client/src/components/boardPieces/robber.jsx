@@ -28,7 +28,6 @@ function Robber({ tileCX, tileCY, shouldRender }) {
         if (canRobb) {
             setScale(1.3);
         }
-
     }
     const handleMouseLeave = () => {
         if (canRobb) {

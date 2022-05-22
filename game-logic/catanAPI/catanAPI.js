@@ -20,10 +20,18 @@ class catanAPI extends Game {
         const directiveMsg = this.#parseDirective(directiveObj);
         console.log(this.directiveExpectation);
         return {
-            gameData: this,
-            message: directiveMsg,
-            expectation: this.directiveExpectation,
+            gamedata: this,
+            outPut: {
+                type: directiveMsg.error ? "declined" : "approved",
+                message: directiveMsg,
+                expectation: this.directiveExpectation,
+            }
         }
+        // return {
+        //     gameData: this,
+        //     message: directiveMsg,
+        //     expectation: this.directiveExpectation,
+        // }
     }
 
     //Handles directive parsing by type

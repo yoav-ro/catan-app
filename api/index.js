@@ -66,9 +66,9 @@ io.sockets.on("connection", (socket) => {
         }
         console.log(directiveOutput)
         if (fullGameData) {
-            if (objToEmit.message.error) {
+            if (objToEmit.output.type === "error") {
                 console.log(objToEmit.message.error);
-                io.to(socket.id).emit("game-error", objToEmit.message.error)
+                io.to(socket.id).emit("game-error", objToEmit.output.message.error)
             }
             else {
                 io.to(fullGameData.id).emit("game-data", objToEmit);
@@ -79,7 +79,6 @@ io.sockets.on("connection", (socket) => {
                     io.to(fullGameData.id).emit("game-event", eventObj);
                 }
                 if (objToEmit.game.directiveExpectation.includes(directiveTypes.dropResources)) {
-                    console.log("sending 7 event")
                     const eventObj = createResourceDropEventObj(objToEmit.game);
                     io.to(fullGameData.id).emit("game-event", eventObj);
                 }
