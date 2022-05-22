@@ -6,6 +6,8 @@ import Road from "../boardPieces/road";
 import Robber from "../boardPieces/robber";
 
 function Tile({ number, resource, coordinates, robber, gameSocketRef }) {
+    const canMoveRobber = useSelector(state => state.robberReducer);
+    
     const center = {
         x: (coordinates.top.x + coordinates.bottom.x) / 2,
         y: (coordinates.top.y + coordinates.bottom.y) / 2,
@@ -33,6 +35,9 @@ function Tile({ number, resource, coordinates, robber, gameSocketRef }) {
             break;
         default:
             break;
+    }
+
+    const handleClick = () => {
     }
 
     if (number) {

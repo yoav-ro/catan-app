@@ -27,3 +27,11 @@ export const resetCurrPlayer = () => (
         description: "Resets the current player",
     }
 )
+
+export const setCanMoveRobber = (canMoveRobber) => (
+    {
+        type: "SET_AWAIT_MOVE_ROBBER",
+        description: "Sets if the game is expectiving a robber move",
+        canMoveRobber: canMoveRobber,
+    }
+)
