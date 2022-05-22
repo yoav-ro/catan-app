@@ -42,28 +42,32 @@ class Board {
             return status ? status : "free";
         }
         else {
-            throw "Invalid road coordinates"
+            throw "Invalid road coordinates";
         }
     }
 
     moveRobber(row, cell) {
-        this.tiles.forEach(tile => {
+        let retMsg;
+        for (let tile of this.tiles) {
             if (tile.row === row && tile.cell === cell) {
                 if (tile.isRobber) {
-                    throw "Robber already on tile"
+                    throw "Robber already on tile";
                 }
                 tile.isRobber = true;
+                retMsg = `Robber was moved to a ${tile.resource} (${tile.number}) tile`;
             }
-        });
+        }
 
         //Remove robber from where it was previously
-        this.tiles.forEach(tile => {
+        for (let tile of this.tiles) {
             if (tile.row !== row && tile.cell !== cell) {
                 if (tile.isRobber) {
-                    this.isRobber = false;
+                    tile.isRobber = false;
                 }
             }
-        });
+        }
+
+        return retMsg;
     }
 
     //Validates junction input and adds it to the board if valid.
@@ -283,7 +287,7 @@ class Board {
         }
         return true;
     }
-    
+
     //Compares two junctions
     #compareJunctions(j1x, j1y, j2x, j2y) {
         return ((roundBySecondDec(j1x) === roundBySecondDec(j2x)) && (roundBySecondDec(j1y) === roundBySecondDec(j2y)));

@@ -8,7 +8,7 @@ import DiceRoller from "./diceRoller";
 function MainEventComp({ gameSocketRef }) {
     const currPlayer = useSelector(state => state.playerReducer);
     const [event, setEvent] = useState("");
-    console.log("tender");
+    
     const [showDropModal, setShowDropModal] = useState(false);
     const handleCloseDropModal = () => setShowDropModal(false);
 

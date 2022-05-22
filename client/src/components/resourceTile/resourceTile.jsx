@@ -7,6 +7,7 @@ import Robber from "../boardPieces/robber";
 import { moveRobberDir } from "../../utils/directiveCreator";
 import { useSelector, useDispatch } from "react-redux";
 import { setCanMoveRobber } from "../../actions";
+import "../styles/resourceTile.css";
 
 function Tile({ number, resource, coordinates, robber, row, cell, gameSocketRef }) {
     const canMoveRobber = useSelector(state => state.robberReducer);
@@ -80,9 +81,9 @@ function Tile({ number, resource, coordinates, robber, row, cell, gameSocketRef 
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
-                <circle cx={center.x} cy={center.y} r="20" fill="white" stroke="black" />
+                <Robber tileCX={center.x} tileCY={center.y} shouldRender={robber} />
+                <circle className="numberCircle" cx={center.x} cy={center.y} r="20" />
                 <text fill={numColor} x={center.x} y={center.y} strokeWidth="4px" fontFamily="Arial" dy=".3em" dx={numberPosCorrection}>{number}</text>
-                <Robber tileCX={center.x} tileCY={center.y} shouldRender={robber} resourceType={resource} />
             </g>
         )
     }
