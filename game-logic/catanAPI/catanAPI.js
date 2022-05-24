@@ -19,19 +19,12 @@ class catanAPI extends Game {
     sendDirective(directiveObj) {
         const directiveMsg = this.#parseDirective(directiveObj);
         console.log(this.directiveExpectation);
+
         return {
-            gamedata: this,
-            outPut: {
-                type: directiveMsg.error ? "declined" : "approved",
-                message: directiveMsg,
-                expectation: this.directiveExpectation,
-            }
+            gameData: this, //Game data
+            message: directiveMsg, //Array containing descriptions of what the directive caused
+            expectation: this.directiveExpectation, //The next acceptable directive types
         }
-        // return {
-        //     gameData: this,
-        //     message: directiveMsg,
-        //     expectation: this.directiveExpectation,
-        // }
     }
 
     //Handles directive parsing by type
@@ -79,7 +72,7 @@ class catanAPI extends Game {
             const totalRoll = this.lastRoll.dice1 + this.lastRoll.dice2;
             this.giveResourcesByRoll(totalRoll);
             this.#setDirectiveExpetation(directiveObj);
-            return `Player ${directiveObj.player} has rolled ${totalRoll} (${this.lastRoll.dice1} + ${this.lastRoll.dice2})`;
+            return [`Player ${directiveObj.player} has rolled ${totalRoll} (${this.lastRoll.dice1} + ${this.lastRoll.dice2})`];
         } catch (error) {
             return { error: error };
         }
@@ -108,7 +101,7 @@ class catanAPI extends Game {
                     throw "Invalid build item";
             }
             this.#setDirectiveExpetation(directiveObj);
-            return retMsg;
+            return [retMsg];
         } catch (error) {
             return { error: error };
         }
@@ -121,7 +114,7 @@ class catanAPI extends Game {
             const { player, resources } = directiveObj;
             const retMsg = this.dropResources(player, resources)
             this.#setDirectiveExpetation(directiveObj);
-            return retMsg;
+            return [retMsg];
         } catch (error) {
             return { error: error }
         }
@@ -163,7 +156,7 @@ class catanAPI extends Game {
                     throw "Invalid dev card type";
             }
             this.#setDirectiveExpetation(directiveObj);
-            return retMsg;
+            return [retMsg];
         } catch (error) {
             return { error: error };
         }
@@ -207,7 +200,7 @@ class catanAPI extends Game {
                 retMsg = this.executeTrade(offeringPlayer, offeredPlayer, offeringPlayerResources, offeredPlayerResources);
             }
             this.#setDirectiveExpetation(directiveObj);
-            return retMsg;
+            return [retMsg];
         } catch (error) {
             return { error: error };
         }
@@ -220,7 +213,7 @@ class catanAPI extends Game {
             const retMsg = this.robbPlayer(player, playerToRob);
             this.isAwaitingRobb = false;
             this.#setDirectiveExpetation(directiveObj);
-            return retMsg;
+            return [retMsg];
         } catch (error) {
             return { error: error };
         }
@@ -231,7 +224,7 @@ class catanAPI extends Game {
             const { newRow, newCell } = directiveObj;
             const retMsg = this.board.moveRobber(newRow, newCell);
             this.#setDirectiveExpetation(directiveObj);
-            return retMsg;
+            return [retMsg];
         } catch (error) {
             return { error: error };
         }
@@ -282,7 +275,6 @@ class catanAPI extends Game {
                 retMsg = `${lastPlayer.color} has finished his turn. Now Its ${this.setupOrder[0].color}'s turn.`;
             }
             else {
-
                 const lastPlayer = this.playerOrder.shift()
                 this.playerOrder.push(lastPlayer);
                 this.isAwaitingRobb = false;
@@ -295,7 +287,7 @@ class catanAPI extends Game {
             if (victory) {
                 this.#handleVictory(victory);
             }
-            return retMsg;
+            return [retMsg];
         } catch (error) {
             return { error: error };
         }
@@ -305,7 +297,7 @@ class catanAPI extends Game {
     #parseTradeWithPort(directiveObj) {
         try {
             const { player, portType, resourceToGive, resourceToTake } = directiveObj;
-            return this.tradeWithPort(portType, player, resourceToGive, resourceToTake);
+            return [this.tradeWithPort(portType, player, resourceToGive, resourceToTake)];
         } catch (error) {
             return { error: error };
         }

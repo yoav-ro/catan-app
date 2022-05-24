@@ -32,7 +32,7 @@ function countItemsInArray(array, itemToCount) {
 }
 
 function randomItemFromArray(array) {
-    array[Math.floor(Math.random() * array.length)];
+    return array[Math.floor(Math.random() * array.length)];
 }
 
 function roundBySecondDec(num) {

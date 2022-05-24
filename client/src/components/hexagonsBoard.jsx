@@ -57,7 +57,7 @@ function HexagonBoard({ boardData: board, gameSocketRef }) {
                 <Port x={60} y={398} type={board.portsData[1].type} junctionA={board.portsData[1].junctionA} junctionB={board.portsData[1].junctionB} scale={0.06} />
                 <Port x={60} y={188} type={board.portsData[0].type} junctionA={board.portsData[0].junctionA} junctionB={board.portsData[0].junctionB} scale={0.06} />
             </svg>
-            <RobbPlayer show={showRobbModal} handleClose={handleCloseRobbModal} />
+            <RobbPlayer show={showRobbModal} handleClose={handleCloseRobbModal} gameSocketRef={gameSocketRef}/>
         </div>
     )
 }

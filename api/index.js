@@ -66,9 +66,9 @@ io.sockets.on("connection", (socket) => {
         }
         console.log(directiveOutput)
         if (fullGameData) {
-            if (objToEmit.output.type === "error") {
+            if (objToEmit.message.error) {
                 console.log(objToEmit.message.error);
-                io.to(socket.id).emit("game-error", objToEmit.output.message.error)
+                io.to(socket.id).emit("game-error", objToEmit.message.error)
             }
             else {
                 io.to(fullGameData.id).emit("game-data", objToEmit);

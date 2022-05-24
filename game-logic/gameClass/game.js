@@ -75,7 +75,9 @@ class Game {
     robbPlayer(robbingPlayerColor, robbedPlayerColor) {
         const robbingPlayer = this.#getPlayerByColor(robbingPlayerColor);
         const robbed = this.#getPlayerByColor(robbedPlayerColor);
+        console.log(robbed.resources);
         const resToRobb = randomItemFromArray(robbed.resources);
+        console.log(resToRobb);
         robbed.removeResources([resToRobb]);
         robbingPlayer.addResources([resToRobb]);
         return `Player ${robbedPlayerColor} was robbed by player ${robbingPlayerColor}`;
@@ -241,7 +243,7 @@ class Game {
             player.buildSettelment(x, y, shouldTakeResources);
             this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT, shouldBeConnected);
             const longestRoadMsg = this.#setLongestRoadPlayer();
-            return `Player ${playerColor} built a settelment` + longestRoadMsg;
+            return [`Player ${playerColor} built a settelment`, longestRoadMsg];
         }
     }
 
@@ -260,7 +262,7 @@ class Game {
             player.buildRoad(startX, startY, endX, endY, shouldTakeResources);
             this.board.addRoad(playerColor, startX, startY, endX, endY);
             const longestRoadMsg = this.#setLongestRoadPlayer();
-            return `Player ${playerColor} built a road` + longestRoadMsg;
+            return [`Player ${playerColor} built a road`, longestRoadMsg];
         }
     }
 

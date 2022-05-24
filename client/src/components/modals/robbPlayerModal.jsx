@@ -1,33 +1,47 @@
-import React from "react";
-import { Container, Modal, Button, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Container, Modal, Button, Row, Form } from "react-bootstrap";
+import { NotificationManager } from "react-notifications";
 import { useSelector } from "react-redux";
 import { robbPlayerDir } from "../../utils/directiveCreator";
 import "../styles/playerDeck.css";
 
-function RobbPlayer({ show, handleClose, event }) {
+function RobbPlayer({ show, handleClose, gameSocketRef }) {
+    const [chosenPlayer, setChosenPlayer] = useState("");
     const currPlayer = useSelector(state => state.playerReducer);
     const gameData = useSelector(state => state.gameReducer);
     const board = gameData.game.game.board;
 
-    //Find all robbAble players
+    const players = gameData.game.game.players;
+    const player = players.find(player => player.playerName.username === currPlayer);
+
+    const roundNum = (num) => { return Math.round((num + Number.EPSILON) * 100) / 100 };
+    const roundCoords = (coords) => { return { x: roundNum(coords.x), y: roundNum(coords.y) } };
+
     const robbedTile = board.tiles.find(tile => tile.isRobber); // Getting the coordiantes of the tile with the robber on it
-    const tileJunctions = [
-        robbedTile.coordinates.top, robbedTile.coordinates.topLeft, robbedTile.coordinates.topRight,
-        robbedTile.coordinates.bottom, robbedTile.coordinates.bottomLeft, robbedTile.coordinates.bottomRight
+    const roundTileJunctions = [
+        roundCoords(robbedTile.coordinates.top), roundCoords(robbedTile.coordinates.topLeft), roundCoords(robbedTile.coordinates.topRight),
+        roundCoords(robbedTile.coordinates.bottom), roundCoords(robbedTile.coordinates.bottomLeft), roundCoords(robbedTile.coordinates.bottomRight),
     ];
+
     const playersOnTile = [];
-    for (let junction of board.builtJunctions) { // Getting all the players with build junctions other the tile
-        if (tileJunctions.includes({ x: junction.x, y: junction.y })) {
-            if (!playersOnTile.includes(junction.player)) {
-                playersOnTile.push(junction.player);
+    for (let coord of board.builtJunctions) { // Getting all the players with build junctions other the tile
+        if (roundTileJunctions.some(tileCoord => tileCoord.x === roundNum(coord.x) && tileCoord.y === roundNum(coord.y))) {
+            if (!playersOnTile.includes(coord.player)) {
+                playersOnTile.push(coord.player);
             }
         }
     }
-
     const robbAblePlayers = gameData.game.game.players.filter(player => player.playerName.username !== currPlayer && playersOnTile.includes(player.color));
 
     const handleConfirm = () => {
-
+        if (!chosenPlayer) {
+            NotificationManager.error("No player selected");
+        }
+        else {
+            const directive = robbPlayerDir(player.color, chosenPlayer.color);
+            gameSocketRef.current.emit("newDirective", { directive: directive });
+            handleClose();
+        }
     }
 
     return (
@@ -38,16 +52,21 @@ function RobbPlayer({ show, handleClose, event }) {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        Select a player to robb:
-                        <Row>
+                        Select a player to rob:
+                        <Form>
                             {robbAblePlayers.map((opponent, key) => {
                                 return (<Container key={key}>
-                                    <div className="playerHeader" style={{ color: opponent.color }}>{opponent.playerName.username} ({opponent.color})</div>
-                                    {opponent.resources.lenght} resources
+                                    <Form.Check
+                                        type="radio"
+                                        name="robbAble"
+                                        style={{ color: opponent.color }}
+                                        className="playerHeader"
+                                        label={`${opponent.playerName.username} (${opponent.color}, ${opponent.resources.length} resources)`}
+                                        onChange={() => setChosenPlayer(opponent)}
+                                    />
                                 </Container>)
                             })}
-                        </Row>
-
+                        </Form>
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
