@@ -50,7 +50,7 @@ function getCardDirectiveInfo(directive) {
     if (directive.card.type === "Monopoly") {
         return {
             type: "Monopoly",
-            resource: resource,
+            resource: directive.card.resource,
         }
     }
     if (directive.card.type === "Year of Plenty") {
@@ -58,6 +58,11 @@ function getCardDirectiveInfo(directive) {
             type: "Year of Plenty",
             resourceA: directive.card.resourceA,
             resourceB: directive.card.resourceB,
+        }
+    }
+    if (directive.card.type === "Knight") {
+        return {
+            type: "Knight",
         }
     }
 }

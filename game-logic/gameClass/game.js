@@ -64,9 +64,10 @@ class Game {
         return `Year of plenty was used by player ${playerColor}`;
     }
 
-    activateKnight(playerColor, newRobberRow, newRobberCell) {
-        this.board.moveRobber(newRobberRow, newRobberCell);
+    activateKnight(playerColor) {
         const player = this.#getPlayerByColor(playerColor);
+        player.validateDevCard(devCards.knight.name);
+        player.activateDevCard(devCards.knight.name);
         player.activeKnights++;
         this.#setLargestArmy();
         return `A knight was activated by player ${playerColor}`;
@@ -110,7 +111,7 @@ class Game {
     #setLargestArmy() {
         let mostKnights = 0;
         let mostKnightsPlayer;
-        players.forEach(player => {
+        this.players.forEach(player => {
             if (player.activeKnights > mostKnights) {
                 mostKnights = player.activeKnights;
                 mostKnightsPlayer = player;
@@ -288,7 +289,7 @@ class Game {
         }
     }
 
-    makeDevCardUseAble(playerColor) {
+    makePlayerDevCardUseable(playerColor) {
         const player = this.#getPlayerByColor(playerColor);
         player.makeDevCardUseAble();
     }

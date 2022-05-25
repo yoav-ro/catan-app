@@ -1,9 +1,10 @@
 function mixArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
+    const arrayMock= array.slice();
+    for (let i = arrayMock.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        [arrayMock[i], arrayMock[j]] = [arrayMock[j], arrayMock[i]];
     }
-    return array;
+    return arrayMock;
 }
 
 function getDistance(x1, y1, x2, y2) {
@@ -22,8 +23,8 @@ function doesArrayContain(array, items) {
 function dicesRoll() {
     const dice1 = Math.round(Math.random() * (6 - 1) + 1);
     const dice2 = Math.round(Math.random() * (6 - 1) + 1);
-    // return { dice1: dice1, dice2: dice2 };
-    return { dice1: 5, dice2: 2 };
+    return { dice1: dice1, dice2: dice2 };
+    // return { dice1: 5, dice2: 2 };
 
 }
 

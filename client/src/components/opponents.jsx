@@ -13,8 +13,8 @@ function Opponents({ playersData, gameData }) {
                 </Row>
                 {playersData.map((player, key) => {
                     const playerName = player.playerName.username;
-                    const { color, resources, devCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = player;
-                    const usedDevCards = devCards.filter(card => card.isUsed);
+                    const { color, resources, playerDevCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = player;
+                    const usedDevCards = playerDevCards.filter(card => card.isUsed);
 
                     const knightCards = usedDevCards.filter(item => item.name === "Knight");
                     const roadBuildingCards = usedDevCards.filter(item => item.name === "Road Building");
@@ -33,7 +33,7 @@ function Opponents({ playersData, gameData }) {
                                 </Col>
                             </Row>
                             <div>Resources: {resources.length}</div>
-                            <div>Unused development cards: {devCards.length - usedDevCards.length}</div>
+                            <div>Unused development cards: {playerDevCards.length - usedDevCards.length}</div>
                             <div>Development cards:</div>
                             <Container>
                                 <Row>

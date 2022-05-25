@@ -9,18 +9,18 @@ class Player {
         this.citiesLeft = 4;
         this.settelmentsLeft = 5;
         this.roadsLeft = 15;
-        this.resources = [];
-        // this.resources = [ //for easier testing
-        //     resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD,
-        //     resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
-        //     resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK,
-        //     resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON,
-        //     resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP,
-        // ]
+        // this.resources = [];
+        this.resources = [ //for easier testing
+            resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD,
+            resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
+            resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK,
+            resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON,
+            resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP,
+        ]
         this.settelments = [];
         this.cities = [];
         this.roads = [];
-        this.devCards = [];
+        this.playerDevCards = [];
         this.activeKnights = 0;
     }
 
@@ -34,7 +34,7 @@ class Player {
         let doesPlayerHaveCard = false;
         let doesPlayerHaveUnusedCard = false;
         let isCardUseAble = false;
-        for (let card of this.devCards) {
+        for (let card of this.playerDevCards) {
             if (card.name === devCardType) {
                 doesPlayerHaveCard = true;
                 if (!card.isUsed) {
@@ -59,8 +59,9 @@ class Player {
 
     //Activaes the given dev card
     activateDevCard(devCardType) {
-        const card = this.devCards.find(card => card.name === devCardType);
+        const card = this.playerDevCards.find(card => card.name === devCardType);
         if (!card.isUsed) {
+            console.log(`used ${card.name} by ${this.color}`)
             card.isUsed = true;
         }
     }
@@ -72,7 +73,8 @@ class Player {
 
     //Making all the player's dev cards useable
     makeDevCardUseAble() {
-        for (let card of this.devCards) {
+        for (let card of this.playerDevCards) {
+            console.log(`Making ${card.name} useable`)
             card.isUseAble = true;
         }
     }
@@ -184,7 +186,7 @@ class Player {
 
     //Adds a new development card to the player and adds a point if the new card is a victory point
     buyDevCard(devCardObj) {
-        this.devCards.push(devCardObj);
+        this.playerDevCards.push(devCardObj);
         this.removeResources(buildingCosts.devCard);
         if (devCardObj.name === devCards.victoryPoint.name) {
             this.addPoints(1);

@@ -132,3 +132,13 @@ export function robbPlayerDir(robbingPlayer, robbedPlayer) {
         playerToRob: robbedPlayer,
     }
 }
+
+export function activateKnightDir(player) {
+    return {
+        type: directiveTypes.activateDevCard,
+        player: player,
+        card: {
+            type: "Knight",
+        }
+    }
+}

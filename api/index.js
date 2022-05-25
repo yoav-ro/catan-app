@@ -64,7 +64,6 @@ io.sockets.on("connection", (socket) => {
             message: directiveOutput.message,
             players: fullGameData.players,
         }
-        console.log(directiveOutput)
         if (fullGameData) {
             if (objToEmit.message.error) {
                 console.log(objToEmit.message.error);

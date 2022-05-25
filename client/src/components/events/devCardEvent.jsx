@@ -21,6 +21,11 @@ function DevCardEvent({ show, handleClose, event }) {
                 `${activatingPlayerName.username} (${activatingPlayerColor}) used a Year of Plenty card!`,
                 `He recieved ${card.resourceA} and ${card.resourceB}`
             ]
+        case "Knight":
+            cardInfo = [
+                `${activatingPlayerName.username} (${activatingPlayerColor}) used a knight card!`,
+                `He is able to move the knight and rob another player`,
+            ]
         default:
             break;
     }

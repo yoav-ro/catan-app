@@ -137,8 +137,7 @@ class catanAPI extends Game {
             let retMsg;
             switch (card.type) {
                 case devCards.knight.name:
-                    const { newRobberX, newRobberY } = card;
-                    retMsg = this.activateKnight(player, newRobberX, newRobberY);
+                    retMsg = this.activateKnight(player);
                     this.isAwaitingRobb = true;
                     break;
                 case devCards.monopoly.name:
@@ -278,7 +277,7 @@ class catanAPI extends Game {
                 const lastPlayer = this.playerOrder.shift()
                 this.playerOrder.push(lastPlayer);
                 this.isAwaitingRobb = false;
-                this.makeDevCardUseAble(lastPlayer.color);
+                this.makePlayerDevCardUseable(lastPlayer.color);
                 this.#setDirectiveExpetation(directiveObj);
                 retMsg = `${lastPlayer.color} has finished his turn. Now Its ${this.playerOrder[0].color}'s turn.`;
             }
@@ -393,6 +392,7 @@ class catanAPI extends Game {
             case directiveTypes.activateDevCard:
                 this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard];
                 if (this.isAwaitingRobb) {
+                    console.log()
                     this.directiveExpectation.push(moveRobber);
                 }
                 break;

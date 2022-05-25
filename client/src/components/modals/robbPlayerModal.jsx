@@ -52,21 +52,26 @@ function RobbPlayer({ show, handleClose, gameSocketRef }) {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        Select a player to rob:
-                        <Form>
-                            {robbAblePlayers.map((opponent, key) => {
-                                return (<Container key={key}>
-                                    <Form.Check
-                                        type="radio"
-                                        name="robbAble"
-                                        style={{ color: opponent.color }}
-                                        className="playerHeader"
-                                        label={`${opponent.playerName.username} (${opponent.color}, ${opponent.resources.length} resources)`}
-                                        onChange={() => setChosenPlayer(opponent)}
-                                    />
-                                </Container>)
-                            })}
-                        </Form>
+                        <Container id="robForm" style={{ display: robbAblePlayers.length > 0 ? "initial" : "none" }}>
+                            Select a player to rob:
+                            <Form>
+                                {robbAblePlayers.map((opponent, key) => {
+                                    return (<Container key={key}>
+                                        <Form.Check
+                                            type="radio"
+                                            name="robbAble"
+                                            style={{ color: opponent.color }}
+                                            className="playerHeader"
+                                            label={`${opponent.playerName.username} (${opponent.color}, ${opponent.resources.length} resources)`}
+                                            onChange={() => setChosenPlayer(opponent)}
+                                        />
+                                    </Container>)
+                                })}
+                            </Form>
+                        </Container>
+                        <Container id="noRobbAble" style={{ display: robbAblePlayers.length > 0 ? "none" : "initial" }}>
+                            No opponents on this tile.
+                        </Container>
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
