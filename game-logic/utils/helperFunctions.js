@@ -1,10 +1,9 @@
 function mixArray(array) {
-    const arrayMock= array.slice();
-    for (let i = arrayMock.length - 1; i > 0; i--) {
+    for (let i = array.length - 1; i > 0; i--) {
         let j = Math.floor(Math.random() * (i + 1));
-        [arrayMock[i], arrayMock[j]] = [arrayMock[j], arrayMock[i]];
+        [array[i], array[j]] = [array[j], array[i]];
     }
-    return arrayMock;
+    return array;
 }
 
 function getDistance(x1, y1, x2, y2) {

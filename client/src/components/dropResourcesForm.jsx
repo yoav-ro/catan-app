@@ -9,7 +9,7 @@ function DropResourcesForm({ selectedResources, setSelectedResources }) {
     const players = gameData.game.game.players;
     const player = players.find(player => player.playerName.username === currPlayer);
 
-    const [resourcesMock, setResourcesMock] = useState(player.resources.slice()); //Modifiable resources array used to display updated resources after drop selections
+    const [resourcesMock, setResourcesMock] = useState(player.resources.slice()); // Modifiable resources array used to display updated resources after drop selections
     const requiredDropCount = player.resources.length % 2 > 0 ? (player.resources.length / 2) - 0.5 : player.resources.length / 2;
 
     const resourceStyle = (resource) => {
@@ -42,7 +42,7 @@ function DropResourcesForm({ selectedResources, setSelectedResources }) {
                 }
             }
             else {
-                filteredMock.push(resourcesMock[i])
+                filteredMock.push(resourcesMock[i]);
             }
         }
         setResourcesMock(filteredMock);
@@ -77,7 +77,6 @@ function DropResourcesForm({ selectedResources, setSelectedResources }) {
                                                     {item}
                                                 </Dropdown.Item>
                                             )
-
                                         })}
                                     </Dropdown.Menu>
                                 </Dropdown>

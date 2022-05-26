@@ -1,7 +1,7 @@
 const { dicesRoll, mixArray, randomItemFromArray, doesArrayContain, roundBySecondDec } = require("../utils/helperFunctions");
 const { pieceTypes, resourcesTypes, devCardsArr, playerColors, devCards, ports, buildingCosts } = require("../utils/constants");
-const Player = require("../playerClass/player");
-const Board = require("../boardClass/board");
+const Player = require("../playerClass/Player");
+const Board = require("../boardClass/Board");
 
 class Game {
     constructor(playersDataArr, tileRadius) {
@@ -11,8 +11,8 @@ class Game {
             new Player(playersDataArr[1].name, playersDataArr[1].color),
             new Player(playersDataArr[2].name, playersDataArr[2].color),
             new Player(playersDataArr[3].name, playersDataArr[3].color)];
-        this.devCards = mixArray(devCardsArr);
-        this.initPickOrder = mixArray(playerColors);
+        this.devCards = mixArray(devCardsArr.slice());
+        this.initPickOrder = mixArray([playerColors.BLUE, playerColors.ORANGE, playerColors.RED, playerColors.WHITE]);
         this.droppingPlayers = [];
         this.largestArmyPlayer = undefined;
         this.longestRoadPlayer = undefined;
@@ -76,9 +76,7 @@ class Game {
     robbPlayer(robbingPlayerColor, robbedPlayerColor) {
         const robbingPlayer = this.#getPlayerByColor(robbingPlayerColor);
         const robbed = this.#getPlayerByColor(robbedPlayerColor);
-        console.log(robbed.resources);
         const resToRobb = randomItemFromArray(robbed.resources);
-        console.log(resToRobb);
         robbed.removeResources([resToRobb]);
         robbingPlayer.addResources([resToRobb]);
         return `Player ${robbedPlayerColor} was robbed by player ${robbingPlayerColor}`;
@@ -117,7 +115,7 @@ class Game {
                 mostKnightsPlayer = player;
             }
         });
-        if (this.largestArmyPlayer) { //If the largest army needs to be taken from someone
+        if (this.largestArmyPlayer) { // If the largest army needs to be taken from someone
             if (mostKnightsPlayer.activeKnights > this.largestArmyPlayer.activeKnights) {
                 const lastLargestArmy = this.largestArmyPlayer;
                 mostKnightsPlayer.addPoints(2);
@@ -126,7 +124,7 @@ class Game {
                 return `The largest army was taken from ${lastLargestArmy} by ${this.largestArmyPlayer}`;
             }
         }
-        else if (mostKnightsPlayer.activeKnights >= 3) { //If no one had the largest army before
+        else if (mostKnightsPlayer.activeKnights >= 3) { // If no one had the largest army before
             mostKnightsPlayer.addPoints(2);
             this.largestArmyPlayer = mostKnightsPlayer;
             return `${this.largestArmyPlayer} now has the largest army`;
@@ -151,12 +149,12 @@ class Game {
         }
     }
 
-    //Returns a random number between 1-12
+    // Returns a random number between 1-12
     rollDice() {
         return dicesRoll();
     }
 
-    //Give player their resources by roll
+    // Give player their resources by roll
     giveResourcesByRoll(roll) {
         if (roll !== 7) {
             this.board.tiles.forEach(tile => {

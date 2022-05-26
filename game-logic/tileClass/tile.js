@@ -13,7 +13,7 @@ class Tile {
 
 module.exports = Tile;
 
-//Calulate the tiles junction's coordinates by its row, cell, and radius
+// Calulate the tiles junction's coordinates by its row, cell, and radius
 function calulateCoordinatesByBoardPosition(row, cell, radius) {
     const rad30 = 30 * Math.PI / 180;
     const hexPerpendicular = Math.cos(rad30) * radius;

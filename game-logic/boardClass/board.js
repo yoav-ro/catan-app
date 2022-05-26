@@ -1,6 +1,6 @@
 const { resourcesTypes, numbersArr, resourcesArr, pieceTypes, portsArr } = require("../utils/constants");
 const { mixArray, getDistance, roundBySecondDec } = require("../utils/helperFunctions")
-const Tile = require("../tileClass/tile");
+const Tile = require("../tileClass/Tile");
 
 class Board {
     #tileRadius
@@ -14,7 +14,7 @@ class Board {
         this.portsData = getPortsData(this.tiles);
     }
 
-    //Returns the status of the requested junction, if exists.
+    // Returns the status of the requested junction, if exists.
     getJunctionStatus(x, y) {
         if (this.doCoordinatesExist(x, y)) {
             const junctionItem = this.builtJunctions.find(junction => this.#compareJunctions(junction.x, junction.y, x, y))
@@ -25,7 +25,7 @@ class Board {
         }
     }
 
-    //Returns the status of the requested road, if exists.
+    // Returns the status of the requested road, if exists.
     getRoadStatus(startX, startY, endX, endY) {
         const roundStartX = roundBySecondDec(startX);
         const roundStartY = roundBySecondDec(startY);
@@ -58,7 +58,7 @@ class Board {
             }
         }
 
-        //Remove robber from where it was previously
+        // Remove robber from where it was previously
         for (let tile of this.tiles) {
             if (tile.row !== row && tile.cell !== cell) {
                 if (tile.isRobber) {
@@ -70,7 +70,7 @@ class Board {
         return retMsg;
     }
 
-    //Validates junction input and adds it to the board if valid.
+    // Validates junction input and adds it to the board if valid.
     addJunction(player, x, y, type) {
         const newJunction = {
             type: type,
@@ -89,14 +89,14 @@ class Board {
         this.#calcLongestRoad();
     }
 
-    //Validates if the settelment can be build
+    // Validates if the settelment can be build
     canPlaceSettelmentOrCity(player, x, y, newPieceType, shouldBeConnected) {
-        if (!this.doCoordinatesExist(x, y)) { //Checks if the coordinates are valid
+        if (!this.doCoordinatesExist(x, y)) { // Checks if the coordinates are valid
             throw "Invalid junction coordinates";
         }
 
         const junctionStatus = this.getJunctionStatus(x, y);
-        if (junctionStatus !== "free") { //Type validation
+        if (junctionStatus !== "free") { // Type validation
             if (newPieceType === junctionStatus.type) {
                 throw "Junction is already a " + newPieceType;
             }
@@ -107,16 +107,16 @@ class Board {
             }
         }
 
-        if (!this.#isJunction2RoadsApart(x, y)) { //Check if the junction isnt too close to any other junctions
+        if (!this.#isJunction2RoadsApart(x, y)) { // Check if the junction isnt too close to any other junctions
             throw "Junction is to close to another settelment";
         }
-        if (!this.#isJunctionConnectedToPlayer(player.color, x, y) && shouldBeConnected) { //Check if the junction is connected to a road build by the same player
+        if (!this.#isJunctionConnectedToPlayer(player.color, x, y) && shouldBeConnected) { // Check if the junction is connected to a road build by the same player
             throw "Junction is not connected to any road build by player " + player.color;
         }
         return true;
     }
 
-    //Validates that the new junction is at least 2 roads apart from all other build junctions
+    // Validates that the new junction is at least 2 roads apart from all other build junctions
     #isJunction2RoadsApart(x, y) {
         if (this.builtJunctions.length > 0) {
             let ret = true;
@@ -131,7 +131,7 @@ class Board {
         return true;
     }
 
-    //Validates that the new junction is connected to a road built by the building player
+    // Validates that the new junction is connected to a road built by the building player
     #isJunctionConnectedToPlayer(player, x, y) {
         for (let road of this.roads) {
             if (roundBySecondDec(road.startX) === roundBySecondDec(x) && roundBySecondDec(road.startY) === roundBySecondDec(y) && road.player === player) {
@@ -144,7 +144,7 @@ class Board {
         return false;
     }
 
-    //Validates road input and adds it to the board if valid.
+    // Validates road input and adds it to the board if valid.
     addRoad(player, startX, startY, endX, endY) {
         const newRoadObj = {
             player: player,
@@ -158,16 +158,16 @@ class Board {
     }
 
     canPlaceRoad(player, startX, startY, endX, endY) {
-        //Checks if the coordinates are valid
+        // Checks if the coordinates are valid
         if (!this.doCoordinatesExist(startX, startY) || !this.doCoordinatesExist(endX, endY) || Math.round(getDistance(startX, startY, endX, endY)) !== this.#tileRadius) {
             throw "Invalid road";
         }
-        //Check if the road is free
+        // Check if the road is free
         const roadStatus = this.getRoadStatus(startX, startY, endX, endY);
         if (roadStatus !== "free") {
             throw "Road already accupied";
         }
-        //Checks if the road is connected to another player
+        // Checks if the road is connected to another player
         const isConnectedToJunction = this.#isConnectedToJunction(player, startX, startY, endX, endY);
         const isConnectedToRoad = this.#isConnectedToRoad(player, startX, startY, endX, endY);
         if (!isConnectedToJunction && !isConnectedToRoad) {
@@ -176,7 +176,7 @@ class Board {
         return true;
     }
 
-    //Checks if the new road is connected to a junction build by the building player
+    // Checks if the new road is connected to a junction build by the building player
     #isConnectedToJunction(player, startX, startY, endX, endY) {
         const startStatus = this.getJunctionStatus(startX, startY);
         const endStatus = this.getJunctionStatus(endX, endY);
@@ -189,7 +189,7 @@ class Board {
         return false;
     }
 
-    //Checks if the new road is connected to a road build by the building player
+    // Checks if the new road is connected to a road build by the building player
     #isConnectedToRoad(player, startX, startY, endX, endY) {
         const mockRoad = {
             player: player,
@@ -208,18 +208,18 @@ class Board {
         return ret;
     }
 
-    //Find the longest road on the board
+    // Find the longest road on the board
     #calcLongestRoad() {
         this.longestRoad = [];
         this.roads.forEach(road => {
-            const longestByMyRoad = this.#getLongestFromSegment([road], []); //For every road on board, searches for the longest sequense based on it
+            const longestByMyRoad = this.#getLongestFromSegment([road], []); // For every road on board, searches for the longest sequense based on it
             if (longestByMyRoad.length > this.longestRoad.length) {
                 this.longestRoad = longestByMyRoad;
             }
         });
     }
 
-    //Enlarges the given roads sequence by adding new connected roads until no new connected roads are found
+    // Enlarges the given roads sequence by adding new connected roads until no new connected roads are found
     #getLongestFromSegment(currSeq, siblingRoads) {
         const nextSegments = this.#checkSegmentNeighbor(currSeq, siblingRoads);
         if (nextSegments.length > 0) {
@@ -233,7 +233,7 @@ class Board {
         return currSeq;
     }
 
-    //Finds all roads diverged from the last road of the given sequence
+    // Finds all roads diverged from the last road of the given sequence
     #checkSegmentNeighbor(roadSeq, siblingRoads) {
         const lastRoad = roadSeq[roadSeq.length - 1];
         const connectedRoads = [];
@@ -247,7 +247,7 @@ class Board {
         return connectedRoads;
     }
 
-    //Checks if the given roads are connected 
+    // Checks if the given roads are connected 
     #areRoadsConnected(roadA, roadB) {
         let { player: colorA, startX: startXA, startY: startYA, endX: endXA, endY: endYA } = roadA;
         let { player: colorB, startX: startXB, startY: startYB, endX: endXB, endY: endYB } = roadB;
@@ -276,7 +276,7 @@ class Board {
         return false;
     }
 
-    //Checks if the connection point between two roads isnt blocked by an opponent player's junction
+    // Checks if the connection point between two roads isnt blocked by an opponent player's junction
     #validateRoadSequence(player, x, y) {
         const junctionStatus = this.getJunctionStatus(x, y);
         if (junctionStatus === "free") {
@@ -288,7 +288,7 @@ class Board {
         return true;
     }
 
-    //Compares two junctions
+    // Compares two junctions
     #compareJunctions(j1x, j1y, j2x, j2y) {
         return ((roundBySecondDec(j1x) === roundBySecondDec(j2x)) && (roundBySecondDec(j1y) === roundBySecondDec(j2y)));
     }
@@ -315,7 +315,7 @@ class Board {
     }
 }
 
-//Each tiles should contain: coordinates, number, resource
+// Each tiles should contain: coordinates, number, resource
 function getTilesData(tileRadius) {
     const resources = mixArray(resourcesArr);
     const numbers = mixArray(numbersArr);
@@ -351,7 +351,7 @@ function getTilesData(tileRadius) {
 
 function getPortsData(tiles) {
     const ports = portsArr.slice();
-    const portCoords = []; //todo- manage the coords to pairs and give each pair a port type
+    const portCoords = [];
     tiles.forEach(tile => {
         if (tile.row === 0) {
             if (tile.cell === 0) {

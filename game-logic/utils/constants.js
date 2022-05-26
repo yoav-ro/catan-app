@@ -81,14 +81,14 @@ const devCards = {
     }
 }
 
-//Each game contains: 14 knight, 5 victory points, 2 road building, 2 years of plenty, 2 monopoly.
+// Each game contains: 14 knight, 5 victory points, 2 road building, 2 years of plenty, 2 monopoly.
 const devCardsArr = [
-    devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight,
-    devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight, devCards.knight,
-    devCards.victoryPoint, devCards.victoryPoint, devCards.victoryPoint, devCards.victoryPoint, devCards.victoryPoint,
-    devCards.roadBuilding, devCards.roadBuilding,
-    devCards.yearOfPlenty, devCards.yearOfPlenty,
-    devCards.monopoly, devCards.monopoly,
+    structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight),
+    structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight), structuredClone(devCards.knight),
+    structuredClone(devCards.victoryPoint), structuredClone(devCards.victoryPoint), structuredClone(devCards.victoryPoint), structuredClone(devCards.victoryPoint), structuredClone(devCards.victoryPoint),
+    structuredClone(devCards.roadBuilding), structuredClone(devCards.roadBuilding),
+    structuredClone(devCards.yearOfPlenty), structuredClone(devCards.yearOfPlenty),
+    structuredClone(devCards.monopoly), structuredClone(devCards.monopoly),
 ]
 
 
