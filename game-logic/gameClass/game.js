@@ -1,7 +1,7 @@
 const { dicesRoll, mixArray, randomItemFromArray, doesArrayContain, roundBySecondDec } = require("../utils/helperFunctions");
 const { pieceTypes, resourcesTypes, devCardsArr, playerColors, devCards, ports, buildingCosts } = require("../utils/constants");
-const Player = require("../playerClass/player");
-const Board = require("../boardClass/board");
+const Player = require("../playerClass/Player");
+const Board = require("../boardClass/Board");
 
 class Game {
     constructor(playersDataArr, tileRadius) {
@@ -11,8 +11,8 @@ class Game {
             new Player(playersDataArr[1].name, playersDataArr[1].color),
             new Player(playersDataArr[2].name, playersDataArr[2].color),
             new Player(playersDataArr[3].name, playersDataArr[3].color)];
-        this.devCards = mixArray(devCardsArr);
-        this.initPickOrder = mixArray(playerColors);
+        this.devCards = mixArray(devCardsArr.slice());
+        this.initPickOrder = mixArray([playerColors.BLUE, playerColors.ORANGE, playerColors.RED, playerColors.WHITE]);
         this.droppingPlayers = [];
         this.largestArmyPlayer = undefined;
         this.longestRoadPlayer = undefined;
@@ -64,9 +64,10 @@ class Game {
         return `Year of plenty was used by player ${playerColor}`;
     }
 
-    activateKnight(playerColor, newRobberRow, newRobberCell) {
-        this.board.moveRobber(newRobberRow, newRobberCell);
+    activateKnight(playerColor) {
         const player = this.#getPlayerByColor(playerColor);
+        player.validateDevCard(devCards.knight.name);
+        player.activateDevCard(devCards.knight.name);
         player.activeKnights++;
         this.#setLargestArmy();
         return `A knight was activated by player ${playerColor}`;
@@ -108,13 +109,13 @@ class Game {
     #setLargestArmy() {
         let mostKnights = 0;
         let mostKnightsPlayer;
-        players.forEach(player => {
+        this.players.forEach(player => {
             if (player.activeKnights > mostKnights) {
                 mostKnights = player.activeKnights;
                 mostKnightsPlayer = player;
             }
         });
-        if (this.largestArmyPlayer) { //If the largest army needs to be taken from someone
+        if (this.largestArmyPlayer) { // If the largest army needs to be taken from someone
             if (mostKnightsPlayer.activeKnights > this.largestArmyPlayer.activeKnights) {
                 const lastLargestArmy = this.largestArmyPlayer;
                 mostKnightsPlayer.addPoints(2);
@@ -123,7 +124,7 @@ class Game {
                 return `The largest army was taken from ${lastLargestArmy} by ${this.largestArmyPlayer}`;
             }
         }
-        else if (mostKnightsPlayer.activeKnights >= 3) { //If no one had the largest army before
+        else if (mostKnightsPlayer.activeKnights >= 3) { // If no one had the largest army before
             mostKnightsPlayer.addPoints(2);
             this.largestArmyPlayer = mostKnightsPlayer;
             return `${this.largestArmyPlayer} now has the largest army`;
@@ -148,12 +149,12 @@ class Game {
         }
     }
 
-    //Returns a random number between 1-12
+    // Returns a random number between 1-12
     rollDice() {
         return dicesRoll();
     }
 
-    //Give player their resources by roll
+    // Give player their resources by roll
     giveResourcesByRoll(roll) {
         if (roll !== 7) {
             this.board.tiles.forEach(tile => {
@@ -176,13 +177,13 @@ class Game {
                 }
             });
         }
-        // else {
-        //     for (let i = 0; i < this.players.length; i++) {
-        //         if (this.players[i].resources.length > 7) {
-        //             this.droppingPlayers.push(this.players[i]);
-        //         }
-        //     }
-        // }
+        else {
+            for (let i = 0; i < this.players.length; i++) {
+                if (this.players[i].resources.length > 7) {
+                    this.droppingPlayers.push(this.players[i]);
+                }
+            }
+        }
     }
 
     dropResources(playerColor, resourcesToDrop) {
@@ -195,8 +196,8 @@ class Game {
             throw `Drop declined. Player ${playerColor} should drop exactly ${requiredDropCount} resources.`;
         }
         player.removeResources(resourcesToDrop);
-        const playerIndex = this.droppingPlayers.findIndex(player => player.color === player);
-        this.dropResources.splice(playerIndex, 1);
+        const playerIndex = this.droppingPlayers.findIndex(player => player.color === playerColor);
+        this.droppingPlayers.splice(playerIndex, 1);
         return `Player ${playerColor} has dropped ${resourcesToDrop.length} resources`;
     }
 
@@ -241,7 +242,7 @@ class Game {
             player.buildSettelment(x, y, shouldTakeResources);
             this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT, shouldBeConnected);
             const longestRoadMsg = this.#setLongestRoadPlayer();
-            return `Player ${playerColor} built a settelment` + longestRoadMsg;
+            return [`Player ${playerColor} built a settelment`, longestRoadMsg];
         }
     }
 
@@ -260,7 +261,7 @@ class Game {
             player.buildRoad(startX, startY, endX, endY, shouldTakeResources);
             this.board.addRoad(playerColor, startX, startY, endX, endY);
             const longestRoadMsg = this.#setLongestRoadPlayer();
-            return `Player ${playerColor} built a road` + longestRoadMsg;
+            return [`Player ${playerColor} built a road`, longestRoadMsg];
         }
     }
 
@@ -286,7 +287,7 @@ class Game {
         }
     }
 
-    makeDevCardUseAble(playerColor) {
+    makePlayerDevCardUseable(playerColor) {
         const player = this.#getPlayerByColor(playerColor);
         player.makeDevCardUseAble();
     }

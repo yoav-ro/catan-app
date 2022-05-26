@@ -1,12 +1,14 @@
+import { gameReducerActionTypes } from "../utils/actionTypes";
+
 const initialState = { game: "none" };
 
 export default function gameReducer(state = initialState, action) {
     switch (action.type) {
-        case "SET_GAME_DATA":
+        case gameReducerActionTypes.setGameData:
             const game = action.data;
             alignBoardCoords(game.game.board);
             return { game: game };
-        case "RESET_GAME_DATA":
+        case gameReducerActionTypes.resetGameData:
             return { game: "none" };
         default:
             return state;

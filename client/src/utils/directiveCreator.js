@@ -1,6 +1,8 @@
+import { directiveTypes } from "./constants"
+
 export function buildSettelmentDir(x, y, player) {
     return {
-        type: "build",
+        type: directiveTypes.build,
         player: player,
         item: {
             type: "settelment",
@@ -12,7 +14,7 @@ export function buildSettelmentDir(x, y, player) {
 
 export function setupBuildSettelmetDir(x, y, player) {
     return {
-        type: "setupBuild",
+        type: directiveTypes.setupBuild,
         player: player,
         item: {
             type: "settelment",
@@ -24,7 +26,7 @@ export function setupBuildSettelmetDir(x, y, player) {
 
 export function buildCityDir(x, y, player) {
     return {
-        type: "build",
+        type: directiveTypes.build,
         player: player,
         item: {
             type: "city",
@@ -36,7 +38,7 @@ export function buildCityDir(x, y, player) {
 
 export function buildRoadDir(x1, y1, x2, y2, player) {
     return {
-        type: "build",
+        type: directiveTypes.build,
         player: player,
         item: {
             type: "road",
@@ -50,7 +52,7 @@ export function buildRoadDir(x1, y1, x2, y2, player) {
 
 export function setupBuildRoadDir(x1, y1, x2, y2, player) {
     return {
-        type: "setupBuild",
+        type: directiveTypes.setupBuild,
         player: player,
         item: {
             type: "road",
@@ -64,28 +66,28 @@ export function setupBuildRoadDir(x1, y1, x2, y2, player) {
 
 export function endTurnDir(player) {
     return {
-        type: "endTurn",
+        type: directiveTypes.endTurn,
         player: player,
     }
 }
 
 export function rollDiceDir(player) {
     return {
-        type: "rollDice",
+        type: directiveTypes.rollDice,
         player: player,
     }
 }
 
 export function buyDevCardDir(player) {
     return {
-        type: "buyDevCard",
+        type: directiveTypes.buyDevCard,
         player: player,
     }
 }
 
 export function activateMonopolyDir(player, resource) {
     return {
-        type: "activateDevCard",
+        type: directiveTypes.activateDevCard,
         player: player,
         card: {
             type: "Monopoly",
@@ -96,12 +98,47 @@ export function activateMonopolyDir(player, resource) {
 
 export function activateYoPDir(player, resourceA, resourceB) {
     return {
-        type: "activateDevCard",
+        type: directiveTypes.activateDevCard,
         player: player,
         card: {
             type: "Year of Plenty",
             resourceA: resourceA,
             resourceB: resourceB,
+        }
+    }
+}
+
+export function dropResourcesDir(player, resourcesToDrop) {
+    return {
+        type: directiveTypes.dropResources,
+        player: player,
+        resources: resourcesToDrop,
+    }
+}
+
+export function moveRobberDir(player, newRow, newCell) {
+    return {
+        type: directiveTypes.moveRobber,
+        player: player,
+        newRow: newRow,
+        newCell: newCell,
+    }
+}
+
+export function robbPlayerDir(robbingPlayer, robbedPlayer) {
+    return {
+        type: directiveTypes.robbPlayer,
+        player: robbingPlayer,
+        playerToRob: robbedPlayer,
+    }
+}
+
+export function activateKnightDir(player) {
+    return {
+        type: directiveTypes.activateDevCard,
+        player: player,
+        card: {
+            type: "Knight",
         }
     }
 }

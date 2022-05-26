@@ -10,7 +10,7 @@ class Player {
         this.settelmentsLeft = 5;
         this.roadsLeft = 15;
         // this.resources = [];
-        this.resources = [ //for easier testing
+        this.resources = [ // for easier testing
             resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD,
             resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
             resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK,
@@ -20,19 +20,21 @@ class Player {
         this.settelments = [];
         this.cities = [];
         this.roads = [];
-        this.devCards = [];
+        this.playerDevCards = [];
         this.activeKnights = 0;
     }
 
+    // Adds new resources to the player
     addResources(resourcesToAddArr) {
         this.resources = this.resources.concat(resourcesToAddArr);
     }
 
+    // Validates that the player can play the given dev card
     validateDevCard(devCardType) {
         let doesPlayerHaveCard = false;
         let doesPlayerHaveUnusedCard = false;
         let isCardUseAble = false;
-        for (let card of this.devCards) {
+        for (let card of this.playerDevCards) {
             if (card.name === devCardType) {
                 doesPlayerHaveCard = true;
                 if (!card.isUsed) {
@@ -55,25 +57,27 @@ class Player {
         }
     }
 
+    // Activaes the given dev card
     activateDevCard(devCardType) {
-        const card = this.devCards.find(card => card.name === devCardType);
+        const card = this.playerDevCards.find(card => card.name === devCardType && !card.isUsed && card.isUseAble);
         if (!card.isUsed) {
             card.isUsed = true;
         }
     }
 
+    // Counts all the player's resources by type 
     countResources(resourceType) {
         return countItemsInArray(this.resources, resourceType);
     }
 
+    // Making all the player's dev cards useable
     makeDevCardUseAble() {
-        console.log("setting cards of " + this.color + " as useable");
-        console.log(this.devCards);
-        for (let card of this.devCards) {
+        for (let card of this.playerDevCards) {
             card.isUseAble = true;
         }
     }
 
+    // Remove the given resources from the player's hand
     removeResources(resourcesToRemoveArr) {
         if (doesArrayContain(this.resources, resourcesToRemoveArr)) {
             resourcesToRemoveArr.forEach(item => {
@@ -83,10 +87,12 @@ class Player {
         }
     }
 
+    // Add points to the player
     addPoints(pointsToAdd) {
         this.points += pointsToAdd;
     }
 
+    // Remove points from the player
     removePoints(pointsToRemove) {
         if (pointsToRemove > this.points) {
             this.points = 0;
@@ -96,6 +102,7 @@ class Player {
         }
     }
 
+    // Adds a new city to the player
     buildCity(x, y) {
         for (let i = 0; i < this.settelments.length; i++) {
             if (this.settelments[i].x === x && this.settelments[i].y === y) {
@@ -114,6 +121,7 @@ class Player {
         }
     }
 
+    // Validates if the player can build a city
     canBuildCity(x, y) {
         if (this.citiesLeft === 0) {
             throw "4 cities already build";
@@ -127,6 +135,7 @@ class Player {
         return true;
     }
 
+    // Adds a new settlement to the player
     buildSettelment(x, y, shouldTakeResources) {
         this.settelments.push({ x: x, y: y });
         if (shouldTakeResources) {
@@ -136,6 +145,7 @@ class Player {
         this.addPoints(1);
     }
 
+    // Validates if the player can build a new settlement
     canBuildSettlement(x, y, shouldTakeResources) {
         if (this.settelmentsLeft < 0) {
             throw "5 settelments already built";
@@ -149,6 +159,7 @@ class Player {
         return true;
     }
 
+    // Adds a new road to the player
     buildRoad(startX, startY, endX, endY, shouldTakeResources) {
         this.roads.push({ startX: startX, startY: startY, endX: endX, endY: endY });
         if (shouldTakeResources) {
@@ -157,6 +168,7 @@ class Player {
         this.roadsLeft--;
     }
 
+    // Validates if the player can build a new road
     canBuildRoad(startX, startY, endX, endY, shouldTakeResources) {
         if (this.roadsLeft < 0) {
             throw "15 roads already built";
@@ -170,14 +182,16 @@ class Player {
         return true;
     }
 
+    // Adds a new development card to the player and adds a point if the new card is a victory point
     buyDevCard(devCardObj) {
-        this.devCards.push(devCardObj);
+        this.playerDevCards.push(devCardObj);
         this.removeResources(buildingCosts.devCard);
         if (devCardObj.name === devCards.victoryPoint.name) {
             this.addPoints(1);
         }
     }
 
+    // Validates if the player can buy a new development card
     canBuyDevCard() {
         if (!doesArrayContain(this.resources, buildingCosts.devCard)) {
             throw "Not enough resources";

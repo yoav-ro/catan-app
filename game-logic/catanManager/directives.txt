@@ -15,8 +15,8 @@ example:
 ----------------------------------------------------------
 {
     type: "rollDice"
-    action: roll the dice at the beggining of a turn
-    condition: at the beggining of a turn. the only action that can happen before is a knight activation 
+    action: roll the dice at the beginning of a turn
+    condition: at the beginning of a turn. the only action that can happen before is a knight activation 
     expectation: any but another dice roll and trade response, robbPlayer (if 7)
 }
 
@@ -52,7 +52,7 @@ examples:
     type: "build",
     player: "blue"
     item: {
-        type: "settelment"
+        type: "settlement"
         x: 10,
         y: 45,
     }
@@ -86,7 +86,7 @@ examples:
 
 {
     type: "activateDevCard"
-    action: activate a certien dev card.
+    action: activate a certain dev card.
     condition: after dice roll (unless knight). Once at a turn. Cant use just built cards (unless year of plenty)
     expectation: any but dice roll and trade response robbPlayer (if knight)
 }
@@ -149,7 +149,7 @@ example:
     player: "blue",
     tradeWith: "red",
     givenResources: ["wood", "wood"],
-    recievedResources: ["iron", "sheep"],
+    receivedResources: ["iron", "sheep"],
 }
 
 ----------------------------------------------------------
@@ -184,8 +184,22 @@ example:
     player: "red",
     tradeWith: "blue",
     givenResources: ["iron", "sheep"],
-    recievedResources: ["wood", "wood"],
+    receivedResources: ["wood", "wood"],
     isAccepted: true
+}
+----------------------------------------------------------
+{
+    type: "moveRobber"
+    action: moves the robber between tiles
+    condition: after knight or rolling 7
+    expectation: any
+}
+example:
+{
+    type: "robbPlayer",
+    player: "blue",
+    newRow: 2,
+    newCell: 3,
 }
 ----------------------------------------------------------
 
@@ -205,7 +219,7 @@ example:
 
 {
     type: "setupBuild"
-    action: builds a settelment or a road in setup mode 
+    action: builds a settlement or a road in setup mode 
     condition: only in setup phase
     expectation: more setupBuilds, ending of setup phase
 }
@@ -215,7 +229,7 @@ examples:
     type: "setupBuild",
     player: "blue"
     item: {
-        name: "settelment"
+        name: "settlement"
         x: 10,
         y: 45,
     }

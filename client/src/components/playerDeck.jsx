@@ -8,24 +8,24 @@ import "./styles/playerDeck.css";
 
 function PlayerDeck({ playerData, gameData, gameSocketRef }) {
     const playerName = playerData.playerName.username;
-    const { color, points, resources, devCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = playerData;
+    const { color, points, resources, playerDevCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = playerData;
     const woodCount = resources.filter(item => item === resourcesTypes.WOOD.name).length;
     const sheepCount = resources.filter(item => item === resourcesTypes.SHEEP.name).length;
     const ironCount = resources.filter(item => item === resourcesTypes.IRON.name).length;
     const brickCount = resources.filter(item => item === resourcesTypes.BRICK.name).length;
     const wheatCount = resources.filter(item => item === resourcesTypes.WHEAT.name).length;
 
-    const knightCards = devCards.filter(item => item.name === "Knight");
-    const roadBuildingCards = devCards.filter(item => item.name === "Road Building");
-    const monopolyCards = devCards.filter(item => item.name === "Monopoly");
-    const yearOfPlentyCards = devCards.filter(item => item.name === "Year of Plenty");
-    const victoryPointCards = devCards.filter(item => item.name === "Victory Point");
+    const knightCards = playerDevCards.filter(item => item.name === "Knight");
+    const roadBuildingCards = playerDevCards.filter(item => item.name === "Road Building");
+    const monopolyCards = playerDevCards.filter(item => item.name === "Monopoly");
+    const yearOfPlentyCards = playerDevCards.filter(item => item.name === "Year of Plenty");
+    const victoryPointCards = playerDevCards.filter(item => item.name === "Victory Point");
 
-    const activeKnights = knightCards.filter(item => item.isUsed === true).length;
-    const activeRoadBuildingCards = roadBuildingCards.filter(item => item.isUsed === true).length;
-    const activeMonopolyCards = monopolyCards.filter(item => item.isUsed === true).length;
-    const activeYearOfPlentyCards = yearOfPlentyCards.filter(item => item.isUsed === true).length;
-    const activeVictoryPointCards = victoryPointCards.filter(item => item.isUsed === true).length;
+    const activeKnights = knightCards.filter(item => item.isUsed).length;
+    const activeRoadBuildingCards = roadBuildingCards.filter(item => item.isUsed).length;
+    const activeMonopolyCards = monopolyCards.filter(item => item.isUsed).length;
+    const activeYearOfPlentyCards = yearOfPlentyCards.filter(item => item.isUsed).length;
+    const activeVictoryPointCards = victoryPointCards.filter(item => item.isUsed).length;
     return (
         <div className="playerDeck">
             <Container style={{ marginBottom: "10px" }}>

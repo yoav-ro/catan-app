@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Container, Modal, Button } from "react-bootstrap";
+import { activeEventTypes } from "../../utils/constants";
 
-function DiceRoller({ event }) {
+function DiceRoller({ show, handleClose, event }) {
+    if (event.type !== activeEventTypes.rollDice) {
+        return <></>
+    }
     const { dice1, dice2, rollerColor, rollerName } = event;
-
-    const [show, setShow] = useState(true);
-    const handleClose = () => setShow(false);
-    setTimeout(() => {
-        setShow(false);
-    }, 2000);
 
     return (
         <div>

@@ -1,40 +1,60 @@
 import React, { useEffect, useState } from "react";
-import { eventTypes } from "../../utils/constants";
+import { useSelector } from "react-redux";
+import { activeEventTypes, passiveEventTypes } from "../../utils/constants";
+import DropResourcesModal from "../modals/dropResourceEvent";
 import DevCardEvent from "./devCardEvent";
 import DiceRoller from "./diceRoller";
 
 function MainEventComp({ gameSocketRef }) {
+    const currPlayer = useSelector(state => state.playerReducer);
     const [event, setEvent] = useState("");
+    
+    const [showDropModal, setShowDropModal] = useState(false);
+    const handleCloseDropModal = () => setShowDropModal(false);
 
-    useEffect(() => {
-        gameSocketRef.current.on("game-event", data => {
-            console.log(data);
-            const eventDuraction = data.type !== eventTypes.rollDice ? 3000 : 1500;
-            setEvent(data);
-            showForDuration(eventDuraction);
-        })
-    })
+    const [showDiceRoll, setShowDiceRoll] = useState(false);
+    const handleCloseDiceRoll = () => setShowDiceRoll(false);
 
-    const showForDuration = (duration) => {
+    const [showDevCard, setShowDevCard] = useState(false);
+    const handleCloseDevCard = () => setShowDevCard(false);
+
+    const showForDuration = (closeCallBack, duration) => {
         setTimeout(() => {
-            setEvent("");
+            closeCallBack();
         }, duration);
     }
 
-    if (event) {
-        if (event.type === eventTypes.rollDice) {
-            return (
-                <DiceRoller event={event} />
-            )
-        }
-        if (event.type === eventTypes.activateDevCard) {
-            return (
-                <DevCardEvent event={event} />
-            )
-        }
-    }
+    gameSocketRef.current.on("game-event", data => {
+        setEvent(data)
+    })
 
-    return <></>
+    useEffect(() => {
+        if (event) {
+            if (event.type === activeEventTypes.rollDice) {
+                setShowDiceRoll(true);
+                showForDuration(handleCloseDiceRoll, 2000);
+            }
+            if (event.type === activeEventTypes.activateDevCard) {
+                setShowDevCard(true);
+                showForDuration(handleCloseDevCard, 2000);
+            }
+            if (event.type === passiveEventTypes.dropResources) {
+                const shouldCurrPlayerDrop = event.droppingPlayers.some(droppingPlayer => droppingPlayer.playerName.username === currPlayer);
+                if (shouldCurrPlayerDrop) {
+                    setShowDropModal(true);
+                }
+            }
+        }
+    }, [event])
+
+
+    return (
+        <>
+            <DiceRoller show={showDiceRoll} handleClose={handleCloseDiceRoll} event={event} />
+            <DevCardEvent show={showDevCard} handleClose={handleCloseDevCard} event={event} />
+            <DropResourcesModal show={showDropModal} handleClose={handleCloseDropModal} gameSocketRef={gameSocketRef} />
+        </>
+    )
 }
 
 export default MainEventComp;

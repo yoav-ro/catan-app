@@ -1,10 +1,12 @@
+import { playerReducerActionTypes } from "../utils/actionTypes";
+
 const initialState = "";
 
 export default function playerReducer(state = initialState, action) {
     switch (action.type) {
-        case "SET_CURR_PLAYER":
+        case playerReducerActionTypes.setCurrPlayer:
             return action.data;
-        case "RESET_CURR_PLAYER":
+        case playerReducerActionTypes.resetCurrPlayer:
             return "";
         default:
             return state;

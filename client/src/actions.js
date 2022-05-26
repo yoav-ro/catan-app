@@ -1,6 +1,8 @@
+import { gameReducerActionTypes, playerReducerActionTypes, robberReducerGameTypes } from "./utils/actionTypes"
+
 export const setGameData = (gameData) => (
     {
-        type: "SET_GAME_DATA",
+        type: gameReducerActionTypes.setGameData,
         data: gameData,
         description: "Updates the game's state",
     }
@@ -8,14 +10,14 @@ export const setGameData = (gameData) => (
 
 export const resetGameData = () => (
     {
-        type: "RESET_GAME_DATA",
+        type: gameReducerActionTypes.resetGameData,
         description: "Deletes the last game's data",
     }
 )
 
 export const setCurrPlayer = (username) => (
     {
-        type: "SET_CURR_PLAYER",
+        type: playerReducerActionTypes.setCurrPlayer,
         description: "Sets the current player by input",
         data: username,
     }
@@ -23,7 +25,15 @@ export const setCurrPlayer = (username) => (
 
 export const resetCurrPlayer = () => (
     {
-        type: "RESET_CURR_PLAYER",
+        type: playerReducerActionTypes.resetCurrPlayer,
         description: "Resets the current player",
+    }
+)
+
+export const setCanMoveRobber = (canMoveRobber) => (
+    {
+        type: robberReducerGameTypes.canMoveRobber,
+        description: "Sets if the game is expectiving a robber move",
+        canMoveRobber: canMoveRobber,
     }
 )

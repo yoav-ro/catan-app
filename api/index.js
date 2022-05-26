@@ -3,10 +3,10 @@ const app = express();
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 const { nanoid } = require("nanoid");
-const CatanGame = require("../game-logic/catanAPI/catanAPI");
+const CatanGame = require("../game-logic/catanManager/CatanManager");
 const cors = require("cors");
-const { eventDirectivesArr } = require("./constants");
-const { eventObjCreator } = require("./helperFunctions");
+const { eventDirectivesArr, activeEventDirectivesArr, passiveEventDirectivesArr, eventTypes, directiveTypes } = require("./constants");
+const { activeEventObjCreator, passiveEventObjCreator, createResourceDropEventObj } = require("./helperFunctions");
 
 require("dotenv").config();
 const port = process.env.PORT || 3001;
@@ -25,11 +25,11 @@ io.sockets.on("connection", (socket) => {
     const gamePlayerCap = 4;
 
     socket.on("joinGame", async ({ username }) => {
-        if (playersQueue.some((player) => player.username === username)) {
+        if (playersQueue.some((player) => player.username === username)) { // Validate user name
             io.to(socket.id).emit("lobby", "User name already taken");
         }
         else {
-            playersQueue.push({ username: username, id: socket.id });
+            playersQueue.push({ username: username, id: socket.id }); // Add to queue
             io.to(socket.id).emit("lobby",
                 {
                     msg: `Joined queue. Looking for ${gamePlayerCap - playersQueue.length} players`,
@@ -38,7 +38,7 @@ io.sockets.on("connection", (socket) => {
             );
         }
 
-        if (playersQueue.length === gamePlayerCap) {
+        if (playersQueue.length === gamePlayerCap) { // Create a new game when cap is filled
             const gameObj = gameCreator(playersQueue);
             const gameId = gameObj.id;
             const connectedSockets = await io.fetchSockets();
@@ -51,7 +51,7 @@ io.sockets.on("connection", (socket) => {
         }
     })
 
-    socket.on("newDirective", ({ directive }) => {
+    socket.on("newDirective", ({ directive }) => { // Handle incoming directive
         const fullGameData = findGameBySocketId(socket.id);
 
         console.log("new directive: " + directive.type);
@@ -62,10 +62,8 @@ io.sockets.on("connection", (socket) => {
             id: fullGameData.id,
             game: directiveOutput.gameData,
             message: directiveOutput.message,
-            expectation: fullGameData.expectation,
             players: fullGameData.players,
         }
-
         if (fullGameData) {
             if (objToEmit.message.error) {
                 console.log(objToEmit.message.error);
@@ -73,29 +71,34 @@ io.sockets.on("connection", (socket) => {
             }
             else {
                 io.to(fullGameData.id).emit("game-data", objToEmit);
+                console.log(objToEmit.game.directiveExpectation);
 
-                if (eventDirectivesArr.includes(directive.type)) {
-                    const eventObj = eventObjCreator(directive, fullGameData.game);
+                if (activeEventDirectivesArr.includes(directive.type)) {
+                    const eventObj = activeEventObjCreator(directive, fullGameData.game);
+                    io.to(fullGameData.id).emit("game-event", eventObj);
+                }
+                if (objToEmit.game.directiveExpectation.includes(directiveTypes.dropResources)) {
+                    const eventObj = createResourceDropEventObj(objToEmit.game);
                     io.to(fullGameData.id).emit("game-event", eventObj);
                 }
             }
         }
     })
 
-    socket.on("leaveQueue", ({ username }) => {
+    socket.on("leaveQueue", ({ username }) => { // Leaving queue
         if (removeFromQueue(username)) {
             io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
             console.log(playersQueue)
         }
     })
 
-    socket.on("disconnect", (reason) => {
+    socket.on("disconnect", (reason) => { // Handle user disconnecting
         console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
         const username = findUserNameBySocketId(socket.id);
         if (removeFromQueue(username)) {
             io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
         }
-        //todo- find the game disconnected from and end it end game
+        // todo- find the game disconnected from and end it end game
     })
 })
 

@@ -4,8 +4,20 @@ import { resourcesTypes } from "../../utils/constants";
 import Junction from "./junction";
 import Road from "../boardPieces/road";
 import Robber from "../boardPieces/robber";
+import { moveRobberDir } from "../../utils/directiveCreator";
+import { useSelector, useDispatch } from "react-redux";
+import { setCanMoveRobber } from "../../actions";
+import "../styles/resourceTile.css";
 
-function Tile({ number, resource, coordinates, robber, gameSocketRef }) {
+function Tile({ number, resource, coordinates, robber, row, cell, gameSocketRef, setShowRobbModal }) {
+    const canMoveRobber = useSelector(state => state.robberReducer);
+    const currPlayer = useSelector(state => state.playerReducer);
+    const gameData = useSelector(state => state.gameReducer);
+    const players = gameData.game.game.players;
+    const dispatch = useDispatch();
+
+    const player = players.find(player => player.playerName.username === currPlayer);
+
     const center = {
         x: (coordinates.top.x + coordinates.bottom.x) / 2,
         y: (coordinates.top.y + coordinates.bottom.y) / 2,
@@ -35,11 +47,20 @@ function Tile({ number, resource, coordinates, robber, gameSocketRef }) {
             break;
     }
 
+    const handleClick = () => {
+        if (canMoveRobber) {
+            const directive = moveRobberDir(player.color, row, cell);
+            gameSocketRef.current.emit("newDirective", { directive: directive });
+            dispatch(setCanMoveRobber(false));
+            setShowRobbModal(true);
+        }
+    }
+
     if (number) {
         const numberPosCorrection = number.toString().length === 2 ? -8 : -4
         const numColor = (number === 6 || number === 8) ? "red" : "black";
         return (
-            <g>
+            <g onClick={handleClick}>
                 <Polygon points={[
                     [coordinates.top.x, coordinates.top.y],
                     [coordinates.topRight.x, coordinates.topRight.y],
@@ -61,15 +82,15 @@ function Tile({ number, resource, coordinates, robber, gameSocketRef }) {
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottom.x} centerY={coordinates.bottom.y} />
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottomLeft.x} centerY={coordinates.bottomLeft.y} />
                 <Junction gameSocketRef={gameSocketRef} centerX={coordinates.bottomRight.x} centerY={coordinates.bottomRight.y} />
-                <circle cx={center.x} cy={center.y} r="20" fill="white" stroke="black" />
+                <Robber tileCX={center.x} tileCY={center.y} shouldRender={robber} />
+                <circle className="numberCircle" cx={center.x} cy={center.y} r="20" />
                 <text fill={numColor} x={center.x} y={center.y} strokeWidth="4px" fontFamily="Arial" dy=".3em" dx={numberPosCorrection}>{number}</text>
-                <Robber tileCX={center.x} tileCY={center.y} shouldRender={robber} resourceType={resource} />
             </g>
         )
     }
 
     return (
-        <g>
+        <g onClick={handleClick}>
             <Polygon points={[
                 [coordinates.top.x, coordinates.top.y],
                 [coordinates.topRight.x, coordinates.topRight.y],

@@ -23,6 +23,8 @@ function dicesRoll() {
     const dice1 = Math.round(Math.random() * (6 - 1) + 1);
     const dice2 = Math.round(Math.random() * (6 - 1) + 1);
     return { dice1: dice1, dice2: dice2 };
+    // return { dice1: 5, dice2: 2 };
+
 }
 
 function countItemsInArray(array, itemToCount) {
@@ -30,7 +32,7 @@ function countItemsInArray(array, itemToCount) {
 }
 
 function randomItemFromArray(array) {
-    array[Math.floor(Math.random() * array.length)];
+    return array[Math.floor(Math.random() * array.length)];
 }
 
 function roundBySecondDec(num) {
