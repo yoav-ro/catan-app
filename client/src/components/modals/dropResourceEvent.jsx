@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { dropResourcesDir } from "../../utils/directiveCreator";
-import DropResourcesForm from "../dropResourcesForm";
+import DropResourcesForm from "../general/dropResourcesForm";
 
 function DropResourcesModal({ show, handleClose, gameSocketRef }) {
     const [selectedResources, setSelectedResources] = useState([]);

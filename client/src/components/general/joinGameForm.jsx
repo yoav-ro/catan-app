@@ -3,7 +3,7 @@ import { Container, Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MainNav from "./navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrPlayer, resetCurrPlayer } from "../actions";
+import { setCurrPlayer, resetCurrPlayer } from "../../actions";
 import { NotificationManager } from 'react-notifications';
 
 function JoinGameForm({ gameSocketRef }) {

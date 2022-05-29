@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import ResourceTile from "./resourceTile/resourceTile";
-import "./styles/hexagon.css"
-import Road from "./boardPieces/road";
-import Port from "./boardPieces/port";
-import City from "./boardPieces/city";
-import Settlement from "./boardPieces/settlement";
-import "./styles/board.css";
-import RobbPlayer from "./modals/robbPlayerModal";
+import ResourceTile from "../resourceTile/resourceTile";
+import "../styles/hexagon.css"
+import Road from "../boardPieces/road";
+import Port from "../boardPieces/port";
+import City from "../boardPieces/city";
+import Settlement from "../boardPieces/settlement";
+import "../styles/board.css";
+import RobbPlayer from "../modals/robbPlayerModal";
 
 function HexagonBoard({ boardData: board, gameSocketRef }) {
     const [showRobbModal, setShowRobbModal] = useState(false);

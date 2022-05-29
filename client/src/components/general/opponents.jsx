@@ -1,8 +1,8 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import LargestArmyIcon from "./icons/largestArmyIcon";
-import LongestRoadIcon from "./icons/longestRoadIcon";
-import "./styles/playerDeck.css";
+import LargestArmyIcon from "../icons/largestArmyIcon";
+import LongestRoadIcon from "../icons/longestRoadIcon";
+import "../styles/playerDeck.css";
 
 function Opponents({ playersData, gameData }) {
     return (

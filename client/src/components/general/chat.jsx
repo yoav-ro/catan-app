@@ -1,5 +1,5 @@
 import React from "react";
-import "./styles/playerDeck.css";
+import "../styles/playerDeck.css";
 import { Container, Row, Col } from "react-bootstrap";
 
 function Chat({ gameData }) {

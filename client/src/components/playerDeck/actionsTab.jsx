@@ -1,10 +1,10 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import RollDiceBtn from "./actions/rollDiceBtn";
-import EndTurnBtn from "./actions/endTurnBtn";
-import BuyDevCardBtn from "./actions/getDevCardBtn";
-import DevCardMenuBtn from "./actions/devCardMenuBtn";
-import DropResourcesBtn from "./actions/dropResourceFormBtn";
+import RollDiceBtn from "../actions/rollDiceBtn";
+import EndTurnBtn from "../actions/endTurnBtn";
+import BuyDevCardBtn from "../actions/getDevCardBtn";
+import DevCardMenuBtn from "../actions/devCardMenuBtn";
+import DropResourcesBtn from "../actions/dropResourceFormBtn";
 
 function ActionsDeck({ gameSocketRef }) {
 
