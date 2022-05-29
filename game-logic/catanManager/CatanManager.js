@@ -13,6 +13,7 @@ class catanAPI extends Game {
         this.isAwaitingRobb = false;
         this.lastRoll = undefined;
         this.pendingTrade = undefined;
+        this.wasKnightUsed = false;
     }
 
     // Recieves a directive and replies with the updated game data
@@ -138,6 +139,7 @@ class catanAPI extends Game {
             switch (card.type) {
                 case devCards.knight.name:
                     retMsg = this.activateKnight(player);
+                    this.wasKnightUsed = true;
                     this.isAwaitingRobb = true;
                     break;
                 case devCards.monopoly.name:
@@ -279,6 +281,7 @@ class catanAPI extends Game {
                 this.isAwaitingRobb = false;
                 this.makePlayerDevCardUseable(lastPlayer.color);
                 this.#setDirectiveExpetation(directiveObj);
+                this.wasKnightUsed = false;
                 retMsg = `${lastPlayer.color} has finished his turn. Now Its ${this.playerOrder[0].color}'s turn.`;
             }
             this.#setDirectiveExpetation(directiveObj);
@@ -402,7 +405,10 @@ class catanAPI extends Game {
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
                 break;
             case directiveTypes.robbPlayer:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
+                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard];
+                if (!this.wasKnightUsed) {
+                    this.directiveExpectation.push(activateDevCard);
+                }
                 break;
             case directiveTypes.setupBuild:
                 if (this.isSetupPhase) {
@@ -429,7 +435,11 @@ class catanAPI extends Game {
                 }
                 break;
             case directiveTypes.moveRobber:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, robbPlayer];
+                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard, robbPlayer];
+                if (!this.wasKnightUsed) {
+                    this.directiveExpectation.push(activateDevCard);
+                }
+
                 break;
             default:
                 break;

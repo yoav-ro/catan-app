@@ -34,8 +34,13 @@ function RobbPlayer({ show, handleClose, gameSocketRef }) {
     const robbAblePlayers = gameData.game.game.players.filter(player => player.playerName.username !== currPlayer && playersOnTile.includes(player.color));
 
     const handleConfirm = () => {
-        if (!chosenPlayer) {
-            NotificationManager.error("No player selected");
+        if (robbAblePlayers.length > 0) {
+            if (!chosenPlayer) {
+                NotificationManager.error("No player selected");
+            }
+            else{
+                handleClose();
+            }
         }
         else {
             const directive = robbPlayerDir(player.color, chosenPlayer.color);

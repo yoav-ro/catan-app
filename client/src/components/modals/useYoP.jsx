@@ -22,6 +22,8 @@ function UseYoP({ show, handleClose, gameSocketRef }) {
         }
         const directive = activateYoPDir(player.color, resourceA.toLowerCase(), resourceB.toLowerCase());
         gameSocketRef.current.emit("newDirective", { directive: directive });
+        setResourceA("");
+        setResourceB("");
         handleClose();
     }
 

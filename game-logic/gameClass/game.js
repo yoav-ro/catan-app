@@ -120,13 +120,13 @@ class Game {
                 const lastLargestArmy = this.largestArmyPlayer;
                 mostKnightsPlayer.addPoints(2);
                 this.largestArmyPlayer.removePoints(2);
-                this.largestArmyPlayer = mostKnightsPlayer;
+                this.largestArmyPlayer = mostKnightsPlayer.color;
                 return `The largest army was taken from ${lastLargestArmy} by ${this.largestArmyPlayer}`;
             }
         }
         else if (mostKnightsPlayer.activeKnights >= 3) { // If no one had the largest army before
             mostKnightsPlayer.addPoints(2);
-            this.largestArmyPlayer = mostKnightsPlayer;
+            this.largestArmyPlayer = mostKnightsPlayer.color;
             return `${this.largestArmyPlayer} now has the largest army`;
         }
     }
