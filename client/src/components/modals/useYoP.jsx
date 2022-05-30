@@ -3,7 +3,7 @@ import { Modal, Button, Row, Col, Dropdown } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { activateYoPDir } from "../../utils/directiveCreator";
 import { NotificationManager } from "react-notifications";
-import { resourcesTypes } from "../../utils/constants";
+import { resourceStyle } from "../../utils/helperFunctions";
 
 function UseYoP({ show, handleClose, gameSocketRef }) {
     const [resourceA, setResourceA] = useState("");
@@ -25,17 +25,6 @@ function UseYoP({ show, handleClose, gameSocketRef }) {
         setResourceA("");
         setResourceB("");
         handleClose();
-    }
-
-    const resourceStyle = (resource) => {
-        if (resource) {
-            const style = {
-                color: resourcesTypes[resource.toUpperCase()].color,
-                WebkitTextStroke: "0.3px black",
-                fontWeight: "bold",
-            }
-            return style;
-        }
     }
 
     if (isSetup) {

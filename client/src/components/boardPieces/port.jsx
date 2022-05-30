@@ -1,7 +1,7 @@
 import React, { useState, } from "react";
 import { resourcesTypes } from "../../utils/constants";
 
-function Port({ type, x, y, junctionA, junctionB, scale: scaleInput }) {
+function Port({ type, x, y, scale: scaleInput }) {
     const [scale, setScale] = useState(scaleInput);
     let text;
     let color;

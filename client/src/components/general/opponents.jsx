@@ -13,9 +13,9 @@ function Opponents({ playersData, gameData }) {
                 </Row>
                 {playersData.map((player, key) => {
                     const playerName = player.playerName.username;
-                    const { color, resources, playerDevCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = player;
+                    const { color, resources, playerDevCards } = player;
                     const usedDevCards = playerDevCards.filter(card => card.isUsed);
-
+                    console.log(gameData)
                     const knightCards = usedDevCards.filter(item => item.name === "Knight");
                     const roadBuildingCards = usedDevCards.filter(item => item.name === "Road Building");
                     const monopolyCards = usedDevCards.filter(item => item.name === "Monopoly");
@@ -29,7 +29,7 @@ function Opponents({ playersData, gameData }) {
                                 </Col>
                                 <Col>
                                     <LongestRoadIcon playerColor={color} longestRoadPlayer={gameData.longestRoadPlayer} />
-                                    <LargestArmyIcon playerColor={color} largestArmyPlayer={gameData.lasrgestArmyPlayer} />
+                                    <LargestArmyIcon playerColor={color} largestArmyPlayer={gameData.largestArmyPlayer} />
                                 </Col>
                             </Row>
                             <div>Resources: {resources.length}</div>

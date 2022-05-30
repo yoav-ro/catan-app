@@ -13,7 +13,7 @@ class catanAPI extends Game {
         this.isAwaitingRobb = false;
         this.lastRoll = undefined;
         this.pendingTrade = undefined;
-        this.wasKnightUsed = false;
+        this.isExpectingDevCard = true;
     }
 
     // Recieves a directive and replies with the updated game data
@@ -139,7 +139,6 @@ class catanAPI extends Game {
             switch (card.type) {
                 case devCards.knight.name:
                     retMsg = this.activateKnight(player);
-                    this.wasKnightUsed = true;
                     this.isAwaitingRobb = true;
                     break;
                 case devCards.monopoly.name:
@@ -156,6 +155,7 @@ class catanAPI extends Game {
                 default:
                     throw "Invalid dev card type";
             }
+            this.isExpectingDevCard = false;
             this.#setDirectiveExpetation(directiveObj);
             return [retMsg];
         } catch (error) {
@@ -281,7 +281,7 @@ class catanAPI extends Game {
                 this.isAwaitingRobb = false;
                 this.makePlayerDevCardUseable(lastPlayer.color);
                 this.#setDirectiveExpetation(directiveObj);
-                this.wasKnightUsed = false;
+                this.isExpectingDevCard = true;
                 retMsg = `${lastPlayer.color} has finished his turn. Now Its ${this.playerOrder[0].color}'s turn.`;
             }
             this.#setDirectiveExpetation(directiveObj);
@@ -467,6 +467,9 @@ class catanAPI extends Game {
             this.#validatePlayerSetup(directiveObj.player);
         }
         else {
+            if (directiveObj.type === directiveTypes.activateDevCard) {
+                throw "Only 1 development card can be used per turn";
+            }
             if (this.droppingPlayers.length === 0) {
                 this.#validatePlayer(directiveObj.player);
             }
