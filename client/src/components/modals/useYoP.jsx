@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { activateYoPDir } from "../../utils/directiveCreator";
 import { NotificationManager } from "react-notifications";
 import { resourceStyle } from "../../utils/helperFunctions";
+import SelectResourceDropDown from "../general/selectResourceDropDown";
+import { resourcesTypes } from "../../utils/constants";
 
 function UseYoP({ show, handleClose, gameSocketRef }) {
     const [resourceA, setResourceA] = useState("");
@@ -14,6 +16,8 @@ function UseYoP({ show, handleClose, gameSocketRef }) {
 
     const player = players.find(player => player.playerName.username === currPlayer);
     const isSetup = gameData.game.game.isSetupPhase;
+
+    const totalResources = [resourcesTypes.WHEAT.name, resourcesTypes.WOOD.name, resourcesTypes.IRON.name, resourcesTypes.SHEEP.name, resourcesTypes.BRICK.name];
 
     const handleConfirm = () => {
         if (!resourceA || !resourceB) {
@@ -44,43 +48,11 @@ function UseYoP({ show, handleClose, gameSocketRef }) {
                     <div>Choose resource:</div>
                     <Row>
                         <Col>
-                            <Dropdown onSelect={(eventKey) => setResourceA(eventKey)}>
-                                <Dropdown.Toggle>
-                                    First resource:
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    {["Wood", "Brick", "Iron", "Sheep", "Wheat"].map((item, key) => {
-                                        return (
-                                            <Dropdown.Item
-                                                key={key}
-                                                style={resourceStyle(item)}
-                                                eventKey={item}>
-                                                {item}
-                                            </Dropdown.Item>
-                                        )
-                                    })}
-                                </Dropdown.Menu>
-                            </Dropdown>
+                            <SelectResourceDropDown resources={totalResources} selectCallBack={setResourceA} dropDownHeader={"First resource: "} />
                             Selected:<div style={resourceStyle(resourceA)}>{resourceA}</div>
                         </Col>
                         <Col>
-                            <Dropdown onSelect={(eventKey) => setResourceB(eventKey)}>
-                                <Dropdown.Toggle>
-                                    Second resource:
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    {["Wood", "Brick", "Iron", "Sheep", "Wheat"].map((item, key) => {
-                                        return (
-                                            <Dropdown.Item
-                                                key={key}
-                                                style={resourceStyle(item)}
-                                                eventKey={item}>
-                                                {item}
-                                            </Dropdown.Item>
-                                        )
-                                    })}
-                                </Dropdown.Menu>
-                            </Dropdown>
+                            <SelectResourceDropDown resources={totalResources} selectCallBack={setResourceB} dropDownHeader={"Second resource: "} />
                             Selected:<div style={resourceStyle(resourceB)}>{resourceB}</div>
                         </Col>
                     </Row>

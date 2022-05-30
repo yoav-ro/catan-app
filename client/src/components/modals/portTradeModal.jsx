@@ -1,14 +1,27 @@
 import React, { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Modal, Button, Form, Container, Row, Col } from "react-bootstrap";
 import SelectResourceDropDown from "../general/selectResourceDropDown";
+import { resourceStyle } from "../../utils/helperFunctions";
+import { resourcesTypes } from "../../utils/constants";
+import { tradeWithPortDir } from "../../utils/directiveCreator";
+import { useSelector } from "react-redux";
 
-
-function PortTradeModal({ portType, show, handleClose }) {
+function PortTradeModal({ portType, show, handleClose, gameSocketRef }) {
     const [resourceToGive, setResourceToGive] = useState(portType === "3to1" ? "" : portType);
     const [resourceToReceive, setResourceToReceive] = useState("");
 
-    const handleConfirm = () => {
+    const gameData = useSelector(state => state.gameReducer);
+    const currPlayer = useSelector(state => state.playerReducer);
+    const players = gameData.game.game.players;
 
+    const player = players.find(player => player.playerName.username === currPlayer);
+
+    const totalResources = [resourcesTypes.WHEAT.name, resourcesTypes.WOOD.name, resourcesTypes.IRON.name, resourcesTypes.SHEEP.name, resourcesTypes.BRICK.name];
+    const filteredResources = totalResources.filter(item => item !== resourceToGive);
+
+    const handleConfirm = () => {
+        const directive = tradeWithPortDir(player.color, portType, resourceToGive, resourceToReceive);
+        gameSocketRef.current.emit("newDirective", { directive: directive });
     }
 
     if (portType !== "3to1") {
@@ -21,18 +34,14 @@ function PortTradeModal({ portType, show, handleClose }) {
                         </Modal.Header>
                         <Modal.Body>
                             <Container>
-                                <div>This is a {portType} port. You can trade 2 {portType} resources for any resource you like</div>
+                                <div>This is a {portType} port. You can trade 2 {portType} resources for any resource you like.</div>
                                 <br />
                                 <Row>
                                     <Col>
-                                        2 X <div style={resourceStyle(resourceToGive)}>{resourceToGives}</div>
+                                        <SelectResourceDropDown selectCallBack={setResourceToReceive} dropDownHeader="Receive" resources={filteredResources} />
                                     </Col>
-                                    <Col>{" => "}</Col>
-                                    <Col>
-                                        <SelectResourceDropDown selectCallBack={setResourceToReceive} />
-                                        1 X <div style={resourceStyle(resourceToReceive)}>{resourceToReceive}</div>
-                                    </Col>
-                                </Row>
+                                </Row> <br />
+                                2 X <span style={resourceStyle(resourceToGive)}>{resourceToGive}</span> {" 🡆 "}  1 X <span style={resourceStyle(resourceToReceive)}>{resourceToReceive ? resourceToReceive : "Not Selected"}</span>
                             </Container>
                         </Modal.Body>
                         <Modal.Footer>
@@ -58,19 +67,17 @@ function PortTradeModal({ portType, show, handleClose }) {
                     </Modal.Header>
                     <Modal.Body>
                         <Container>
-                            <div>This is a 3 to 1 port. You can trade 3 of the same resource for any resource you like</div>
+                            <div>This is a 3 to 1 port. You can trade 3 of the same resource for any resource you like.</div>
                             <br />
                             <Row>
                                 <Col>
-                                    <SelectResourceDropDown selectCallBack={setResourceToGive} />
-                                    3 X <div style={resourceStyle(resourceToGive)}>{resourceToGive}</div>
+                                    <SelectResourceDropDown selectCallBack={setResourceToGive} dropDownHeader="Give" resources={filteredResources} />
                                 </Col>
-                                <Col>{" => "}</Col>
                                 <Col>
-                                    <SelectResourceDropDown selectCallBack={setResourceToReceive} />
-                                    1 X <div style={resourceStyle(resourceToReceive)}>{resourceToReceive}</div>
+                                    <SelectResourceDropDown selectCallBack={setResourceToReceive} dropDownHeader="Recieve" resources={filteredResources} />
                                 </Col>
-                            </Row>
+                            </Row> <br />
+                            3 X <span style={resourceStyle(resourceToGive)}>{resourceToGive}</span> {" 🡆 "}  1 X <span style={resourceStyle(resourceToReceive)}>{resourceToReceive}</span>
                         </Container>
                     </Modal.Body>
                     <Modal.Footer>

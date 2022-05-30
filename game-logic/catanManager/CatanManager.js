@@ -299,7 +299,9 @@ class catanAPI extends Game {
     #parseTradeWithPort(directiveObj) {
         try {
             const { player, portType, resourceToGive, resourceToTake } = directiveObj;
-            return [this.tradeWithPort(portType, player, resourceToGive, resourceToTake)];
+            const retMsg = [this.tradeWithPort(portType, player, resourceToGive, resourceToTake)];
+            this.#setDirectiveExpetation(directiveObj);
+            return retMsg;
         } catch (error) {
             return { error: error };
         }
@@ -373,39 +375,39 @@ class catanAPI extends Game {
     #setDirectiveExpetation(lastDirective) {
         const lastDirectiveType = lastDirective.type;
         this.directiveExpectation = [];
-        const { endTurn, robbPlayer, rollDice, build, activateDevCard, tradeReq, tradeRes, setupBuild, buyDevCard, dropResources, moveRobber } = directiveTypes;
+        const { endTurn, robbPlayer, rollDice, build, activateDevCard, tradeReq, tradeRes, setupBuild, buyDevCard, dropResources, moveRobber, tradeWithPort } = directiveTypes;
         switch (lastDirectiveType) {
             case directiveTypes.endTurn:
                 this.directiveExpectation = [rollDice, activateDevCard];
                 break;
             case directiveTypes.rollDice:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, tradeWithPort];
                 if (this.lastRoll.dice1 + this.lastRoll.dice2 === 7) {
                     if (this.droppingPlayers.length > 0) {
                         this.directiveExpectation = [dropResources];
                     }
                     else {
-                        this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, moveRobber];
+                        this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, moveRobber, tradeWithPort];
                     }
                 }
                 break;
             case directiveTypes.build:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, tradeWithPort];
                 break;
             case directiveTypes.activateDevCard:
-                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard];
+                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard, tradeWithPort];
                 if (this.isAwaitingRobb) {
                     this.directiveExpectation.push(moveRobber);
                 }
                 break;
             case directiveTypes.tradeReq:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeRes, buyDevCard];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeRes, buyDevCard, tradeWithPort];
                 break;
             case directiveTypes.tradeRes:
-                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard];
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, tradeWithPort];
                 break;
             case directiveTypes.robbPlayer:
-                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard];
+                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard, tradeWithPort];
                 if (!this.wasKnightUsed) {
                     this.directiveExpectation.push(activateDevCard);
                 }
@@ -423,7 +425,7 @@ class catanAPI extends Game {
                     }
                 }
                 else {
-                    this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard, buyDevCard];
+                    this.directiveExpectation = [endTurn, build, tradeReq, activateDevCard, buyDevCard, tradeWithPort];
                 }
                 break;
             case directiveTypes.dropResources:
@@ -431,11 +433,11 @@ class catanAPI extends Game {
                     this.directiveExpectation = [dropResources];
                 }
                 else {
-                    this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, moveRobber];
+                    this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, moveRobber, tradeWithPort];
                 }
                 break;
             case directiveTypes.moveRobber:
-                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard, robbPlayer];
+                this.directiveExpectation = [endTurn, build, tradeReq, buyDevCard, robbPlayer, tradeWithPort];
                 if (!this.wasKnightUsed) {
                     this.directiveExpectation.push(activateDevCard);
                 }
@@ -467,7 +469,7 @@ class catanAPI extends Game {
             this.#validatePlayerSetup(directiveObj.player);
         }
         else {
-            if (directiveObj.type === directiveTypes.activateDevCard) {
+            if (directiveObj.type === directiveTypes.activateDevCard && !this.isExpectingDevCard) {
                 throw "Only 1 development card can be used per turn";
             }
             if (this.droppingPlayers.length === 0) {

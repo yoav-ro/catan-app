@@ -329,14 +329,14 @@ class Game {
         const portsByType = this.board.getPortsByType(portType);
 
         for (let settelment of player.settelments) {
-            portsByType.forEach(port => {
-                if (port.junctionA.x === settelment.x && port.junctionA.x === settelment.y) {
+            for (let port of portsByType) {
+                if (roundBySecondDec(port.junctionA.x) === roundBySecondDec(settelment.x) && roundBySecondDec(port.junctionA.x) === roundBySecondDec(settelment.y)) {
                     return true;
                 }
-                if (port.junctionB.x === settelment.x && port.junctionB.x === settelment.y) {
+                if (roundBySecondDec(port.junctionB.x) === roundBySecondDec(settelment.x) && roundBySecondDec(port.junctionB.x) === roundBySecondDec(settelment.y)) {
                     return true;
                 }
-            })
+            }
         }
         return false;
     }

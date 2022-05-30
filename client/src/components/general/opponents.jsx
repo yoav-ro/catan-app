@@ -15,7 +15,6 @@ function Opponents({ playersData, gameData }) {
                     const playerName = player.playerName.username;
                     const { color, resources, playerDevCards } = player;
                     const usedDevCards = playerDevCards.filter(card => card.isUsed);
-                    console.log(gameData)
                     const knightCards = usedDevCards.filter(item => item.name === "Knight");
                     const roadBuildingCards = usedDevCards.filter(item => item.name === "Road Building");
                     const monopolyCards = usedDevCards.filter(item => item.name === "Monopoly");
