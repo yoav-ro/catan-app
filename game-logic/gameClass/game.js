@@ -312,13 +312,23 @@ class Game {
                 player.addResources([resourceToTake]);
                 return "Trade made succesfully";
             }
+            else {
+                throw `Player ${playerColor} doesnt have enough resources (4) to trade with the bank`;
+            }
         }
         if (this.#playerHasPort(playerColor, portType)) {
             const numOfResToTake = portType === "3to1" ? 3 : 2;
-            player.removeResources(Array(numOfResToTake).fill(resourceToGive));
-            player.addResources([resourceToTake]);
-            return "Trade made succesfully";
+            if (doesArrayContain(player.resources, Array(numOfResToTake).fill(resourceToGive))) {
+                player.removeResources(Array(numOfResToTake).fill(resourceToGive));
+                player.addResources([resourceToTake]);
+                return "Trade made succesfully";
+            }
+            else {
+                throw `Player ${playerColor} doesnt have enough resources (${numOfResToTake}) to trade with the port`;
+            }
+
         }
+
         else {
             throw `Player ${playerColor} does not have access to this port (${portType})`;
         }
@@ -327,13 +337,15 @@ class Game {
     #playerHasPort(playerColor, portType) {
         const player = this.#getPlayerByColor(playerColor);
         const portsByType = this.board.getPortsByType(portType);
-
-        for (let settelment of player.settelments) {
+        const playerJunctions = player.settelments.concat(player.cities);
+        console.log(portsByType);
+        console.log(playerJunctions);
+        for (let junction of playerJunctions) {
             for (let port of portsByType) {
-                if (roundBySecondDec(port.junctionA.x) === roundBySecondDec(settelment.x) && roundBySecondDec(port.junctionA.x) === roundBySecondDec(settelment.y)) {
+                if (roundBySecondDec(port.junctionA.x) === roundBySecondDec(junction.x) && roundBySecondDec(port.junctionA.y) === roundBySecondDec(junction.y)) {
                     return true;
                 }
-                if (roundBySecondDec(port.junctionB.x) === roundBySecondDec(settelment.x) && roundBySecondDec(port.junctionB.x) === roundBySecondDec(settelment.y)) {
+                if (roundBySecondDec(port.junctionB.x) === roundBySecondDec(junction.x) && roundBySecondDec(port.junctionB.y) === roundBySecondDec(junction.y)) {
                     return true;
                 }
             }

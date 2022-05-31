@@ -293,10 +293,10 @@ class Board {
         return ((roundBySecondDec(j1x) === roundBySecondDec(j2x)) && (roundBySecondDec(j1y) === roundBySecondDec(j2y)));
     }
 
-    getPortsByType(boardType) {
+    getPortsByType(portType) {
         const portsByType = [];
         this.portsData.forEach(port => {
-            if (port.type === boardType) {
+            if (port.type === portType) {
                 portsByType.push(port);
             }
         })
@@ -353,85 +353,168 @@ function getPortsData(tiles) {
     const ports = portsArr.slice();
     const portCoords = [];
     tiles.forEach(tile => {
+        //     if (tile.row === 0) {
+        //         if (tile.cell === 0) {
+        //             portCoords.push(
+        //                 {
+        //                     junctionA: tile.coordinates.bottom,
+        //                     junctionB: tile.coordinates.bottomLeft,
+        //                     type: ports.pop(),
+        //                 }
+        //             );
+        //         }
+        //         if (tile.cell === 1) {
+        //             portCoords.push({
+        //                 junctionA: tile.coordinates.bottom,
+        //                 junctionB: tile.coordinates.bottomRight,
+        //                 type: ports.pop(),
+        //             })
+        //         }
+        //     }
+        //     if (tile.row === 1) {
+        //         if (tile.cell === 0) {
+        //             portCoords.push(
+        //                 {
+        //                     junctionA: tile.coordinates.topLeft,
+        //                     junctionB: tile.coordinates.bottomLeft,
+        //                     type: ports.pop(),
+        //                 }
+        //             );
+        //         }
+        //         if (tile.cell === 3) {
+        //             portCoords.push(
+        //                 {
+        //                     junctionA: tile.coordinates.bottomRight,
+        //                     junctionB: tile.coordinates.bottom,
+        //                     type: ports.pop(),
+        //                 }
+        //             );
+        //         }
+        //     }
+        //     if (tile.row === 2) {
+        //         if (tile.cell === 4) {
+        //             portCoords.push(
+        //                 {
+        //                     junctionA: tile.coordinates.topRight,
+        //                     junctionB: tile.coordinates.bottomRight,
+        //                     type: ports.pop(),
+        //                 }
+        //             );
+        //         }
+        //     }
+        //     if (tile.row === 3) {
+        //         if (tile.cell === 0) {
+        //             portCoords.push({
+        //                 junctionA: tile.coordinates.topLeft,
+        //                 junctionB: tile.coordinates.bottomLeft,
+        //                 type: ports.pop(),
+        //             })
+        //         }
+        //         if (tile.cell === 3) {
+        //             portCoords.push({
+        //                 junctionA: tile.coordinates.topRight,
+        //                 junctionB: tile.coordinates.top,
+        //                 type: ports.pop(),
+        //             })
+        //         }
+        //     }
+        //     if (tile.row === 4) {
+        //         if (tile.cell === 0) {
+        //             portCoords.push({
+        //                 junctionA: tile.coordinates.topLeft,
+        //                 junctionB: tile.coordinates.top,
+        //                 type: ports.pop(),
+        //             })
+        //         }
+        //         if (tile.cell === 1) {
+        //             portCoords.push({
+        //                 junctionA: tile.coordinates.topRight,
+        //                 junctionB: tile.coordinates.top,
+        //                 type: ports.pop(),
+        //             })
+        //         }
+        //     }
+        // })
         if (tile.row === 0) {
             if (tile.cell === 0) {
-                portCoords.push(
-                    {
-                        junctionA: tile.coordinates.bottom,
-                        junctionB: tile.coordinates.bottomLeft,
-                        type: ports.pop(),
-                    }
-                );
+                const portObj = {
+                    junctionA: tile.coordinates.bottom,
+                    junctionB: tile.coordinates.bottomLeft,
+                    type: ports[0],
+                }
+                portCoords.push(portObj);
             }
             if (tile.cell === 1) {
-                portCoords.push({
+                const portObj = {
                     junctionA: tile.coordinates.bottom,
                     junctionB: tile.coordinates.bottomRight,
-                    type: ports.pop(),
-                })
+                    type: ports[1],
+                }
+                portCoords.push(portObj);
             }
         }
         if (tile.row === 1) {
             if (tile.cell === 0) {
-                portCoords.push(
-                    {
-                        junctionA: tile.coordinates.topLeft,
-                        junctionB: tile.coordinates.bottomLeft,
-                        type: ports.pop(),
-                    }
-                );
+                const portObj = {
+                    junctionA: tile.coordinates.bottom,
+                    junctionB: tile.coordinates.topLeft,
+                    type: ports[8],
+                }
+                portCoords.push(portObj);
             }
             if (tile.cell === 3) {
-                portCoords.push(
-                    {
-                        junctionA: tile.coordinates.bottomRight,
-                        junctionB: tile.coordinates.bottom,
-                        type: ports.pop(),
-                    }
-                );
+                const portObj = {
+                    junctionA: tile.coordinates.bottom,
+                    junctionB: tile.coordinates.bottomRight,
+                    type: ports[2],
+                }
+                portCoords.push(portObj);
             }
         }
         if (tile.row === 2) {
             if (tile.cell === 4) {
-                portCoords.push(
-                    {
-                        junctionA: tile.coordinates.topRight,
-                        junctionB: tile.coordinates.bottomRight,
-                        type: ports.pop(),
-                    }
-                );
+                const portObj = {
+                    junctionA: tile.coordinates.bottomRight,
+                    junctionB: tile.coordinates.topRight,
+                    type: ports[3],
+                }
+                portCoords.push(portObj);
             }
         }
         if (tile.row === 3) {
             if (tile.cell === 0) {
-                portCoords.push({
-                    junctionA: tile.coordinates.topLeft,
-                    junctionB: tile.coordinates.bottomLeft,
-                    type: ports.pop(),
-                })
+                const portObj = {
+                    junctionA: tile.coordinates.bottomLeft,
+                    junctionB: tile.coordinates.topLeft,
+                    type: ports[7],
+                }
+                portCoords.push(portObj)
             }
             if (tile.cell === 3) {
-                portCoords.push({
+                const portObj = {
                     junctionA: tile.coordinates.topRight,
                     junctionB: tile.coordinates.top,
-                    type: ports.pop(),
-                })
+                    type: ports[4],
+                }
+                portCoords.push(portObj);
             }
         }
         if (tile.row === 4) {
             if (tile.cell === 0) {
-                portCoords.push({
-                    junctionA: tile.coordinates.topLeft,
-                    junctionB: tile.coordinates.top,
-                    type: ports.pop(),
-                })
+                const portObj = {
+                    junctionA: tile.coordinates.top,
+                    junctionB: tile.coordinates.bottomLeft,
+                    type: ports[6],
+                }
+                portCoords.push(portObj);
             }
             if (tile.cell === 1) {
-                portCoords.push({
-                    junctionA: tile.coordinates.topRight,
-                    junctionB: tile.coordinates.top,
-                    type: ports.pop(),
-                })
+                const portObj = {
+                    junctionA: tile.coordinates.top,
+                    junctionB: tile.coordinates.topRight,
+                    type: ports[5],
+                }
+                portCoords.push(portObj);
             }
         }
     })

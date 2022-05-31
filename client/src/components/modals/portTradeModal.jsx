@@ -20,8 +20,11 @@ function PortTradeModal({ portType, show, handleClose, gameSocketRef }) {
     const filteredResources = totalResources.filter(item => item !== resourceToGive);
 
     const handleConfirm = () => {
-        const directive = tradeWithPortDir(player.color, portType, resourceToGive, resourceToReceive);
+        const directive = tradeWithPortDir(player.color, portType, resourceToGive.toLowerCase(), resourceToReceive.toLowerCase());
         gameSocketRef.current.emit("newDirective", { directive: directive });
+        setResourceToGive(portType === "3to1" ? "" : portType);
+        setResourceToReceive("");
+        handleClose();
     }
 
     if (portType !== "3to1") {

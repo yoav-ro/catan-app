@@ -25,7 +25,7 @@ function UseKnight({ show, handleClose, gameSocketRef }) {
             <Modal show={show} onHide={handleClose}>
                 <Form>
                     <Modal.Header closeButton>
-                        <Modal.Title>Activate Monopoly</Modal.Title>
+                        <Modal.Title>Activate Knight</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Container>

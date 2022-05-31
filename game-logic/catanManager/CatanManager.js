@@ -441,7 +441,9 @@ class catanAPI extends Game {
                 if (!this.wasKnightUsed) {
                     this.directiveExpectation.push(activateDevCard);
                 }
-
+                break;
+            case directiveTypes.tradeWithPort:
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeRes, buyDevCard, tradeWithPort];
                 break;
             default:
                 break;

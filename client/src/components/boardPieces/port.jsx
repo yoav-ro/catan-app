@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { resourcesTypes } from "../../utils/constants";
 import PortTradeModal from "../modals/portTradeModal";
 
-function Port({ type, x, y, scale: scaleInput, gameSocketRef }) {
+function Port({ type, x, y, scale: scaleInput, gameSocketRef, junctionA, junctionB }) {
     const gameData = useSelector(state => state.gameReducer);
 
     const [scale, setScale] = useState(scaleInput);

@@ -25,7 +25,7 @@ function RobbPlayer({ show, handleClose, gameSocketRef }) {
 
     const playersOnTile = [];
     for (let coord of board.builtJunctions) { // Getting all the players with build junctions other the tile
-        if (roundTileJunctions.some(tileCoord => tileCoord.x === roundNum(coord.x) && tileCoord.y === roundNum(coord.y))) {
+        if (roundTileJunctions.some(tileCoord => roundNum(tileCoord.x) === roundNum(coord.x) && roundNum(tileCoord.y) === roundNum(coord.y))) {
             if (!playersOnTile.includes(coord.player)) {
                 playersOnTile.push(coord.player);
             }
@@ -38,14 +38,11 @@ function RobbPlayer({ show, handleClose, gameSocketRef }) {
             if (!chosenPlayer) {
                 NotificationManager.error("No player selected");
             }
-            else{
+            else {
+                const directive = robbPlayerDir(player.color, chosenPlayer.color);
+                gameSocketRef.current.emit("newDirective", { directive: directive });
                 handleClose();
             }
-        }
-        else {
-            const directive = robbPlayerDir(player.color, chosenPlayer.color);
-            gameSocketRef.current.emit("newDirective", { directive: directive });
-            handleClose();
         }
     }
 
