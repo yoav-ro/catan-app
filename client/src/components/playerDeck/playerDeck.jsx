@@ -1,10 +1,10 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { resourcesTypes } from "../utils/constants";
+import { resourcesTypes } from "../../utils/constants";
 import ActionsDeck from "./actionsTab";
-import LongestRoadIcon from "./icons/longestRoadIcon";
-import LargestArmyIcon from "./icons/largestArmyIcon";
-import "./styles/playerDeck.css";
+import LongestRoadIcon from "../icons/longestRoadIcon";
+import LargestArmyIcon from "../icons/largestArmyIcon";
+import "../styles/playerDeck.css";
 
 function PlayerDeck({ playerData, gameData, gameSocketRef }) {
     const playerName = playerData.playerName.username;
@@ -36,7 +36,7 @@ function PlayerDeck({ playerData, gameData, gameSocketRef }) {
                     <Col>
                         <h3 className="playerHeader" style={{ color: color, float: "right" }}>Points: {points}</h3>
                         <LongestRoadIcon playerColor={color} longestRoadPlayer={gameData.longestRoadPlayer} />
-                        <LargestArmyIcon playerColor={color} largestArmyPlayer={gameData.lasrgestArmyPlayer} />
+                        <LargestArmyIcon playerColor={color} largestArmyPlayer={gameData.largestArmyPlayer} />
                     </Col>
                 </Row>
                 <Row>

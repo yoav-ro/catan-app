@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Dropdown, Button, Row, Col } from "react-bootstrap";
-import { resourcesTypes } from "../utils/constants";
+import { resourcesTypes } from "../../utils/constants";
 import { useSelector } from "react-redux";
 
 function DropResourcesForm({ selectedResources, setSelectedResources }) {

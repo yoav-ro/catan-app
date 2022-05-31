@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import HexagonBoard from "./hexagonsBoard";
 import MainNav from "./navbar";
 import { useSelector } from "react-redux";
 import { Container } from "react-bootstrap";
 import Chat from "./chat";
-import PlayerDeck from "./playerDeck";
+import PlayerDeck from "../playerDeck/playerDeck";
 import Opponents from "./opponents";
-import MainEventComp from "./events/mainActionComp";
+import MainEventComp from "../events/mainActionComp";
 
 function GameTab({ gameSocketRef }) {
     const gameData = useSelector(state => state.gameReducer);

@@ -142,3 +142,13 @@ export function activateKnightDir(player) {
         }
     }
 }
+
+export function tradeWithPortDir(player, portType, resourceToGive, resourceToReceive) {
+    return {
+        type: directiveTypes.tradeWithPort,
+        player: player,
+        portType: portType,
+        resourceToGive: resourceToGive,
+        resourceToTake: resourceToReceive,
+    }
+}

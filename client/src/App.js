@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
-import JoinGameForm from './components/joinGameForm';
+import JoinGameForm from './components/general/joinGameForm';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import GameTab from './components/gameTab';
+import GameTab from './components/general/gameTab';
 import { setGameData } from "./actions";
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';

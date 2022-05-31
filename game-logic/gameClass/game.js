@@ -120,13 +120,13 @@ class Game {
                 const lastLargestArmy = this.largestArmyPlayer;
                 mostKnightsPlayer.addPoints(2);
                 this.largestArmyPlayer.removePoints(2);
-                this.largestArmyPlayer = mostKnightsPlayer;
+                this.largestArmyPlayer = mostKnightsPlayer.color;
                 return `The largest army was taken from ${lastLargestArmy} by ${this.largestArmyPlayer}`;
             }
         }
         else if (mostKnightsPlayer.activeKnights >= 3) { // If no one had the largest army before
             mostKnightsPlayer.addPoints(2);
-            this.largestArmyPlayer = mostKnightsPlayer;
+            this.largestArmyPlayer = mostKnightsPlayer.color;
             return `${this.largestArmyPlayer} now has the largest army`;
         }
     }
@@ -312,13 +312,23 @@ class Game {
                 player.addResources([resourceToTake]);
                 return "Trade made succesfully";
             }
+            else {
+                throw `Player ${playerColor} doesnt have enough resources (4) to trade with the bank`;
+            }
         }
         if (this.#playerHasPort(playerColor, portType)) {
             const numOfResToTake = portType === "3to1" ? 3 : 2;
-            player.removeResources(Array(numOfResToTake).fill(resourceToGive));
-            player.addResources([resourceToTake]);
-            return "Trade made succesfully";
+            if (doesArrayContain(player.resources, Array(numOfResToTake).fill(resourceToGive))) {
+                player.removeResources(Array(numOfResToTake).fill(resourceToGive));
+                player.addResources([resourceToTake]);
+                return "Trade made succesfully";
+            }
+            else {
+                throw `Player ${playerColor} doesnt have enough resources (${numOfResToTake}) to trade with the port`;
+            }
+
         }
+
         else {
             throw `Player ${playerColor} does not have access to this port (${portType})`;
         }
@@ -327,16 +337,16 @@ class Game {
     #playerHasPort(playerColor, portType) {
         const player = this.#getPlayerByColor(playerColor);
         const portsByType = this.board.getPortsByType(portType);
-
-        for (let settelment of player.settelments) {
-            portsByType.forEach(port => {
-                if (port.junctionA.x === settelment.x && port.junctionA.x === settelment.y) {
+        const playerJunctions = player.settelments.concat(player.cities);
+        for (let junction of playerJunctions) {
+            for (let port of portsByType) {
+                if (roundBySecondDec(port.junctionA.x) === roundBySecondDec(junction.x) && roundBySecondDec(port.junctionA.y) === roundBySecondDec(junction.y)) {
                     return true;
                 }
-                if (port.junctionB.x === settelment.x && port.junctionB.x === settelment.y) {
+                if (roundBySecondDec(port.junctionB.x) === roundBySecondDec(junction.x) && roundBySecondDec(port.junctionB.y) === roundBySecondDec(junction.y)) {
                     return true;
                 }
-            })
+            }
         }
         return false;
     }
