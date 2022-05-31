@@ -338,8 +338,6 @@ class Game {
         const player = this.#getPlayerByColor(playerColor);
         const portsByType = this.board.getPortsByType(portType);
         const playerJunctions = player.settelments.concat(player.cities);
-        console.log(portsByType);
-        console.log(playerJunctions);
         for (let junction of playerJunctions) {
             for (let port of portsByType) {
                 if (roundBySecondDec(port.junctionA.x) === roundBySecondDec(junction.x) && roundBySecondDec(port.junctionA.y) === roundBySecondDec(junction.y)) {
