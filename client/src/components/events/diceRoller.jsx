@@ -16,8 +16,8 @@ function DiceRoller({ show, handleClose, event }) {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <img src={require("../../assets/dices/face" + dice1 + ".png")} />
-                        <img src={require("../../assets/dices/face" + dice2 + ".png")} />
+                        <img src={require("../../assets/dices/face" + dice1 + ".png")} alt={`Dice 1 rolled ${dice1}`} />
+                        <img src={require("../../assets/dices/face" + dice2 + ".png")} alt={`Dice 2 rolled ${dice2}`} />
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>

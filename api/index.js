@@ -58,8 +58,7 @@ io.sockets.on("connection", (socket) => {
         }
     })
 
-    socket.on("msgToServer", ({ messageObj }) => {
-        console.log(messageObj)
+    socket.on("msgToServer", ({ messageObj }) => { // Emit chat messages
         io.to(messageObj.chatId).emit("chat-data", messageObj);
     })
 
@@ -83,7 +82,12 @@ io.sockets.on("connection", (socket) => {
             }
             else {
                 io.to(fullGameData.id).emit("game-data", objToEmit);
-                console.log(objToEmit.game.directiveExpectation);
+
+                console.log(objToEmit)
+                const chatId = "chat" + objToEmit.id.slice(4, objToEmit.id.length);
+                for (let message of objToEmit.message) {
+                    io.to(chatId).emit("chat-data", generateServerMsg(message, chatId));
+                }
 
                 if (activeEventDirectivesArr.includes(directive.type)) {
                     const eventObj = activeEventObjCreator(directive, fullGameData.game);
@@ -167,4 +171,12 @@ function gameCreator(playersArray) {
         expectation: game.directiveExpectation,
         players: playersArray.slice(),
     };
+}
+
+function generateServerMsg(gameMessage, chatId) {
+    return {
+        chatId: chatId,
+        type: "server",
+        content: gameMessage,
+    }
 }

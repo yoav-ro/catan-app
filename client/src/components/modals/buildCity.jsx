@@ -30,7 +30,7 @@ function BuildCity({ show, handleClose, x, y, gameSocketRef }) {
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <div>You are about to upgrade a {player.color} settelment to a city.</div>
+                        <div>You are about to upgrade a {player.color} settlement to a city.</div>
                         <div>It will cost:</div>
                         <Row>
                             <Col>

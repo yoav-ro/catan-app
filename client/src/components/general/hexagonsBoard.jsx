@@ -43,9 +43,10 @@ function HexagonBoard({ boardData: board, gameSocketRef }) {
                     if (junction.type === "city") {
                         return <City key={key} centerX={junction.x} centerY={junction.y} color={junction.player} />
                     }
-                    if (junction.type === "settelment") {
+                    if (junction.type === "settlement") {
                         return <Settlement key={key} centerX={junction.x} centerY={junction.y} color={junction.player} gameSocketRef={gameSocketRef} />
                     }
+                    return <></>
                 })}
                 <Port x={155} y={15.5} type={board.portsData[0].type} junctionA={board.portsData[0].junctionA} junctionB={board.portsData[0].junctionB} scale={0.06} gameSocketRef={gameSocketRef} />
                 <Port x={360} y={15.5} type={board.portsData[1].type} junctionA={board.portsData[1].junctionA} junctionB={board.portsData[1].junctionB} scale={0.06} gameSocketRef={gameSocketRef} />

@@ -27,12 +27,12 @@ function BuildSettelment({ show, handleClose, x, y, gameSocketRef }) {
         <div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Build a settelment</Modal.Title>
+                    <Modal.Title>Build a settlement</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <div>You are about to build a new {player.color} settelment.</div>
-                        <div>It will cost (first two settelments are free):</div>
+                        <div>You are about to build a new {player.color} settlement.</div>
+                        <div>It will cost (first two settlements are free):</div>
                         <Row>
                             <Col>
                                 1 x Wood

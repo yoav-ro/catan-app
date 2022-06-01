@@ -37,7 +37,7 @@ function App() {
       console.log(data);
       dispatch(newChatMsg(data));
     })
-  }, [])
+  }, [dispatch])
 
   return (
     <div>

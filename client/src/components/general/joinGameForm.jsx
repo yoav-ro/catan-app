@@ -45,7 +45,7 @@ function JoinGameForm({ gameSocketRef }) {
                 <Container>
                     <h2>Find a game</h2>
                     <Form>
-                        <Form.Control id="userNameInput" type="text" placeholder="Enter player name" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                        <Form.Control id="userNameInput" type="text" autoComplete="off" placeholder="Enter player name" value={userName} onChange={(e) => setUserName(e.target.value)} />
                         <Button type="submit" onClick={handleClick}>Join</Button>
                     </Form>
                 </Container>

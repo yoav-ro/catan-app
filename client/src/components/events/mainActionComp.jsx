@@ -45,7 +45,7 @@ function MainEventComp({ gameSocketRef }) {
                 }
             }
         }
-    }, [event])
+    }, [event, currPlayer])
 
 
     return (

@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import RollDiceBtn from "../actions/rollDiceBtn";
 import EndTurnBtn from "../actions/endTurnBtn";
 import BuyDevCardBtn from "../actions/getDevCardBtn";
