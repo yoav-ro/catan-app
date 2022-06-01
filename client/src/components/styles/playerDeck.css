@@ -1,4 +1,4 @@
-.playerDeck{
+.playerDeck {
     border-radius: 15px;
     border-style: solid;
     border-width: 3;
@@ -7,21 +7,25 @@
     margin-top: 30px;
 }
 
-.resource{
-    font-weight: bolder;
-    -webkit-text-stroke: 0.5px black;
-}
-
-.topRow{
+.turnHeader{
     border-bottom: 2px solid black;
 }
 
-.playerHeader{
+.resource {
+    font-weight: bolder;
+    -webkit-text-stroke: 0.5px black;
+}
+
+.topRow {
+    border-bottom: 2px solid black;
+}
+
+.playerHeader {
     -webkit-text-stroke: 0.5px black;
     font-weight: bolder;
 }
 
-.opponentsTab{
+.opponentsTab {
     border-radius: 15px;
     border-style: solid;
     border-width: 3;
@@ -31,7 +35,7 @@
     margin-left: 10px;
 }
 
-.chat{
+.chatTab {
     border-radius: 15px;
     border-style: solid;
     border-width: 3;
@@ -41,7 +45,13 @@
     margin-right: 10px;
 }
 
-.opponent:nth-child(3){
+.chat {
+    height: 48vh;
+    overflow: auto;
+    overflow-wrap: break-word;
+}
+
+.opponent:nth-child(3) {
     border-bottom: 2px solid black;
     border-top: 2px solid black;
 }

@@ -3,9 +3,9 @@ import HexagonBoard from "./hexagonsBoard";
 import MainNav from "./navbar";
 import { useSelector } from "react-redux";
 import { Container } from "react-bootstrap";
-import Chat from "./chat";
 import PlayerDeck from "../playerDeck/playerDeck";
 import Opponents from "./opponents";
+import Chat from "../chat/chat";
 import MainEventComp from "../events/mainActionComp";
 
 function GameTab({ gameSocketRef }) {
@@ -22,7 +22,7 @@ function GameTab({ gameSocketRef }) {
             <div>
                 <MainNav />
                 <Opponents playersData={mockPlayers} gameData={gameData.game.game} />
-                <Chat gameData={gameData.game.game} />
+                <Chat gameData={gameData.game.game} gameSocketRef={gameSocketRef} />
                 <HexagonBoard boardData={gameData.game.game.board} gameSocketRef={gameSocketRef} />
                 <PlayerDeck playerData={players[currPlayerIndex]} gameData={gameData.game.game} gameSocketRef={gameSocketRef} />
                 <MainEventComp gameSocketRef={gameSocketRef} />

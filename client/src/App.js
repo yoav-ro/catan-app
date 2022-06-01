@@ -33,7 +33,7 @@ function App() {
       dispatch(setGameData(data));
     })
 
-    socketRef.current.on("msgToGame", data => {
+    socketRef.current.on("chat-data", data => {
       console.log(data);
       dispatch(newChatMsg(data));
     })

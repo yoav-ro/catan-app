@@ -1,11 +1,19 @@
 import { chatReducerActionTypes } from "../utils/actionTypes";
 
-const initialState = [];
+const initialState = {
+    chatId: "none",
+    messages: [],
+}
 
-export default function playerReducer(state = initialState, action) {
+export default function chatReducer(state = initialState, action) {
     switch (action.type) {
         case chatReducerActionTypes.newMsg:
-            return [state, ...action.data];
+            const newState = {
+                chatId: action.data.chatId,
+                messages: [...state.messages, action.data],
+            }
+            console.log(newState)
+            return newState
         case chatReducerActionTypes.resetChat:
             return initialState;
         default:

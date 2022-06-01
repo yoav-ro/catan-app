@@ -51,17 +51,16 @@ io.sockets.on("connection", (socket) => {
             games.push(gameObj);
             io.to(gameId).emit("game-data", gameObj);
             io.to(chatId).emit("chat-data", {
-                message: {
-                    type: "server",
-                    chatId: chatId,
-                    content: "Game starting!",
-                }
+                chatId: chatId,
+                type: "server",
+                content: "Game starting!",
             });
         }
     })
 
     socket.on("msgToServer", ({ messageObj }) => {
-        io.to(msgObj.chatId).emit("msgToGame", messageObj);
+        console.log(messageObj)
+        io.to(messageObj.chatId).emit("chat-data", messageObj);
     })
 
     socket.on("newDirective", ({ directive }) => { // Handle incoming directive
