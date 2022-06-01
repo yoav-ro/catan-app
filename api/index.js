@@ -41,14 +41,27 @@ io.sockets.on("connection", (socket) => {
         if (playersQueue.length === gamePlayerCap) { // Create a new game when cap is filled
             const gameObj = gameCreator(playersQueue);
             const gameId = gameObj.id;
+            const chatId = "chat" + gameId.slice(4, gameId.length);
             const connectedSockets = await io.fetchSockets();
             for (let connectedSocket of connectedSockets) {
                 connectedSocket.join(gameId);
+                connectedSocket.join(chatId);
             }
             playersQueue.length = 0;
             games.push(gameObj);
             io.to(gameId).emit("game-data", gameObj);
+            io.to(chatId).emit("chat-data", {
+                message: {
+                    type: "server",
+                    chatId: chatId,
+                    content: "Game starting!",
+                }
+            });
         }
+    })
+
+    socket.on("msgToServer", ({ messageObj }) => {
+        io.to(msgObj.chatId).emit("msgToGame", messageObj);
     })
 
     socket.on("newDirective", ({ directive }) => { // Handle incoming directive
