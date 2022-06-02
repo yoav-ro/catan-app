@@ -1,4 +1,4 @@
-import { gameReducerActionTypes, playerReducerActionTypes, robberReducerGameTypes } from "./utils/actionTypes"
+import { chatReducerActionTypes, gameReducerActionTypes, playerReducerActionTypes, robberReducerGameTypes } from "./utils/actionTypes"
 
 export const setGameData = (gameData) => (
     {
@@ -35,5 +35,20 @@ export const setCanMoveRobber = (canMoveRobber) => (
         type: robberReducerGameTypes.canMoveRobber,
         description: "Sets if the game is expectiving a robber move",
         canMoveRobber: canMoveRobber,
+    }
+)
+
+export const newChatMsg = (msgObj) => (
+    {
+        type: chatReducerActionTypes.newMsg,
+        description: "Adds a new message to the game chat",
+        data: msgObj,
+    }
+)
+
+export const resetChat = () => (
+    {
+        type: chatReducerActionTypes.resetChat,
+        description: "Resets the chat",
     }
 )

@@ -89,7 +89,7 @@ class Board {
         this.#calcLongestRoad();
     }
 
-    // Validates if the settelment can be build
+    // Validates if the settlement can be build
     canPlaceSettelmentOrCity(player, x, y, newPieceType, shouldBeConnected) {
         if (!this.doCoordinatesExist(x, y)) { // Checks if the coordinates are valid
             throw "Invalid junction coordinates";
@@ -108,7 +108,7 @@ class Board {
         }
 
         if (!this.#isJunction2RoadsApart(x, y)) { // Check if the junction isnt too close to any other junctions
-            throw "Junction is to close to another settelment";
+            throw "Junction is to close to another settlement";
         }
         if (!this.#isJunctionConnectedToPlayer(player.color, x, y) && shouldBeConnected) { // Check if the junction is connected to a road build by the same player
             throw "Junction is not connected to any road build by player " + player.color;

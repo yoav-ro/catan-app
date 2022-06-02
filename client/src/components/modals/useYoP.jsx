@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button, Row, Col, Dropdown } from "react-bootstrap";
+import { Modal, Button, Row, Col } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { activateYoPDir } from "../../utils/directiveCreator";
 import { NotificationManager } from "react-notifications";

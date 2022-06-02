@@ -8,7 +8,7 @@ import "../styles/playerDeck.css";
 
 function PlayerDeck({ playerData, gameData, gameSocketRef }) {
     const playerName = playerData.playerName.username;
-    const { color, points, resources, playerDevCards, settelmentsLeft, roadsLeft, citiesLeft, settelments, cities, roads } = playerData;
+    const { color, points, resources, playerDevCards, settlementsLeft, roadsLeft, citiesLeft, settlements, cities, roads } = playerData;
     const woodCount = resources.filter(item => item === resourcesTypes.WOOD.name).length;
     const sheepCount = resources.filter(item => item === resourcesTypes.SHEEP.name).length;
     const ironCount = resources.filter(item => item === resourcesTypes.IRON.name).length;
@@ -50,7 +50,7 @@ function PlayerDeck({ playerData, gameData, gameSocketRef }) {
                     </Col>
                     <Col>
                         <h5>Pieces:</h5>
-                        <div>Settelments: {settelments.length} ({settelmentsLeft} left)</div>
+                        <div>Settelments: {settlements.length} ({settlementsLeft} left)</div>
                         <div>Roads: {roads.length} ({roadsLeft} left)</div>
                         <div>Cities: {cities.length} ({citiesLeft} left)</div>
                     </Col>

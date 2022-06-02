@@ -16,12 +16,12 @@ const playerColors = {
 
 const pieceTypes = {
     CITY: "city",
-    SETTELMENT: "settelment",
+    SETTELMENT: "settlement",
     ROAD: "road",
     DEVCARD: "devCard",
 }
 const buildingCosts = {
-    settelment: [resourcesTypes.BRICK, resourcesTypes.WOOD, resourcesTypes.SHEEP, resourcesTypes.WHEAT],
+    settlement: [resourcesTypes.BRICK, resourcesTypes.WOOD, resourcesTypes.SHEEP, resourcesTypes.WHEAT],
     road: [resourcesTypes.WOOD, resourcesTypes.BRICK],
     devCard: [resourcesTypes.IRON, resourcesTypes.SHEEP, resourcesTypes.WHEAT],
     city: [resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.WHEAT, resourcesTypes.WHEAT]

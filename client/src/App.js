@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 import JoinGameForm from './components/general/joinGameForm';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import GameTab from './components/general/gameTab';
-import { setGameData } from "./actions";
+import { setGameData, newChatMsg } from "./actions";
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -24,15 +24,20 @@ function App() {
     })
 
     socketRef.current.on("game-error", data => {
-      console.log(data)
+      console.log(data);
       NotificationManager.error(data.toString());
     })
 
     socketRef.current.on("game-data", data => {
-      console.log(data)
+      console.log(data);
       dispatch(setGameData(data));
     })
-  }, [])
+
+    socketRef.current.on("chat-data", data => {
+      console.log(data);
+      dispatch(newChatMsg(data));
+    })
+  }, [dispatch])
 
   return (
     <div>

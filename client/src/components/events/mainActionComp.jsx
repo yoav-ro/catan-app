@@ -4,11 +4,12 @@ import { activeEventTypes, passiveEventTypes } from "../../utils/constants";
 import DropResourcesModal from "../modals/dropResourceEvent";
 import DevCardEvent from "./devCardEvent";
 import DiceRoller from "./diceRoller";
+import VictoryEvent from "./victoryEvent";
 
 function MainEventComp({ gameSocketRef }) {
     const currPlayer = useSelector(state => state.playerReducer);
     const [event, setEvent] = useState("");
-    
+
     const [showDropModal, setShowDropModal] = useState(false);
     const handleCloseDropModal = () => setShowDropModal(false);
 
@@ -17,6 +18,9 @@ function MainEventComp({ gameSocketRef }) {
 
     const [showDevCard, setShowDevCard] = useState(false);
     const handleCloseDevCard = () => setShowDevCard(false);
+
+    const [showVictory, setShowVictory] = useState(false);
+    const handleCloseVictory = () => setShowVictory(false);
 
     const showForDuration = (closeCallBack, duration) => {
         setTimeout(() => {
@@ -44,8 +48,11 @@ function MainEventComp({ gameSocketRef }) {
                     setShowDropModal(true);
                 }
             }
+            if (event.type === activeEventTypes.victory) {
+                setShowVictory(true);
+            }
         }
-    }, [event])
+    }, [event, currPlayer])
 
 
     return (
@@ -53,6 +60,7 @@ function MainEventComp({ gameSocketRef }) {
             <DiceRoller show={showDiceRoll} handleClose={handleCloseDiceRoll} event={event} />
             <DevCardEvent show={showDevCard} handleClose={handleCloseDevCard} event={event} />
             <DropResourcesModal show={showDropModal} handleClose={handleCloseDropModal} gameSocketRef={gameSocketRef} />
+            <VictoryEvent show={showVictory} handleClose={handleCloseVictory} event={event} />
         </>
     )
 }

@@ -11,3 +11,8 @@ export const playerReducerActionTypes = {
 export const robberReducerGameTypes = {
     canMoveRobber: "SET_AWAIT_MOVE_ROBBER",
 }
+
+export const chatReducerActionTypes = {
+    newMsg: "NEW_MSG",
+    resetChat: "RESET_CHAT",
+}

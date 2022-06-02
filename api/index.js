@@ -6,7 +6,7 @@ const { nanoid } = require("nanoid");
 const CatanGame = require("../game-logic/catanManager/CatanManager");
 const cors = require("cors");
 const { eventDirectivesArr, activeEventDirectivesArr, passiveEventDirectivesArr, eventTypes, directiveTypes } = require("./constants");
-const { activeEventObjCreator, passiveEventObjCreator, createResourceDropEventObj } = require("./helperFunctions");
+const { activeEventObjCreator, passiveEventObjCreator, createResourceDropEventObj, createVictoryEventObj } = require("./helperFunctions");
 
 require("dotenv").config();
 const port = process.env.PORT || 3001;
@@ -41,14 +41,25 @@ io.sockets.on("connection", (socket) => {
         if (playersQueue.length === gamePlayerCap) { // Create a new game when cap is filled
             const gameObj = gameCreator(playersQueue);
             const gameId = gameObj.id;
+            const chatId = "chat" + gameId.slice(4, gameId.length);
             const connectedSockets = await io.fetchSockets();
             for (let connectedSocket of connectedSockets) {
                 connectedSocket.join(gameId);
+                connectedSocket.join(chatId);
             }
             playersQueue.length = 0;
             games.push(gameObj);
             io.to(gameId).emit("game-data", gameObj);
+            io.to(chatId).emit("chat-data", {
+                chatId: chatId,
+                type: "server",
+                content: "Game starting!",
+            });
         }
+    })
+
+    socket.on("msgToServer", ({ messageObj }) => { // Emit chat messages
+        io.to(messageObj.chatId).emit("chat-data", messageObj);
     })
 
     socket.on("newDirective", ({ directive }) => { // Handle incoming directive
@@ -71,7 +82,11 @@ io.sockets.on("connection", (socket) => {
             }
             else {
                 io.to(fullGameData.id).emit("game-data", objToEmit);
-                console.log(objToEmit.game.directiveExpectation);
+
+                const chatId = "chat" + objToEmit.id.slice(4, objToEmit.id.length);
+                for (let message of objToEmit.message) {
+                    io.to(chatId).emit("chat-data", generateServerMsg(message, chatId));
+                }
 
                 if (activeEventDirectivesArr.includes(directive.type)) {
                     const eventObj = activeEventObjCreator(directive, fullGameData.game);
@@ -79,6 +94,10 @@ io.sockets.on("connection", (socket) => {
                 }
                 if (objToEmit.game.directiveExpectation.includes(directiveTypes.dropResources)) {
                     const eventObj = createResourceDropEventObj(objToEmit.game);
+                    io.to(fullGameData.id).emit("game-event", eventObj);
+                }
+                if (objToEmit.game.winner) {
+                    const eventObj = createVictoryEventObj(objToEmit.game.winner);
                     io.to(fullGameData.id).emit("game-event", eventObj);
                 }
             }
@@ -155,4 +174,12 @@ function gameCreator(playersArray) {
         expectation: game.directiveExpectation,
         players: playersArray.slice(),
     };
+}
+
+function generateServerMsg(gameMessage, chatId) {
+    return {
+        chatId: chatId,
+        type: "server",
+        content: gameMessage,
+    }
 }

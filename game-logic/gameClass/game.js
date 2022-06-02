@@ -85,13 +85,13 @@ class Game {
     initialBuildSettelment(playerColor, x, y) {
         if (playerColor === this.initPickOrder[0]) {
             const player = this.#getPlayerByColor(playerColor);
-            if (player.settelments.length < 2) {
+            if (player.settlements.length < 2) {
                 this.buildSettelment(playerColor, x, y, false, false);
             }
         }
         const lastPlayer = this.initPickOrder.shift()
         this.initPickOrder.push(lastPlayer);
-        return `Player ${playerColor} built a settelment`;
+        return `Player ${playerColor} built a settlement`;
     }
 
     initialBuildRoad(playerColor, startX, startY, endX, endY) {
@@ -201,13 +201,13 @@ class Game {
         return `Player ${playerColor} has dropped ${resourcesToDrop.length} resources`;
     }
 
-    giveInitialResources(settelmentX, settelmentY, playerColor) {
+    giveInitialResources(settlementX, settlementY, playerColor) {
         const player = this.#getPlayerByColor(playerColor);
         for (let tile of this.board.tiles) {
             const surroundingJunctions = this.#getTileCoordsArr(tile);
             for (let junction of surroundingJunctions) {
                 const resourceToGive = tile.resource;
-                if (resourceToGive !== resourcesTypes.DESERT && roundBySecondDec(junction.x) === roundBySecondDec(settelmentX) && roundBySecondDec(junction.y) === roundBySecondDec(settelmentY)) {
+                if (resourceToGive !== resourcesTypes.DESERT && roundBySecondDec(junction.x) === roundBySecondDec(settlementX) && roundBySecondDec(junction.y) === roundBySecondDec(settlementY)) {
                     player.addResources([resourceToGive]);
                 }
             }
@@ -232,7 +232,7 @@ class Game {
             case pieceTypes.ROAD:
                 return 15 - player.roadsLeft;
             case pieceTypes.SETTELMENT:
-                return 5 - player.settelmentsLeft;
+                return 5 - player.settlementsLeft;
         }
     }
 
@@ -242,7 +242,7 @@ class Game {
             player.buildSettelment(x, y, shouldTakeResources);
             this.board.addJunction(playerColor, x, y, pieceTypes.SETTELMENT, shouldBeConnected);
             const longestRoadMsg = this.#setLongestRoadPlayer();
-            return [`Player ${playerColor} built a settelment`, longestRoadMsg];
+            return [`Player ${playerColor} built a settlement`, longestRoadMsg];
         }
     }
 
@@ -301,7 +301,7 @@ class Game {
 
         playerA.addResources(resPlayerB);
         playerB.addResources(resPlayerA);
-        return `Trade made succesfully`
+        return `Trade made betweet player ${playerAcolor} and player ${playerBColor}`;
     }
 
     tradeWithPort(portType, playerColor, resourceToGive, resourceToTake) {
@@ -310,7 +310,7 @@ class Game {
             if (doesArrayContain(player.resources, Array(4).fill(resourceToGive))) {
                 player.removeResources(Array(4).fill(resourceToGive));
                 player.addResources([resourceToTake]);
-                return "Trade made succesfully";
+                return `Player ${playerColor} has traded with the bank`;
             }
             else {
                 throw `Player ${playerColor} doesnt have enough resources (4) to trade with the bank`;
@@ -321,7 +321,7 @@ class Game {
             if (doesArrayContain(player.resources, Array(numOfResToTake).fill(resourceToGive))) {
                 player.removeResources(Array(numOfResToTake).fill(resourceToGive));
                 player.addResources([resourceToTake]);
-                return "Trade made succesfully";
+                return `Player ${playerColor} has traded with a port`;
             }
             else {
                 throw `Player ${playerColor} doesnt have enough resources (${numOfResToTake}) to trade with the port`;
@@ -337,7 +337,7 @@ class Game {
     #playerHasPort(playerColor, portType) {
         const player = this.#getPlayerByColor(playerColor);
         const portsByType = this.board.getPortsByType(portType);
-        const playerJunctions = player.settelments.concat(player.cities);
+        const playerJunctions = player.settlements.concat(player.cities);
         for (let junction of playerJunctions) {
             for (let port of portsByType) {
                 if (roundBySecondDec(port.junctionA.x) === roundBySecondDec(junction.x) && roundBySecondDec(port.junctionA.y) === roundBySecondDec(junction.y)) {
@@ -355,7 +355,8 @@ class Game {
         for (let player of this.players) {
             if (player.points >= 10) {
                 return {
-                    color: player.color,
+                    playerName: player.playerName.username,
+                    playerColor: player.color,
                     points: player.points,
                 };
             }

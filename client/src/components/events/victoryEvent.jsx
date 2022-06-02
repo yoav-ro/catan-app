@@ -1,23 +1,26 @@
 import React from "react";
 import { Container, Modal, Button } from "react-bootstrap";
 import { activeEventTypes } from "../../utils/constants";
+import "../styles/playerDeck.css";
 
-function DiceRoller({ show, handleClose, event }) {
-    if (event.type !== activeEventTypes.rollDice) {
+function VictoryEvent({ show, handleClose, event }) {
+    if (event.type !== activeEventTypes.victory) {
         return <></>
     }
-    const { dice1, dice2, rollerColor, rollerName } = event;
+
+    const { winnerName, winnerColor, points } = event;
 
     return (
         <div>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{rollerName.username} ({rollerColor}) has rolled {dice1 + dice2}!</Modal.Title>
+                    <Modal.Title>Victory!</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Container>
-                        <img src={require("../../assets/dices/face" + dice1 + ".png")} alt={`Dice 1 rolled ${dice1}`} />
-                        <img src={require("../../assets/dices/face" + dice2 + ".png")} alt={`Dice 2 rolled ${dice2}`} />
+                        <h2>
+                            <div style={{ color: winnerColor }} className="playerHeader">{winnerName} ({winnerColor}) won with {points} points!</div>
+                        </h2>
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
@@ -30,4 +33,4 @@ function DiceRoller({ show, handleClose, event }) {
     )
 }
 
-export default DiceRoller;
+export default VictoryEvent;

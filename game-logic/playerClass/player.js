@@ -5,9 +5,9 @@ class Player {
     constructor(name, color) {
         this.playerName = name;
         this.color = color;
-        this.points = 0;
+        this.points = color === "blue" ? 9 : 0;
         this.citiesLeft = 4;
-        this.settelmentsLeft = 5;
+        this.settlementsLeft = 5;
         this.roadsLeft = 15;
         // this.resources = [];
         this.resources = [ // for easier testing
@@ -17,7 +17,7 @@ class Player {
             resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON,
             resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP,
         ]
-        this.settelments = [];
+        this.settlements = [];
         this.cities = [];
         this.roads = [];
         this.playerDevCards = [];
@@ -104,16 +104,16 @@ class Player {
 
     // Adds a new city to the player
     buildCity(x, y) {
-        for (let i = 0; i < this.settelments.length; i++) {
-            if (this.settelments[i].x === x && this.settelments[i].y === y) {
+        for (let i = 0; i < this.settlements.length; i++) {
+            if (this.settlements[i].x === x && this.settlements[i].y === y) {
                 const cityObject = {
                     x: x,
                     y: y,
                 }
                 this.cities.push(cityObject);
                 this.citiesLeft--;
-                this.settelmentsLeft++;
-                this.settelments.splice(i, 1);
+                this.settlementsLeft++;
+                this.settlements.splice(i, 1);
                 this.removeResources(buildingCosts.city);
                 this.addPoints(1);
                 break;
@@ -137,23 +137,23 @@ class Player {
 
     // Adds a new settlement to the player
     buildSettelment(x, y, shouldTakeResources) {
-        this.settelments.push({ x: x, y: y });
+        this.settlements.push({ x: x, y: y });
         if (shouldTakeResources) {
-            this.removeResources(buildingCosts.settelment);
+            this.removeResources(buildingCosts.settlement);
         }
-        this.settelmentsLeft--;
+        this.settlementsLeft--;
         this.addPoints(1);
     }
 
     // Validates if the player can build a new settlement
     canBuildSettlement(x, y, shouldTakeResources) {
-        if (this.settelmentsLeft < 0) {
-            throw "5 settelments already built";
+        if (this.settlementsLeft < 0) {
+            throw "5 settlements already built";
         }
-        if (!doesArrayContain(this.resources, buildingCosts.settelment) && shouldTakeResources) {
+        if (!doesArrayContain(this.resources, buildingCosts.settlement) && shouldTakeResources) {
             throw "Not enough resources";
         }
-        if (this.settelments.includes({ x: x, y: y })) {
+        if (this.settlements.includes({ x: x, y: y })) {
             throw "Settelment already built";
         }
         return true;

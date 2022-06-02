@@ -5,7 +5,7 @@ export function buildSettelmentDir(x, y, player) {
         type: directiveTypes.build,
         player: player,
         item: {
-            type: "settelment",
+            type: "settlement",
             x: x,
             y: y,
         }
@@ -17,7 +17,7 @@ export function setupBuildSettelmetDir(x, y, player) {
         type: directiveTypes.setupBuild,
         player: player,
         item: {
-            type: "settelment",
+            type: "settlement",
             x: x,
             y: y,
         }
