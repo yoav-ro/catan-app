@@ -12,7 +12,6 @@ export default function chatReducer(state = initialState, action) {
                 chatId: action.data.chatId,
                 messages: [...state.messages, action.data],
             }
-            console.log(newState)
             return newState
         case chatReducerActionTypes.resetChat:
             return initialState;

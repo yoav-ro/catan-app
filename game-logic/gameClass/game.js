@@ -355,7 +355,8 @@ class Game {
         for (let player of this.players) {
             if (player.points >= 10) {
                 return {
-                    color: player.color,
+                    playerName: player.playerName.username,
+                    playerColor: player.color,
                     points: player.points,
                 };
             }

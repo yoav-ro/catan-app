@@ -6,7 +6,7 @@ const { nanoid } = require("nanoid");
 const CatanGame = require("../game-logic/catanManager/CatanManager");
 const cors = require("cors");
 const { eventDirectivesArr, activeEventDirectivesArr, passiveEventDirectivesArr, eventTypes, directiveTypes } = require("./constants");
-const { activeEventObjCreator, passiveEventObjCreator, createResourceDropEventObj } = require("./helperFunctions");
+const { activeEventObjCreator, passiveEventObjCreator, createResourceDropEventObj, createVictoryEventObj } = require("./helperFunctions");
 
 require("dotenv").config();
 const port = process.env.PORT || 3001;
@@ -83,7 +83,6 @@ io.sockets.on("connection", (socket) => {
             else {
                 io.to(fullGameData.id).emit("game-data", objToEmit);
 
-                console.log(objToEmit)
                 const chatId = "chat" + objToEmit.id.slice(4, objToEmit.id.length);
                 for (let message of objToEmit.message) {
                     io.to(chatId).emit("chat-data", generateServerMsg(message, chatId));
@@ -95,6 +94,10 @@ io.sockets.on("connection", (socket) => {
                 }
                 if (objToEmit.game.directiveExpectation.includes(directiveTypes.dropResources)) {
                     const eventObj = createResourceDropEventObj(objToEmit.game);
+                    io.to(fullGameData.id).emit("game-event", eventObj);
+                }
+                if (objToEmit.game.winner) {
+                    const eventObj = createVictoryEventObj(objToEmit.game.winner);
                     io.to(fullGameData.id).emit("game-event", eventObj);
                 }
             }

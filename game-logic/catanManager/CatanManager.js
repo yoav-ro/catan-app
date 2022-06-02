@@ -14,6 +14,7 @@ class catanAPI extends Game {
         this.lastRoll = undefined;
         this.pendingTrade = undefined;
         this.isExpectingDevCard = true;
+        this.winner = undefined;
     }
 
     // Recieves a directive and replies with the updated game data
@@ -289,7 +290,7 @@ class catanAPI extends Game {
             this.#setDirectiveExpetation(directiveObj);
             const victory = this.checkVictory();
             if (victory) {
-                this.#handleVictory(victory);
+                retMsg = this.#handleVictory(victory);
             }
             return [retMsg];
         } catch (error) {
@@ -484,9 +485,10 @@ class catanAPI extends Game {
 
     // Checks if the game was won
     #handleVictory(winnerObj) {
-        const { color, points } = winnerObj;
+        const { playerColor, playerName, points } = winnerObj;
+        this.winner = winnerObj;
         this.directiveExpectation = [];
-        return `Player ${color} won with ${points} points!`;
+        return `Player ${playerColor} won with ${points} points!`;
     }
 }
 module.exports = catanAPI;

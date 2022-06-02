@@ -45,6 +45,15 @@ function createResourceDropEventObj(game) {
     }
 }
 
+function createVictoryEventObj(winnerObj) {
+    return {
+        type: eventTypes.victory,
+        winnerName: winnerObj.playerName,
+        winnerColor: winnerObj.playerColor,
+        points: winnerObj.points,
+    }
+}
+
 // Creates a development card event object based on type
 function getCardDirectiveInfo(directive) {
     if (directive.card.type === "Monopoly") {
@@ -68,5 +77,5 @@ function getCardDirectiveInfo(directive) {
 }
 
 module.exports = {
-    activeEventObjCreator, passiveEventObjCreator, createResourceDropEventObj
+    activeEventObjCreator, passiveEventObjCreator, createResourceDropEventObj, createVictoryEventObj
 }
