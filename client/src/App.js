@@ -19,22 +19,15 @@ function App() {
   useEffect(() => {
     socketRef.current = io.connect("http://localhost:3008");
 
-    socketRef.current.on("lobby", data => {
-      console.log(data);
-    })
-
     socketRef.current.on("game-error", data => {
-      console.log(data);
       NotificationManager.error(data.toString());
     })
 
     socketRef.current.on("game-data", data => {
-      console.log(data);
       dispatch(setGameData(data));
     })
 
     socketRef.current.on("chat-data", data => {
-      console.log(data);
       dispatch(newChatMsg(data));
     })
   }, [dispatch])

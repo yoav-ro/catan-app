@@ -65,9 +65,6 @@ io.sockets.on("connection", (socket) => {
     socket.on("newDirective", ({ directive }) => { // Handle incoming directive
         const fullGameData = findGameBySocketId(socket.id);
 
-        console.log("new directive: " + directive.type);
-        console.log(directive)
-
         const directiveOutput = fullGameData.game.sendDirective(directive);
         const objToEmit = {
             id: fullGameData.id,
@@ -77,7 +74,6 @@ io.sockets.on("connection", (socket) => {
         }
         if (fullGameData) {
             if (objToEmit.message.error) {
-                console.log(objToEmit.message.error);
                 io.to(socket.id).emit("game-error", objToEmit.message.error)
             }
             else {
@@ -107,12 +103,10 @@ io.sockets.on("connection", (socket) => {
     socket.on("leaveQueue", ({ username }) => { // Leaving queue
         if (removeFromQueue(username)) {
             io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
-            console.log(playersQueue)
         }
     })
 
     socket.on("disconnect", (reason) => { // Handle user disconnecting
-        console.log(`Connection with id ${socket.id} has disconnected (${reason})`);
         const username = findUserNameBySocketId(socket.id);
         if (removeFromQueue(username)) {
             io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
