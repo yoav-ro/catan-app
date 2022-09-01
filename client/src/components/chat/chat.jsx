@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Button, Container, InputGroup, FormControl, Form } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
 import { useSelector } from "react-redux";
@@ -13,7 +13,14 @@ function Chat({ gameData, gameSocketRef }) {
     const players = gameData.players;
     const player = players.find(player => player.playerName.username === currUser);
 
+    const bottomRef = useRef(null);
+
     const { chatId, messages } = chat;
+
+    useEffect(() => {
+        // 👇️ scroll to bottom every time messages change
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [messages]);
 
     const handleClick = (e) => {
         e.preventDefault();
@@ -47,6 +54,7 @@ function Chat({ gameData, gameSocketRef }) {
                         {messages.map((msg, key) => {
                             return <ChatMessage msgObj={msg} key={key} />
                         })}
+                        <div ref={bottomRef}></div>
                     </Container>
                     <Form>
                         <InputGroup className="mb-2">
