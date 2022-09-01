@@ -383,7 +383,16 @@ class catanAPI extends Game {
             case directiveTypes.endTurn:
                 this.directiveExpectation = [rollDice, activateDevCard];
                 break;
-            case directiveTypes.build || directiveTypes.build || directiveTypes.tradeRes || directiveTypes.tradeWithPort:
+            case directiveTypes.build:
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, tradeWithPort];
+                break;
+            case directiveTypes.tradeRes:
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, tradeWithPort];
+                break;
+            case directiveTypes.tradeWithPort:
+                this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, tradeWithPort];
+                break;
+            case directiveTypes.buyDevCard:
                 this.directiveExpectation = [endTurn, build, activateDevCard, tradeReq, buyDevCard, tradeWithPort];
                 break;
             case directiveTypes.rollDice:
