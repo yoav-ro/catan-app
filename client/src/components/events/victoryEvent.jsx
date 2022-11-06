@@ -10,6 +10,10 @@ function VictoryEvent({ show, handleClose, event }) {
 
     const { winnerName, winnerColor, points } = event;
 
+    const handleConfirm = () => {
+        console.log("confirm victory")
+    }
+
     return (
         <div>
             <Modal show={show} onHide={handleClose}>
@@ -24,6 +28,9 @@ function VictoryEvent({ show, handleClose, event }) {
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
+                    <Button variant="primary" onClick={handleConfirm}>
+                        Return to lobby
+                    </Button>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>

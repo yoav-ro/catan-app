@@ -117,7 +117,7 @@ io.sockets.on("connection", (socket) => {
         if (removeFromQueue(username)) {
             io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
         }
-        // todo- find the game disconnected from and end it end game
+        // todo- find the game disconnected from and end its game
     })
 })
 

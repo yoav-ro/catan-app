@@ -5,8 +5,8 @@ class Player {
     constructor(name, color) {
         this.playerName = name;
         this.color = color;
-        // this.points = color === "blue" ? 9 : 0;
-        this.points = 0;
+        this.points = color === "blue" ? 9 : 0;
+        // this.points = 0;
         this.citiesLeft = 4;
         this.settlementsLeft = 5;
         this.roadsLeft = 15;

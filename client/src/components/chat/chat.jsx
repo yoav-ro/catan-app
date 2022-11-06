@@ -52,7 +52,9 @@ function Chat({ gameData, gameSocketRef }) {
                 <Container>
                     <Container className="chat">
                         {messages.map((msg, key) => {
-                            return <ChatMessage msgObj={msg} key={key} />
+                            return <>
+                                <ChatMessage msgObj={msg} key={key} />
+                            </>
                         })}
                         <div ref={bottomRef}></div>
                     </Container>
