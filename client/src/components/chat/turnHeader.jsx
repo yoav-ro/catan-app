@@ -32,7 +32,7 @@ function TurnHeader({ gameData }) {
                     <Col>
                         <h4>Turn:
                             <div className="playerHeader" style={{ color: winner.playerColor }}>{winner.playerName} has won the game!</div>
-                            <LobbyBtn />
+                            <LobbyBtn shouldResetData={true}/>
                         </h4>
                     </Col>
                 </Row>

@@ -26,7 +26,7 @@ function VictoryEvent({ show, handleClose, event }) {
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
-                    <LobbyBtn />
+                    <LobbyBtn shouldResetData={true} />
 
                     <Button variant="secondary" onClick={handleClose}>
                         Close

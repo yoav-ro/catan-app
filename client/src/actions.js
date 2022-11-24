@@ -33,7 +33,7 @@ export const resetCurrPlayer = () => (
 export const setCanMoveRobber = (canMoveRobber) => (
     {
         type: robberReducerGameTypes.canMoveRobber,
-        description: "Sets if the game is expectiving a robber move",
+        description: "Sets if the game client is expecting a robber move",
         canMoveRobber: canMoveRobber,
     }
 )
