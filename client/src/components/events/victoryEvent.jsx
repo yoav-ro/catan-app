@@ -1,6 +1,8 @@
 import React from "react";
 import { Container, Modal, Button } from "react-bootstrap";
 import { activeEventTypes } from "../../utils/constants";
+import LobbyBtn from "../general/lobbyButton";
+
 import "../styles/playerDeck.css";
 
 function VictoryEvent({ show, handleClose, event }) {
@@ -9,10 +11,6 @@ function VictoryEvent({ show, handleClose, event }) {
     }
 
     const { winnerName, winnerColor, points } = event;
-
-    const handleConfirm = () => {
-        console.log("confirm victory")
-    }
 
     return (
         <div>
@@ -28,9 +26,8 @@ function VictoryEvent({ show, handleClose, event }) {
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleConfirm}>
-                        Return to lobby
-                    </Button>
+                    <LobbyBtn />
+
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
