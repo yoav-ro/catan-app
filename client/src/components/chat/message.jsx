@@ -9,7 +9,7 @@ function ChatMessage({ msgObj }) {
 
     const sender = msgObj.type === "server" ? "Server" : msgObj.player.username;
     const playerColor = msgObj.type === "server" ? "grey" : msgObj.player.color;
-    const borderColorCorrection = playerColor === "white" ? "gray" : playerColor
+    const borderColorCorrection = playerColor === "white" ? "grey" : playerColor;
     const content = msgObj.content;
 
     const styleObj = {

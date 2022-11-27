@@ -1,6 +1,8 @@
 import React from "react";
 import { Container, Modal, Button } from "react-bootstrap";
 import { activeEventTypes } from "../../utils/constants";
+import LobbyBtn from "../general/lobbyButton";
+
 import "../styles/playerDeck.css";
 
 function VictoryEvent({ show, handleClose, event }) {
@@ -24,6 +26,8 @@ function VictoryEvent({ show, handleClose, event }) {
                     </Container>
                 </Modal.Body>
                 <Modal.Footer>
+                    <LobbyBtn shouldResetData={true} />
+
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>

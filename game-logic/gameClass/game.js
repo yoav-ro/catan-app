@@ -354,6 +354,7 @@ class Game {
     checkVictory() {
         for (let player of this.players) {
             if (player.points >= 10) {
+                console.log("game won")
                 return {
                     playerName: player.playerName.username,
                     playerColor: player.color,

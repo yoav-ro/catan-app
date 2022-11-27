@@ -99,6 +99,7 @@ io.sockets.on("connection", (socket) => {
                 if (objToEmit.game.winner) {
                     const eventObj = createVictoryEventObj(objToEmit.game.winner);
                     io.to(fullGameData.id).emit("game-event", eventObj);
+                    endGame();
                 }
             }
         }
@@ -117,7 +118,7 @@ io.sockets.on("connection", (socket) => {
         if (removeFromQueue(username)) {
             io.to(socket.id).emit("lobby", { msg: `Player "${username}" has left the lobby` });
         }
-        // todo- find the game disconnected from and end it end game
+        // todo- find the game disconnected from and end its game
     })
 })
 
@@ -128,6 +129,11 @@ function removeFromQueue(userName) {
         return true;
     }
     return false;
+}
+
+function endGame(gameId) {
+    const gameIndex = games.findIndex(game => game.id === gameId);
+    games.splice(gameIndex, 1);
 }
 
 function findUserNameBySocketId(socketId) {

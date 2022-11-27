@@ -5,18 +5,18 @@ class Player {
     constructor(name, color) {
         this.playerName = name;
         this.color = color;
-        this.points = color === "blue" ? 9 : 0;
+        this.points = 0;
         this.citiesLeft = 4;
         this.settlementsLeft = 5;
         this.roadsLeft = 15;
-        // this.resources = [];
-        this.resources = [ // for easier testing
-            resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD,
-            resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
-            resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK,
-            resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON,
-            resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP,
-        ]
+        this.resources = [];
+        // this.resources = [ // for easier testing
+        //     resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD, resourcesTypes.WOOD,
+        //     resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT, resourcesTypes.WHEAT,
+        //     resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK, resourcesTypes.BRICK,
+        //     resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON, resourcesTypes.IRON,
+        //     resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP, resourcesTypes.SHEEP,
+        // ]
         this.settlements = [];
         this.cities = [];
         this.roads = [];
