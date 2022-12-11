@@ -9,6 +9,8 @@ A real time graphical web application. Build using React.js, with redux as a sta
 ### Game Engine
 Node.js object oriented design implementing several objects containing game state and main logic.
 
+<img src="./assets/WIP_Screenshot.PNG" width="850" height="414">
+(WIP screenshot)
 
 ##### Notable missing features from current version
 - Resource trading
@@ -193,7 +195,3 @@ Node.js object oriented design implementing several objects containing game stat
         }
     }
     ```
-
-<img src="./assets/WIP_Screenshot.PNG" width="850" height="414">
-(WIP screenshot)
-
