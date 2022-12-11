@@ -44,9 +44,9 @@ Node.js object oriented design implementing several objects containing game stat
     * Example:
     ```
     {
-    type: "dropResources",
-    player: "blue",
-    resources: ["wood","wood","wood","wood"]
+       type: "dropResources",
+       player: "blue",
+       resources: ["wood","wood","wood","wood"]
     }
     ```
 - "build" directive-
@@ -56,29 +56,29 @@ Node.js object oriented design implementing several objects containing game stat
     * Examples:
     ```
     {
-    type: "build",
-    player: "blue",
-    item: 
-        {
-            type: "settlement"
-            x: 10,
-            y: 45,
-        }
+       type: "build",
+       player: "blue",
+       item: 
+           {
+               type: "settlement"
+               x: 10,
+               y: 45,
+           }
     }
     ```
     ```
     {
-    type: "build",
-    player: "blue",
-    item: 
-        {
-            type: "road"
-            startX: 10,
-            startY: 45,
-            endX: 30,
-            endY: 45,
-        }
-    }
+       type: "build",
+       player: "blue",
+       item: 
+           {
+               type: "road"
+               startX: 10,
+               startY: 45,
+               endX: 30,
+               endY: 45,
+           }
+       }
     }
     ```
 - "buyDevCard" directive-
