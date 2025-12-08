@@ -1,5 +1,5 @@
 # Catan App (WIP)
-## A Web version of the world-famous strategy board game- "Settlers of Catan"
+A Web version of the world-famous strategy board game- "Settlers of Catan"
 
 The project contains 3 main parts:
 ### API Server
